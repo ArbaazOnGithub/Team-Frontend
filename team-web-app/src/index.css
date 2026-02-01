@@ -1,1 +1,79 @@
 @import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f4fff7;
+  --color-brand-100: #CFFFDC;
+  --color-brand-200: #a7eec1;
+  --color-brand-300: #68BA7F;
+  --color-brand-400: #4a9e62;
+  --color-brand-500: #2E6F40;
+  --color-brand-600: #253D2C;
+  --color-brand-700: #1b2e21;
+}
+
+@layer base {
+  body {
+    @apply bg-[#CFFFDC] text-[#253D2C] antialiased selection:bg-[#68BA7F] selection:text-white;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-xl bg-white/40 border border-[#68BA7F]/30 shadow-2xl;
+  }
+
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/40 border border-[#68BA7F]/30 shadow-2xl rounded-2xl transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 20px 50px rgba(37, 61, 44, 0.15);
+  }
+
+  .btn-premium {
+    @apply relative overflow-hidden transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .input-premium {
+    @apply w-full p-3 bg-white/30 border-2 border-[#68BA7F]/20 rounded-xl transition-all duration-300 focus:outline-none focus:border-[#2E6F40] focus:bg-white focus:ring-4 focus:ring-[#2E6F40]/10 placeholder:text-[#253D2C]/70;
+  }
+}
+
+.bg-mesh {
+  position: relative;
+  background-color: #253D2C;
+  background-image:
+    linear-gradient(rgba(37, 61, 44, 0.4), rgba(37, 61, 44, 0.4)),
+    url('/forest-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.bg-auth-gradient {
+  background-image:
+    radial-gradient(circle at top left, rgba(46, 111, 64, 0.8), rgba(37, 61, 44, 0.9)),
+    url('/forest-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
