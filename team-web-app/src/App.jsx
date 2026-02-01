@@ -15,8 +15,11 @@ import RequestForm from './components/Requests/RequestForm';
 import RequestList from './components/Requests/RequestList';
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("team_user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  const [token, setToken] = useState(() => localStorage.getItem("team_token") || null);
 
   // Views: 'login', 'register', 'forgot-password', 'reset-password'
   const [view, setView] = useState("login");
@@ -128,6 +131,8 @@ function App() {
       const data = await api.registerUser(formData);
       setUser(data.user);
       setToken(data.token);
+      localStorage.setItem("team_user", JSON.stringify(data.user));
+      localStorage.setItem("team_token", data.token);
       resetForms();
       toast.success("Account created successfully!");
     } catch (err) {
@@ -146,6 +151,8 @@ function App() {
       const data = await api.loginUser(mobile, password);
       setUser(data.user);
       setToken(data.token);
+      localStorage.setItem("team_user", JSON.stringify(data.user));
+      localStorage.setItem("team_token", data.token);
       resetForms();
       toast.success(`Welcome back, ${data.user.name}!`);
     } catch (err) {
@@ -194,6 +201,8 @@ function App() {
 
   const handleLogout = () => {
     setUser(null); setToken(null); setRequests([]); setView("login");
+    localStorage.removeItem("team_user");
+    localStorage.removeItem("team_token");
     toast.success("Logged out successfully!");
   };
 
@@ -217,7 +226,8 @@ function App() {
     if (!query.trim()) return;
     setLoading(true);
     try {
-      await api.submitRequest(token, query);
+      const newReq = await api.submitRequest(token, query);
+      setRequests(prev => [newReq, ...prev]);
       setQuery(""); setError("");
       toast.success("Request submitted!");
     } catch (err) {
