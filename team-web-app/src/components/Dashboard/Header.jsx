@@ -10,7 +10,12 @@ const Header = ({ user, handleLogout }) => {
                     className="flex items-center gap-3 pr-4 border-r border-[#68BA7F]/20 cursor-pointer group/profile"
                     onClick={() => window.dispatchEvent(new CustomEvent('open-profile'))}
                 >
-                    <img src={getImageUrl(user.profileImage)} className="w-10 h-10 rounded-full object-cover border-2 border-[#2E6F40] shadow-sm transition-transform group-hover/profile:scale-110" alt="Profile" />
+                    <img
+                        src={getImageUrl(user.profileImage)}
+                        onError={(e) => e.target.src = "https://via.placeholder.com/50?text=USER"}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-[#2E6F40] shadow-sm transition-transform group-hover/profile:scale-110"
+                        alt="Profile"
+                    />
                     <div className="hidden sm:block">
                         <div className="font-bold text-sm text-[#253D2C] leading-tight">{user.name}</div>
                         <div className="text-[10px] bg-[#68BA7F]/20 text-[#2E6F40] px-2 py-0.5 rounded-full font-black w-fit uppercase tracking-tighter">{user.role}</div>

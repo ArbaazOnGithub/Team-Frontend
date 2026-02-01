@@ -47,7 +47,12 @@ const ProfileModal = ({ user, isOpen, onClose, onUpdate, loading }) => {
 
                         <form onSubmit={handleSubmit} className="flex flex-col items-center">
                             <div className="relative group mb-8">
-                                <img src={imagePreview} className="w-28 h-28 rounded-full object-cover border-4 border-[#2E6F40] shadow-lg" alt="Profile" />
+                                <img
+                                    src={imagePreview}
+                                    onError={(e) => e.target.src = "https://via.placeholder.com/150?text=USER"}
+                                    className="w-28 h-28 rounded-full object-cover border-4 border-[#2E6F40] shadow-lg"
+                                    alt="Profile"
+                                />
                                 <label htmlFor="modal-image" className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                                     <span className="text-white text-xs font-bold uppercase">Change</span>
                                 </label>

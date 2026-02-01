@@ -18,7 +18,12 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
             <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-4">
                     <div className="relative">
-                        <img src={getImageUrl(req.user.profileImage)} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm" alt={req.user.name} />
+                        <img
+                            src={getImageUrl(req.user.profileImage)}
+                            onError={(e) => e.target.src = "https://via.placeholder.com/50?text=USER"}
+                            className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
+                            alt={req.user.name}
+                        />
                         <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${req.status?.toLowerCase() === 'pending' ? 'bg-[#68BA7F]' : req.status?.toLowerCase() === 'approved' ? 'bg-[#2E6F40]' : req.status?.toLowerCase() === 'resolved' ? 'bg-[#253D2C]' : 'bg-rose-500'}`}></div>
                     </div>
                     <div>
