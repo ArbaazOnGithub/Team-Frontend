@@ -13,6 +13,7 @@ import Stats from './components/Dashboard/Stats';
 import ProfileModal from './components/Dashboard/ProfileModal';
 import RequestForm from './components/Requests/RequestForm';
 import RequestList from './components/Requests/RequestList';
+import AdminDashboard from './components/Admin/AdminDashboard';
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -352,7 +353,7 @@ function App() {
   return (
     <div className="min-h-screen bg-mesh pb-20">
       <Toaster position="top-center" />
-      <Header user={user} handleLogout={handleLogout} />
+      <Header user={user} handleLogout={handleLogout} setView={setView} />
 
       <ProfileModal
         isOpen={isProfileOpen}
@@ -363,48 +364,56 @@ function App() {
       />
 
       <div className="max-w-2xl mx-auto px-6 py-12">
-        {error && <div className="glass bg-emerald-50/50 text-[#2E6F40] p-4 rounded-xl mb-8 text-center text-sm font-bold border-[#68BA7F]/20">{error}</div>}
+        {view === 'admin' ? (
+          <AdminDashboard
+            token={token}
+            user={user}
+            onBack={() => setView('dashboard')}
+          />
+        ) : (
+          <>
+            {error && <div className="glass bg-emerald-50/50 text-[#2E6F40] p-4 rounded-xl mb-8 text-center text-sm font-bold border-[#68BA7F]/20">{error}</div>}
 
-        <Stats stats={stats} />
+            <Stats stats={stats} />
 
-
-
-        <RequestForm
-          query={query} setQuery={setQuery}
-          submitRequest={handleRequestSubmit} loading={loading}
-        />
-
-        <div className="flex items-center gap-4 mb-8">
-          <div className="relative flex-1 group">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#68BA7F]/50 group-focus-within:text-[#2E6F40] transition-colors">🔍</span>
-            <input
-              type="text"
-              placeholder="Search queries..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="input-premium pl-12 py-3 bg-white/70 border-[#68BA7F]/30 focus:bg-white"
+            <RequestForm
+              query={query} setQuery={setQuery}
+              submitRequest={handleRequestSubmit} loading={loading}
             />
-          </div>
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="input-premium w-40 py-3 bg-white/70 border-[#68BA7F]/30 font-bold text-xs uppercase tracking-widest cursor-pointer focus:bg-white text-[#253D2C]"
-          >
-            <option value="all">All Status</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Resolved">Resolved</option>
-            <option value="Cancelled">Cancelled</option>
-          </select>
-        </div>
 
-        <RequestList
-          requests={filteredRequests}
-          user={user}
-          changeStatus={handleChangeStatus}
-          deleteRequest={handleDeleteRequest}
-          formatDate={formatDate}
-        />
+            <div className="flex items-center gap-4 mb-8">
+              <div className="relative flex-1 group">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#68BA7F]/50 group-focus-within:text-[#2E6F40] transition-colors">🔍</span>
+                <input
+                  type="text"
+                  placeholder="Search queries..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="input-premium pl-12 py-3 bg-white/70 border-[#68BA7F]/30 focus:bg-white"
+                />
+              </div>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="input-premium w-40 py-3 bg-white/70 border-[#68BA7F]/30 font-bold text-xs uppercase tracking-widest cursor-pointer focus:bg-white text-[#253D2C]"
+              >
+                <option value="all">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Resolved">Resolved</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            <RequestList
+              requests={filteredRequests}
+              user={user}
+              changeStatus={handleChangeStatus}
+              deleteRequest={handleDeleteRequest}
+              formatDate={formatDate}
+            />
+          </>
+        )}
       </div>
     </div>
   );

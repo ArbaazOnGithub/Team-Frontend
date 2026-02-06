@@ -102,6 +102,36 @@ export const fetchDetailedStats = async (token) => {
     return await res.json();
 };
 
+// --- ADMIN API ---
+export const fetchAllUsers = async (token) => {
+    const res = await fetch(`${API_URL}/admin/users`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error("Failed to fetch users");
+    return await res.json();
+};
+
+export const updateUserRole = async (token, userId, role) => {
+    const res = await fetch(`${API_URL}/admin/users/role`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ userId, role })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to update role");
+    return data;
+};
+
+export const deleteUser = async (token, userId) => {
+    const res = await fetch(`${API_URL}/admin/users/${userId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to delete user");
+    return data;
+};
+
 export const getImageUrl = (path) => {
     if (!path) return "https://via.placeholder.com/50";
     let cleanPath = path.replace(/\\/g, "/");
