@@ -43,6 +43,12 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                         <p className="text-rose-700 text-xs">{req.comment}</p>
                     </div>
                 )}
+                {req.actionBy && req.status !== 'Pending' && (
+                    <div className="mt-4 flex items-center gap-1.5 px-3 py-1.5 bg-[#68BA7F]/10 rounded-full w-fit">
+                        <span className="text-[10px] font-black text-[#68BA7F] uppercase tracking-tighter">Handled by:</span>
+                        <span className="text-[10px] font-bold text-[#2E6F40]">{req.actionBy.name}</span>
+                    </div>
+                )}
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[#68BA7F]/10">

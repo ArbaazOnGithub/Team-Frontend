@@ -142,8 +142,8 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                                             </td>
                                             <td className="p-5">
                                                 <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${user.role === 'admin'
-                                                        ? 'bg-blue-100 text-blue-600'
-                                                        : 'bg-slate-100 text-slate-600'
+                                                    ? 'bg-blue-100 text-blue-600'
+                                                    : 'bg-slate-100 text-slate-600'
                                                     }`}>
                                                     {user.role}
                                                 </span>
@@ -152,7 +152,7 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                                                 {new Date(user.createdAt).toLocaleDateString()}
                                             </td>
                                             <td className="p-5 text-right">
-                                                <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <div className="flex items-center justify-end gap-2 opacity-100 transition-opacity">
                                                     <button
                                                         onClick={() => handleToggleRole(user._id, user.role)}
                                                         className="p-2 rounded-lg bg-brand-400/10 text-brand-600 hover:bg-brand-500 hover:text-white transition-all text-sm font-bold"

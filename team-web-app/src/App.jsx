@@ -265,6 +265,7 @@ function App() {
     try {
       const data = await api.updateProfile(token, formData);
       setUser(data.user);
+      localStorage.setItem("team_user", JSON.stringify(data.user));
       setIsProfileOpen(false);
       toast.success("Profile updated!");
     } catch (err) {
