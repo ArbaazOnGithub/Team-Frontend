@@ -134,7 +134,16 @@ export const deleteUser = async (token, userId) => {
 
 export const getImageUrl = (path) => {
     if (!path) return "https://via.placeholder.com/50";
+    if (path.startsWith("http")) return path;
+
     let cleanPath = path.replace(/\\/g, "/");
     if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
+
+    // Ensure we don't have double uploads/ in the path if cleanPath already contains it
+    // and the static route is mounted at /uploads.
+    // However, the current backend serves /uploads/filename.
+    // If cleanPath is 'uploads/filename', it becomes BACKEND_URL + /uploads/filename.
+    // This is correct as Express treats /uploads as the route.
+
     return `${BACKEND_URL}/${cleanPath}`;
 };

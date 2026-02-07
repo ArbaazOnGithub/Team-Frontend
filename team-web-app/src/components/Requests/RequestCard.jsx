@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { getImageUrl } from '../../services/api';
 
 const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => {
-    const [isRejecting, setIsRejecting] = useState(false);
-    const [rejectReason, setRejectReason] = useState("");
+    const [isActioning, setIsActioning] = useState(false);
+    const [actionType, setActionType] = useState(""); // "Approved" or "Cancelled"
+    const [remark, setRemark] = useState("");
 
     if (!req.user) return null;
 
-    const handleReject = () => {
-        if (!rejectReason.trim()) return;
-        changeStatus(req._id, "Cancelled", rejectReason);
-        setIsRejecting(false);
+    const handleAction = () => {
+        if (!actionType) return;
+        changeStatus(req._id, actionType, remark);
+        setIsActioning(false);
+        setRemark("");
+        setActionType("");
     }
 
     return (
@@ -38,9 +41,11 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
             <div className="mb-6 pl-2 border-l-2 border-[#68BA7F]/20">
                 <p className="text-[#253D2C]/80 leading-relaxed text-sm">{req.query}</p>
                 {req.comment && (
-                    <div className="mt-4 p-3 bg-rose-50 border border-rose-100 rounded-lg">
-                        <p className="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1">Rejection Reason:</p>
-                        <p className="text-rose-700 text-xs">{req.comment}</p>
+                    <div className={`mt-4 p-3 rounded-lg border ${req.status === 'Cancelled' ? 'bg-rose-50 border-rose-100' : 'bg-[#68BA7F]/10 border-[#68BA7F]/20'}`}>
+                        <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${req.status === 'Cancelled' ? 'text-rose-400' : 'text-[#68BA7F]'}`}>
+                            {req.status === 'Cancelled' ? 'Rejection Reason:' : 'Admin Remark:'}
+                        </p>
+                        <p className={`text-xs ${req.status === 'Cancelled' ? 'text-rose-700' : 'text-[#253D2C]'}`}>{req.comment}</p>
                     </div>
                 )}
                 {req.actionBy && req.status !== 'Pending' && (
@@ -52,25 +57,35 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[#68BA7F]/10">
-                {user.role === "admin" && (
+                {user.role === "admin" && req.status === "Pending" && (
                     <div className="w-full sm:w-auto">
-                        {!isRejecting ? (
+                        {!isActioning ? (
                             <div className="flex gap-2 w-full">
-                                <button className="btn-premium flex-1 px-4 py-2 bg-[#2E6F40] text-white rounded-lg text-xs font-black uppercase tracking-tight hover:bg-[#253D2C]" onClick={() => changeStatus(req._id, "Approved")}>Accept</button>
-                                <button className="btn-premium flex-1 px-4 py-2 bg-[#253D2C]/10 text-[#253D2C] border border-[#253D2C]/20 rounded-lg text-xs font-black uppercase tracking-tight hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200" onClick={() => setIsRejecting(true)}>Reject</button>
+                                <button className="btn-premium flex-1 px-4 py-2 bg-[#2E6F40] text-white rounded-lg text-xs font-black uppercase tracking-tight hover:bg-[#253D2C]" onClick={() => { setIsActioning(true); setActionType("Approved"); }}>Accept</button>
+                                <button className="btn-premium flex-1 px-4 py-2 bg-[#253D2C]/10 text-[#253D2C] border border-[#253D2C]/20 rounded-lg text-xs font-black uppercase tracking-tight hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200" onClick={() => { setIsActioning(true); setActionType("Cancelled"); }}>Reject</button>
                             </div>
                         ) : (
                             <div className="w-full animate-fadeIn">
                                 <textarea
-                                    className="w-full p-3 text-xs bg-white border border-rose-200 rounded-lg focus:outline-none focus:border-rose-400 text-rose-800 placeholder:text-rose-300 mb-2"
-                                    placeholder="Reason for rejection..."
-                                    value={rejectReason}
-                                    onChange={(e) => setRejectReason(e.target.value)}
+                                    className={`w-full p-3 text-xs bg-white border rounded-lg focus:outline-none mb-2 ${actionType === 'Cancelled' ? 'border-rose-200 focus:border-rose-400 text-rose-800 placeholder:text-rose-300' : 'border-[#68BA7F]/30 focus:border-[#2E6F40] text-[#253D2C] placeholder:#68BA7F/50'}`}
+                                    placeholder={actionType === 'Cancelled' ? "Reason for rejection..." : "Add a remark (optional)..."}
+                                    value={remark}
+                                    onChange={(e) => setRemark(e.target.value)}
                                     autoFocus
                                 ></textarea>
                                 <div className="flex gap-2">
-                                    <button className="btn-premium flex-1 px-3 py-1.5 bg-rose-500 text-white rounded-md text-[10px] font-black uppercase tracking-widest hover:bg-rose-600" onClick={handleReject}>Confirm Rejection</button>
-                                    <button className="btn-premium px-3 py-1.5 bg-gray-100 text-gray-500 rounded-md text-[10px] font-black uppercase tracking-widest hover:bg-gray-200" onClick={() => { setIsRejecting(false); setRejectReason(""); }}>Cancel</button>
+                                    <button
+                                        className={`btn-premium flex-1 px-3 py-1.5 text-white rounded-md text-[10px] font-black uppercase tracking-widest ${actionType === 'Cancelled' ? 'bg-rose-500 hover:bg-rose-600' : 'bg-[#2E6F40] hover:bg-[#253D2C]'}`}
+                                        onClick={handleAction}
+                                    >
+                                        Confirm {actionType === 'Approved' ? 'Approval' : 'Rejection'}
+                                    </button>
+                                    <button
+                                        className="btn-premium px-3 py-1.5 bg-gray-100 text-gray-500 rounded-md text-[10px] font-black uppercase tracking-widest hover:bg-gray-200"
+                                        onClick={() => { setIsActioning(false); setRemark(""); setActionType(""); }}
+                                    >
+                                        Cancel
+                                    </button>
                                 </div>
                             </div>
                         )}
