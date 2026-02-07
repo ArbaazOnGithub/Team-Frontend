@@ -133,7 +133,7 @@ export const deleteUser = async (token, userId) => {
 };
 
 export const getImageUrl = (path) => {
-    if (!path) return "https://via.placeholder.com/50";
+    if (!path) return "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff";
     if (path.startsWith("http")) return path;
 
     let cleanPath = path.replace(/\\/g, "/");

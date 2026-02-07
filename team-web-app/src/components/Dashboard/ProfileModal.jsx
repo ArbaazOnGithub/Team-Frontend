@@ -49,7 +49,7 @@ const ProfileModal = ({ user, isOpen, onClose, onUpdate, loading }) => {
                             <div className="relative group mb-8">
                                 <img
                                     src={imagePreview}
-                                    onError={(e) => e.target.src = "https://via.placeholder.com/150?text=USER"}
+                                    onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff&size=150"}
                                     className="w-28 h-28 rounded-full object-cover border-4 border-[#2E6F40] shadow-lg"
                                     alt="Profile"
                                 />

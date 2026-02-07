@@ -23,7 +23,7 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                     <div className="relative">
                         <img
                             src={getImageUrl(req.user.profileImage)}
-                            onError={(e) => e.target.src = "https://via.placeholder.com/50?text=USER"}
+                            onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"}
                             className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
                             alt={req.user.name}
                         />

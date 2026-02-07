@@ -12,7 +12,7 @@ const Header = ({ user, handleLogout, setView }) => {
                 >
                     <img
                         src={getImageUrl(user.profileImage)}
-                        onError={(e) => e.target.src = "https://via.placeholder.com/50?text=USER"}
+                        onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"}
                         className="w-10 h-10 rounded-full object-cover border-2 border-[#2E6F40] shadow-sm transition-transform group-hover/profile:scale-110"
                         alt="Profile"
                     />

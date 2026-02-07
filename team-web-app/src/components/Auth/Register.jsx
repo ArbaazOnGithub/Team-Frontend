@@ -1,10 +1,11 @@
+```javascript
 import React from 'react';
 
 const Register = ({ name, setName, email, setEmail, mobile, setMobile, password, setPassword, imagePreview, handleImageChange, loading, handleRegister, setView, resetForms }) => {
     return (
         <div>
             <div className="relative group w-24 h-24 mx-auto mb-6">
-                <img src={imagePreview || "https://via.placeholder.com/150"} className="w-full h-full rounded-full object-cover border-4 border-[#2E6F40] shadow-md" alt="Preview" />
+                <img src={imagePreview || "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff&size=150"} onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"} className="w-full h-full rounded-full object-cover border-4 border-[#2E6F40] shadow-md" alt="Preview" />
                 <label htmlFor="file-upload" className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                     <span className="text-white text-xs font-bold uppercase">Upload</span>
                 </label>
