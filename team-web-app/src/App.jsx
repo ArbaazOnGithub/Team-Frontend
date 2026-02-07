@@ -63,7 +63,7 @@ function App() {
   useEffect(() => {
     let socket = null;
     if (token && user) {
-      socket = io("http://localhost:5000", { auth: { token } });
+      socket = io(api.BACKEND_URL, { auth: { token } });
       socket.on("connect", () => console.log("Connected to Socket"));
       socket.on("new_request", (data) => {
         if (user.role === 'admin' || data.user._id === user._id) {

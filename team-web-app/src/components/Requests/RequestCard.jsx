@@ -92,7 +92,7 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                     </div>
                 )}
 
-                {(user.role === "admin" || req.user._id === user._id) && !isRejecting && (
+                {(user.role === "admin" || req.user._id === user._id) && !isActioning && (
                     <button className="btn-premium text-[#2E6F40] hover:text-[#253D2C] font-bold text-xs uppercase tracking-widest flex items-center gap-1 group" onClick={() => deleteRequest(req._id)}>
                         <span className="opacity-0 group-hover:opacity-100 transition-opacity">✕</span> Delete Request
                     </button>

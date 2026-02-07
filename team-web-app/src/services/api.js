@@ -1,5 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 export const fetchRequests = async (token) => {
     const res = await fetch(`${API_URL}/requests`, { headers: { Authorization: `Bearer ${token}` } });
