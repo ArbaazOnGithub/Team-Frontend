@@ -21,8 +21,8 @@ const Register = ({ name, setName, email, setEmail, mobile, setMobile, password,
             >
                 {loading ? "Creating Account..." : "Register"}
             </button>
-            <p className="text-center mt-5 text-sm text-[#253D2C]/80">
-                Already have an account? <span onClick={() => { setView("login"); resetForms(); }} className="text-[#2E6F40] cursor-pointer font-bold underline">Login</span>
+            <p className="text-center mt-5 text-sm text-[#253D2C]/60 font-black">
+                Already have an account? <span onClick={() => { setView("login"); resetForms(); }} className="text-[#2E6F40] cursor-pointer underline underline-offset-4 hover:text-[#253D2C] transition-colors">Login</span>
             </p>
         </div>
     );

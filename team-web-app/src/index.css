@@ -54,7 +54,7 @@
 
 .bg-auth-gradient {
   background-image:
-    radial-gradient(circle at top left, rgba(46, 111, 64, 0.8), rgba(37, 61, 44, 0.9)),
+    linear-gradient(rgba(37, 61, 44, 0.4), rgba(37, 61, 44, 0.4)),
     url('/forest-bg.jpg');
   background-size: cover;
   background-position: center;

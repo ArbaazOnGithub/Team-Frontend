@@ -26,9 +26,9 @@ const Login = ({ mobile, setMobile, password, setPassword, loading, handleLogin,
             >
                 {loading ? "Logging in..." : "Login"}
             </button>
-            <div className="flex justify-between mt-5 text-sm">
-                <span onClick={() => { setView("register"); resetForms(); }} className="text-[#2E6F40] cursor-pointer font-bold underline">Register</span>
-                <span onClick={() => { setView("forgot-password"); resetForms(); }} className="text-[#253D2C]/80 cursor-pointer hover:text-[#253D2C]">Forgot Password?</span>
+            <div className="flex justify-between mt-5 text-sm font-black">
+                <span onClick={() => { setView("register"); resetForms(); }} className="text-[#2E6F40] cursor-pointer underline underline-offset-4 hover:text-[#253D2C] transition-colors">Register</span>
+                <span onClick={() => { setView("forgot-password"); resetForms(); }} className="text-[#253D2C]/60 cursor-pointer hover:text-[#2E6F40] transition-colors">Forgot Password?</span>
             </div>
         </div>
     );
