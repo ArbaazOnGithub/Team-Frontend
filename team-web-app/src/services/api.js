@@ -137,6 +137,12 @@ export const getImageUrl = (path) => {
     if (path.startsWith("http")) return path;
 
     let cleanPath = path.replace(/\\/g, "/");
+
+    // Proactively replace legacy via.placeholder.com with ui-avatars.com
+    if (cleanPath.includes("via.placeholder.com")) {
+        return "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff";
+    }
+
     if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
 
     // Ensure we don't have double uploads/ in the path if cleanPath already contains it

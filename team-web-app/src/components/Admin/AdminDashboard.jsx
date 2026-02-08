@@ -127,6 +127,7 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                                                 <div className="flex items-center gap-3">
                                                     <img
                                                         src={api.getImageUrl(user.profileImage)}
+                                                        onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"}
                                                         alt={user.name}
                                                         className="w-10 h-10 rounded-full object-cover border-2 border-[#68BA7F]/20"
                                                     />
