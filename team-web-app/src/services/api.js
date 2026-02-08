@@ -132,6 +132,14 @@ export const deleteUser = async (token, userId) => {
     return data;
 };
 
+export const fetchRequestLogs = async (token) => {
+    const res = await fetch(`${API_URL}/admin/requests/logs`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error("Failed to fetch logs");
+    return await res.json();
+};
+
 export const getImageUrl = (path) => {
     if (!path) return "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff";
     if (path.startsWith("http")) return path;
