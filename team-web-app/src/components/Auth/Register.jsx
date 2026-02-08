@@ -1,4 +1,3 @@
-```javascript
 import React from 'react';
 
 const Register = ({ name, setName, email, setEmail, mobile, setMobile, password, setPassword, imagePreview, handleImageChange, loading, handleRegister, setView, resetForms }) => {
