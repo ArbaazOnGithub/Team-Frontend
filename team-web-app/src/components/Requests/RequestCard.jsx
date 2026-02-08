@@ -31,27 +31,27 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                     </div>
                     <div>
                         <h3 className="font-bold text-[#253D2C] leading-tight">{req.user.name}</h3>
-                        <p className="text-xs text-[#68BA7F] font-bold uppercase tracking-tighter">{formatDate(req.createdAt)}</p>
+                        <p className="text-xs text-[#2E6F40] font-black uppercase tracking-tighter">{formatDate(req.createdAt)}</p>
                     </div>
                 </div>
-                <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${req.status?.toLowerCase() === 'pending' ? 'bg-[#68BA7F]/10 text-[#68BA7F]' : req.status?.toLowerCase() === 'approved' ? 'bg-[#2E6F40]/10 text-[#2E6F40]' : req.status?.toLowerCase() === 'resolved' ? 'bg-[#253D2C]/10 text-[#253D2C]' : 'bg-rose-50 text-rose-600'}`}>
+                <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${req.status?.toLowerCase() === 'pending' ? 'bg-[#2E6F40]/10 text-[#2E6F40]' : req.status?.toLowerCase() === 'approved' ? 'bg-[#2E6F40]/10 text-[#2E6F40]' : req.status?.toLowerCase() === 'resolved' ? 'bg-[#253D2C]/10 text-[#253D2C]' : 'bg-rose-50 text-rose-600'}`}>
                     {req.status}
                 </span>
             </div>
             <div className="mb-6 pl-2 border-l-2 border-[#68BA7F]/20">
                 <p className="text-[#253D2C]/80 leading-relaxed text-sm">{req.query}</p>
                 {req.comment && (
-                    <div className={`mt-4 p-3 rounded-lg border ${req.status === 'Cancelled' ? 'bg-rose-50 border-rose-100' : 'bg-[#68BA7F]/10 border-[#68BA7F]/20'}`}>
-                        <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${req.status === 'Cancelled' ? 'text-rose-400' : 'text-[#68BA7F]'}`}>
+                    <div className={`mt-4 p-3 rounded-lg border ${req.status === 'Cancelled' ? 'bg-rose-50 border-rose-100' : 'bg-[#2E6F40]/10 border-[#2E6F40]/20'}`}>
+                        <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${req.status === 'Cancelled' ? 'text-rose-500' : 'text-[#2E6F40]'}`}>
                             {req.status === 'Cancelled' ? 'Rejection Reason:' : 'Admin Remark:'}
                         </p>
                         <p className={`text-xs ${req.status === 'Cancelled' ? 'text-rose-700' : 'text-[#253D2C]'}`}>{req.comment}</p>
                     </div>
                 )}
                 {req.actionBy && req.status !== 'Pending' && (
-                    <div className="mt-4 flex items-center gap-1.5 px-3 py-1.5 bg-[#68BA7F]/10 rounded-full w-fit">
-                        <span className="text-[10px] font-black text-[#68BA7F] uppercase tracking-tighter">Handled by:</span>
-                        <span className="text-[10px] font-bold text-[#2E6F40]">{req.actionBy.name}</span>
+                    <div className="mt-4 flex items-center gap-1.5 px-3 py-1.5 bg-[#2E6F40]/10 rounded-full w-fit">
+                        <span className="text-[10px] font-black text-[#2E6F40] uppercase tracking-tighter">Handled by:</span>
+                        <span className="text-[10px] font-black text-[#2E6F40]">{req.actionBy.name}</span>
                     </div>
                 )}
             </div>

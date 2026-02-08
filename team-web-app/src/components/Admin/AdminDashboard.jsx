@@ -110,19 +110,17 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                                     />
                                 </div>
 
-                                <div className="grid grid-cols-3 gap-4 flex-1">
-                                    <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
-                                        <p className="text-[#68BA7F] font-bold uppercase text-[9px] tracking-widest mb-1">Total</p>
-                                        <h3 className="text-xl font-black text-[#253D2C]">{users.length}</h3>
-                                    </div>
-                                    <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
-                                        <p className="text-[#68BA7F] font-bold uppercase text-[9px] tracking-widest mb-1">Admins</p>
-                                        <h3 className="text-xl font-black text-[#253D2C]">{users.filter(u => u.role === 'admin').length}</h3>
-                                    </div>
-                                    <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
-                                        <p className="text-[#68BA7F] font-bold uppercase text-[9px] tracking-widest mb-1">Users</p>
-                                        <h3 className="text-xl font-black text-[#253D2C]">{users.filter(u => u.role === 'user').length}</h3>
-                                    </div>
+                                <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
+                                    <p className="text-[#2E6F40] font-bold uppercase text-[9px] tracking-widest mb-1">Total</p>
+                                    <h3 className="text-xl font-black text-[#253D2C]">{users.length}</h3>
+                                </div>
+                                <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
+                                    <p className="text-[#2E6F40] font-bold uppercase text-[9px] tracking-widest mb-1">Admins</p>
+                                    <h3 className="text-xl font-black text-[#253D2C]">{users.filter(u => u.role === 'admin').length}</h3>
+                                </div>
+                                <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
+                                    <p className="text-[#2E6F40] font-bold uppercase text-[9px] tracking-widest mb-1">Users</p>
+                                    <h3 className="text-xl font-black text-[#253D2C]">{users.filter(u => u.role === 'user').length}</h3>
                                 </div>
                             </div>
 
@@ -132,11 +130,11 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                                     <table className="w-full text-left border-collapse">
                                         <thead>
                                             <tr className="border-b border-black/5 bg-white/30">
-                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest">User</th>
-                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest">Contact</th>
-                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest">Role</th>
-                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest">Joined</th>
-                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest text-right">Actions</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">User</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Contact</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Role</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Joined</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest text-right">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>

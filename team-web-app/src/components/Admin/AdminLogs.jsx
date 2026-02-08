@@ -65,19 +65,19 @@ const AdminLogs = ({ token }) => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div className="flex flex-1 gap-4 max-w-2xl">
                     <div className="relative group flex-1">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#68BA7F]/50 group-focus-within:text-[#2E6F40] transition-colors">🔍</span>
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#2E6F40]/60 group-focus-within:text-[#2E6F40] transition-colors">🔍</span>
                         <input
                             type="text"
                             placeholder="Search by Request No, Name, or Query..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="input-premium pl-12 py-3 bg-white/70 border-[#68BA7F]/30 focus:bg-white"
+                            className="input-premium pl-12 py-3 bg-white/70 border-[#2E6F40]/30 focus:bg-white"
                         />
                     </div>
                     <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
-                        className="input-premium w-40 py-3 bg-white/70 border-[#68BA7F]/30 font-bold text-xs uppercase tracking-widest cursor-pointer focus:bg-white text-[#253D2C]"
+                        className="input-premium w-40 py-3 bg-white/70 border-[#2E6F40]/30 font-bold text-xs uppercase tracking-widest cursor-pointer focus:bg-white text-[#253D2C]"
                     >
                         <option value="all">All Status</option>
                         <option value="Pending">Pending</option>
@@ -99,12 +99,12 @@ const AdminLogs = ({ token }) => {
                     <table className="w-full text-left border-collapse min-w-[1000px]">
                         <thead>
                             <tr className="border-b border-black/5 bg-white/30">
-                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-[10px] tracking-widest">No</th>
-                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-[10px] tracking-widest">Raiser</th>
-                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-[10px] tracking-widest">Query</th>
-                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-[10px] tracking-widest">Status</th>
-                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-[10px] tracking-widest">Handler</th>
-                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-[10px] tracking-widest">Date</th>
+                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">No</th>
+                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Raiser</th>
+                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Query</th>
+                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Status</th>
+                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Handler</th>
+                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,9 +128,9 @@ const AdminLogs = ({ token }) => {
                                         </td>
                                         <td className="p-5">
                                             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${log.status === 'Pending' ? 'bg-[#68BA7F]/10 text-[#68BA7F]' :
-                                                    log.status === 'Approved' ? 'bg-[#2E6F40]/10 text-[#2E6F40]' :
-                                                        log.status === 'Resolved' ? 'bg-[#253D2C]/10 text-[#253D2C]' :
-                                                            'bg-rose-50 text-rose-600'
+                                                log.status === 'Approved' ? 'bg-[#2E6F40]/10 text-[#2E6F40]' :
+                                                    log.status === 'Resolved' ? 'bg-[#253D2C]/10 text-[#253D2C]' :
+                                                        'bg-rose-50 text-rose-600'
                                                 }`}>
                                                 {log.status}
                                             </span>
