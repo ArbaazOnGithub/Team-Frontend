@@ -38,6 +38,11 @@ function App() {
   const [newPassword, setNewPassword] = useState("");
   const [resetMobile, setResetMobile] = useState("");
 
+  // Leave Form States
+  const [requestType, setRequestType] = useState("General");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
   // Dashboard States
   const [query, setQuery] = useState("");
   const [requests, setRequests] = useState([]);
@@ -210,6 +215,7 @@ function App() {
   const resetForms = () => {
     setMobile(""); setName(""); setPassword(""); setEmail(""); setOtp(""); setNewPassword("");
     setImageFile(null); setImagePreview(null); setError(""); setSuccessMsg("");
+    setQuery(""); setRequestType("General"); setStartDate(""); setEndDate("");
   };
 
   const handleImageChange = (e) => {
@@ -225,11 +231,22 @@ function App() {
   // --- DASHBOARD ACTIONS ---
   const handleRequestSubmit = async () => {
     if (!query.trim()) return;
+
+    let payload = { query: query.trim(), requestType };
+    if (requestType === 'Leave') {
+      if (!startDate || !endDate) return toast.error("Please select both dates");
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const diffTime = Math.abs(end - start);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      payload = { ...payload, startDate, endDate, daysCount: diffDays };
+    }
+
     setLoading(true);
     try {
-      const newReq = await api.submitRequest(token, query);
+      const newReq = await api.submitRequest(token, payload);
       setRequests(prev => [newReq, ...prev]);
-      setQuery(""); setError("");
+      resetForms();
       toast.success("Request submitted!");
     } catch (err) {
       setError("Failed to submit");
@@ -380,6 +397,9 @@ function App() {
             <RequestForm
               query={query} setQuery={setQuery}
               submitRequest={handleRequestSubmit} loading={loading}
+              requestType={requestType} setRequestType={setRequestType}
+              startDate={startDate} setStartDate={setStartDate}
+              endDate={endDate} setEndDate={setEndDate}
             />
 
             <div className="flex items-center gap-4 mb-8">

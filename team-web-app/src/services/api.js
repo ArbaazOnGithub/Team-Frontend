@@ -54,11 +54,11 @@ export const resetPassword = async (email, otp, newPassword) => {
     return data;
 };
 
-export const submitRequest = async (token, query) => {
+export const submitRequest = async (token, payload) => {
     const res = await fetch(`${API_URL}/requests`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ query: query.trim() })
+        body: JSON.stringify(payload)
     });
     if (!res.ok) throw new Error("Failed to submit request");
     return await res.json();

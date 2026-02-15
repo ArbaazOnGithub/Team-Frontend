@@ -18,7 +18,12 @@ const Header = ({ user, handleLogout, setView }) => {
                     />
                     <div className="hidden sm:block">
                         <div className="font-bold text-sm text-[#253D2C] leading-tight">{user.name}</div>
-                        <div className="text-[10px] bg-[#68BA7F]/20 text-[#2E6F40] px-2 py-0.5 rounded-full font-black w-fit uppercase tracking-tighter">{user.role}</div>
+                        <div className="flex gap-1 mt-1">
+                            <div className="text-[10px] bg-[#68BA7F]/20 text-[#2E6F40] px-2 py-0.5 rounded-full font-black w-fit uppercase tracking-tighter">{user.role}</div>
+                            <div className="text-[10px] bg-[#2E6F40] text-white px-2 py-0.5 rounded-full font-black w-fit uppercase tracking-tighter">
+                                PL: {user.paidLeaveBalance || 0}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">

@@ -40,6 +40,16 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
             </div>
             <div className="mb-6 pl-2 border-l-2 border-[#68BA7F]/20">
                 <p className="text-[#253D2C]/80 leading-relaxed text-sm">{req.query}</p>
+                {req.requestType === 'Leave' && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                        <div className="px-3 py-1 bg-[#2E6F40]/10 text-[#2E6F40] rounded-lg text-[10px] font-black uppercase tracking-widest border border-[#2E6F40]/20">
+                            📅 {new Date(req.startDate).toLocaleDateString()} - {new Date(req.endDate).toLocaleDateString()}
+                        </div>
+                        <div className="px-3 py-1 bg-[#253D2C] text-white rounded-lg text-[10px] font-black uppercase tracking-widest">
+                            {req.daysCount} Days
+                        </div>
+                    </div>
+                )}
                 {req.comment && (
                     <div className={`mt-4 p-3 rounded-lg border ${req.status === 'Cancelled' ? 'bg-rose-50 border-rose-100' : 'bg-[#2E6F40]/10 border-[#2E6F40]/20'}`}>
                         <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${req.status === 'Cancelled' ? 'text-rose-500' : 'text-[#2E6F40]'}`}>
