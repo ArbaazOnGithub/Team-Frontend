@@ -1,23 +1,65 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { getImageUrl } from '../../services/api';
+import * as api from '../../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
+import io from 'socket.io-client';
 
 const Header = ({ user, handleLogout, setView }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isNotifOpen, setIsNotifOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
     const dropdownRef = useRef(null);
+    const notifRef = useRef(null);
 
-    // Close dropdown when clicking outside
+    const token = localStorage.getItem("team_token");
+
+    // Socket for notifications
+    useEffect(() => {
+        if (!token || !user) return;
+        const socket = io(api.BACKEND_URL, { auth: { token } });
+
+        socket.on('notification_received', (notif) => {
+            setNotifications(prev => [notif, ...prev]);
+        });
+
+        loadNotifications();
+
+        return () => socket.disconnect();
+    }, [token, user]);
+
+    const loadNotifications = async () => {
+        try {
+            const data = await api.fetchNotifications(token);
+            setNotifications(data);
+        } catch (err) {
+            console.error("Failed to load notifications", err);
+        }
+    };
+
+    const handleMarkRead = async () => {
+        if (notifications.filter(n => !n.isRead).length === 0) return;
+        try {
+            await api.markNotificationsAsRead(token);
+            setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    // Close dropdowns when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsDropdownOpen(false);
+            }
+            if (notifRef.current && !notifRef.current.contains(event.target)) {
+                setIsNotifOpen(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+    const unreadCount = notifications.filter(n => !n.isRead).length;
 
     return (
         <header className="glass bg-[#CFFFDC]/90 px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-[#68BA7F]/30">
@@ -28,15 +70,72 @@ const Header = ({ user, handleLogout, setView }) => {
                 Team Queries
             </h1>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-6">
+                {/* Notifications Bell */}
+                <div className="relative" ref={notifRef}>
+                    <button
+                        onClick={() => {
+                            setIsNotifOpen(!isNotifOpen);
+                            if (!isNotifOpen) handleMarkRead();
+                        }}
+                        className="p-2.5 rounded-xl bg-white/50 border border-[#68BA7F]/20 hover:bg-white transition-all text-xl relative"
+                    >
+                        🔔
+                        {unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-full shadow-lg animate-bounce">
+                                {unreadCount}
+                            </span>
+                        )}
+                    </button>
+
+                    <AnimatePresence>
+                        {isNotifOpen && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                className="absolute right-0 mt-3 w-80 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-[#68BA7F]/20 overflow-hidden z-[60]"
+                            >
+                                <div className="p-4 bg-[#CFFFDC]/30 border-b border-[#68BA7F]/10 flex justify-between items-center">
+                                    <span className="text-xs font-black uppercase text-[#2E6F40] tracking-widest">Notifications</span>
+                                    {unreadCount > 0 && (
+                                        <span className="text-[9px] bg-[#2E6F40] text-white px-2 py-0.5 rounded-full font-bold">
+                                            {unreadCount} NEW
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="max-h-96 overflow-y-auto">
+                                    {notifications.length > 0 ? (
+                                        notifications.map((n) => (
+                                            <div key={n._id} className={`p-4 border-b border-[#68BA7F]/5 hover:bg-[#CFFFDC]/20 transition-colors ${!n.isRead ? 'bg-[#CFFFDC]/10' : ''}`}>
+                                                <div className="flex gap-3">
+                                                    <span className="text-lg">{n.type === 'leave_update' ? '📅' : '📝'}</span>
+                                                    <div className="flex-1">
+                                                        <p className="text-xs text-[#253D2C] leading-relaxed font-bold">{n.message}</p>
+                                                        <p className="text-[9px] text-gray-400 mt-1">{new Date(n.createdAt).toLocaleString()}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="p-8 text-center">
+                                            <p className="text-gray-400 text-xs font-bold italic">No notifications yet</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
                 <div className="relative" ref={dropdownRef}>
                     {/* User Profile Trigger */}
                     <div
                         className="flex items-center gap-3 cursor-pointer group/profile p-1 rounded-full hover:bg-[#68BA7F]/10 transition-colors"
-                        onClick={toggleDropdown}
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
                         <img
-                            src={getImageUrl(user.profileImage)}
+                            src={api.getImageUrl(user.profileImage)}
                             onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"}
                             className="w-10 h-10 rounded-full object-cover border-2 border-[#2E6F40] shadow-sm transition-transform group-hover/profile:scale-105"
                             alt="Profile"
@@ -136,8 +235,8 @@ const Header = ({ user, handleLogout, setView }) => {
                     </AnimatePresence>
                 </div>
 
-                {/* Desktop Logout (Hidden on very small screens, redundant due to dropdown but kept for quick access on desktop) */}
-                <div className="hidden lg:flex items-center gap-2">
+                {/* Desktop Logout (Quick access for Admin Dashboard or Desktop) */}
+                <div className="hidden sm:flex lg:flex items-center gap-2">
                     <button
                         onClick={handleLogout}
                         className="btn-premium px-5 py-2 bg-[#253D2C] text-white rounded-xl text-xs font-bold hover:bg-[#2E6F40] shadow-lg shadow-[#253D2C]/20"
@@ -151,4 +250,5 @@ const Header = ({ user, handleLogout, setView }) => {
 };
 
 export default Header;
+
 

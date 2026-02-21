@@ -80,9 +80,9 @@ function App() {
       socket.on("status_update", (updatedItem) => {
         setRequests((prev) => prev.map((item) => (item._id === updatedItem._id ? updatedItem : item)));
         loadStats();
-        if (updatedItem.user._id === user._id) {
-          toast(`Request status updated: ${updatedItem.status}`, { icon: '🔔' });
-        }
+        // Socket room ensures only the correct user hears this if we were using private events, 
+        // but status_update is broadcasted to all admins or the requester. 
+        // For the new 'notification_received' event, it's already room-restricted on backend.
       });
       socket.on("request_deleted", (data) => {
         setRequests((prev) => prev.filter(item => item._id !== data.id));

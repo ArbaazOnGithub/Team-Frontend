@@ -9,10 +9,35 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState('users'); // 'users' or 'logs'
+    const [selectedUserForLeave, setSelectedUserForLeave] = useState(null);
+    const [newLeaveBalance, setNewLeaveBalance] = useState(0);
+    const [leaveReason, setLeaveReason] = useState("");
 
     useEffect(() => {
         if (activeTab === 'users') loadUsers();
     }, [activeTab]);
+
+    useEffect(() => {
+        if (selectedUserForLeave) {
+            setNewLeaveBalance(selectedUserForLeave.paidLeaveBalance || 0);
+            setLeaveReason("");
+        }
+    }, [selectedUserForLeave]);
+
+    const handleUpdateBalance = async () => {
+        if (!leaveReason.trim()) return toast.error("Please provide a reason");
+        setLoading(true);
+        try {
+            await api.updateUserLeaveBalance(token, selectedUserForLeave._id, newLeaveBalance, leaveReason);
+            setUsers(prev => prev.map(u => u._id === selectedUserForLeave._id ? { ...u, paidLeaveBalance: newLeaveBalance } : u));
+            toast.success("Leave balance updated!");
+            setSelectedUserForLeave(null);
+        } catch (err) {
+            toast.error(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const loadUsers = async () => {
         setLoading(true);
@@ -132,6 +157,7 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                                             <tr className="border-b border-black/5 bg-white/30">
                                                 <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">User</th>
                                                 <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Contact</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Leave Balance</th>
                                                 <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Role</th>
                                                 <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Joined</th>
                                                 <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest text-right">Actions</th>
@@ -167,6 +193,20 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                                                             <p className="text-xs text-gray-500">{user.mobile}</p>
                                                         </td>
                                                         <td className="p-5">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="font-black text-[#2E6F40] bg-[#CFFFDC] px-3 py-1 rounded-lg text-xs border border-[#68BA7F]/20">
+                                                                    {user.paidLeaveBalance || 0} PL
+                                                                </span>
+                                                                <button
+                                                                    onClick={() => setSelectedUserForLeave(user)}
+                                                                    className="p-1.5 hover:bg-[#68BA7F]/10 rounded-lg text-[#2E6F40] transition-colors"
+                                                                    title="Adjust Balance"
+                                                                >
+                                                                    ✏️
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                        <td className="p-5">
                                                             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${user.role === 'admin'
                                                                 ? 'bg-[#2E6F40]/10 text-[#2E6F40]'
                                                                 : 'bg-slate-100 text-slate-600'
@@ -199,7 +239,7 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                                                     </motion.tr>
                                                 )) : (
                                                     <tr>
-                                                        <td colSpan="5" className="p-10 text-center font-bold text-[#253D2C]/40">No users found matching your search</td>
+                                                        <td colSpan="6" className="p-10 text-center font-bold text-[#253D2C]/40">No users found matching your search</td>
                                                     </tr>
                                                 )}
                                             </AnimatePresence>
@@ -217,6 +257,69 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                         >
                             <AdminLogs token={token} />
                         </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Adjust Balance Modal */}
+                <AnimatePresence>
+                    {selectedUserForLeave && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setSelectedUserForLeave(null)}
+                                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                            />
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                                className="relative w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl border border-[#68BA7F]/20"
+                            >
+                                <h3 className="text-2xl font-black text-[#253D2C] mb-2 text-center">Adjust Leave Balance</h3>
+                                <p className="text-sm text-gray-500 text-center mb-6">Updating balance for <span className="text-[#2E6F40] font-bold">{selectedUserForLeave.name}</span></p>
+
+                                <div className="space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1 tracking-widest">New Balance (Days)</label>
+                                        <input
+                                            type="number"
+                                            value={newLeaveBalance}
+                                            onChange={(e) => setNewLeaveBalance(parseFloat(e.target.value))}
+                                            className="input-premium py-4 font-black text-xl text-center bg-[#CFFFDC]/20 border-[#68BA7F]/30"
+                                            step="0.5"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1 tracking-widest">Reason for Adjustment</label>
+                                        <textarea
+                                            placeholder="e.g., Deduction for unlogged leave, corrected month-end balance..."
+                                            value={leaveReason}
+                                            onChange={(e) => setLeaveReason(e.target.value)}
+                                            className="input-premium min-h-24 py-3 bg-white border-dashed border-[#68BA7F]/40"
+                                        />
+                                    </div>
+
+                                    <div className="flex gap-3">
+                                        <button
+                                            onClick={() => setSelectedUserForLeave(null)}
+                                            className="flex-1 py-4 rounded-2xl font-bold text-gray-400 hover:bg-gray-50 transition-all border border-gray-100"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={handleUpdateBalance}
+                                            disabled={loading || !leaveReason.trim()}
+                                            className="flex-[2] py-4 rounded-2xl bg-[#2E6F40] text-white font-bold hover:bg-[#253D2C] shadow-lg shadow-[#2E6F40]/20 disabled:opacity-50 transition-all"
+                                        >
+                                            {loading ? "Updating..." : "Confirm Update"}
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
                     )}
                 </AnimatePresence>
             </div>

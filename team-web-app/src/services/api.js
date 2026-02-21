@@ -140,6 +140,36 @@ export const fetchRequestLogs = async (token) => {
     return await res.json();
 };
 
+export const updateUserLeaveBalance = async (token, userId, newBalance, reason) => {
+    const res = await fetch(`${API_URL}/admin/users/leave-balance`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ userId, newBalance, reason })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to update balance");
+    return data;
+};
+
+// --- NOTIFICATIONS API ---
+export const fetchNotifications = async (token) => {
+    const res = await fetch(`${API_URL}/notifications`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error("Failed to fetch notifications");
+    return await res.json();
+};
+
+export const markNotificationsAsRead = async (token) => {
+    const res = await fetch(`${API_URL}/notifications/mark-read`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to mark as read");
+    return data;
+};
+
 export const getImageUrl = (path) => {
     if (!path) return "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff";
     if (path.startsWith("http")) return path;
