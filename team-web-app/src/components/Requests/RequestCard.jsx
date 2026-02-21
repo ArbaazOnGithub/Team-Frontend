@@ -48,6 +48,11 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                         <div className="px-3 py-1 bg-[#253D2C] text-white rounded-lg text-[10px] font-black uppercase tracking-widest">
                             {req.daysCount} Days
                         </div>
+                        {user.role === 'admin' && req.status === 'Pending' && req.daysCount > (req.user?.paidLeaveBalance || 0) && (
+                            <div className="w-full mt-2 px-3 py-1.5 bg-rose-50 border border-rose-200 text-rose-600 rounded-lg text-[10px] font-bold flex items-center gap-2 animate-pulse">
+                                ⚠️ Over-balance request ({req.user?.paidLeaveBalance || 0} days available)
+                            </div>
+                        )}
                     </div>
                 )}
                 {req.comment && (

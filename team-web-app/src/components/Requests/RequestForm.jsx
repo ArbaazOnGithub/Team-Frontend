@@ -1,8 +1,22 @@
 import React from 'react';
 
-const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, setRequestType, startDate, setStartDate, endDate, setEndDate }) => {
+const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, setRequestType, startDate, setStartDate, endDate, setEndDate, paidLeaveBalance }) => {
+
+    // Calculate preview of days
+    const getDaysCount = () => {
+        if (!startDate || !endDate) return 0;
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        if (end < start) return 0;
+        const diffTime = Math.abs(end - start);
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    };
+
+    const daysCount = getDaysCount();
+    const isOverBalance = requestType === 'Leave' && daysCount > (paidLeaveBalance || 0);
+
     return (
-        <div className="glass-card bg-white/60 p-6 mb-8 border-[#68BA7F]/20">
+        <div className={`glass-card bg-white/60 p-6 mb-8 border-2 transition-colors ${isOverBalance ? 'border-rose-300' : 'border-[#68BA7F]/20'}`}>
             <div className="flex gap-4 mb-4">
                 <button
                     onClick={() => setRequestType('General')}
@@ -19,25 +33,50 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
             </div>
 
             {requestType === 'Leave' && (
-                <div className="grid grid-cols-2 gap-4 mb-4 animate-fadeIn">
-                    <div className="space-y-1">
-                        <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1">From Date</label>
-                        <input
-                            type="date"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            className="input-premium py-2 bg-white/70 border-[#68BA7F]/30"
-                        />
+                <div className="mb-4 animate-fadeIn">
+                    <div className="flex justify-between items-center mb-4 px-2">
+                        <span className="text-[10px] font-black uppercase text-[#68BA7F]">Leave Balance</span>
+                        <span className="text-xs font-black text-[#2E6F40] bg-[#CFFFDC] px-3 py-1 rounded-full border border-[#68BA7F]/30 shadow-sm">
+                            {paidLeaveBalance || 0} Days Available
+                        </span>
                     </div>
-                    <div className="space-y-1">
-                        <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1">To Date</label>
-                        <input
-                            type="date"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            className="input-premium py-2 bg-white/70 border-[#68BA7F]/30"
-                        />
+
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1">From Date</label>
+                            <input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                className="input-premium py-2 bg-white/70 border-[#68BA7F]/30"
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1">To Date</label>
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                className="input-premium py-2 bg-white/70 border-[#68BA7F]/30"
+                            />
+                        </div>
                     </div>
+
+                    {daysCount > 0 && (
+                        <div className={`flex items-center justify-between p-3 rounded-xl mb-4 border ${isOverBalance ? 'bg-rose-50 border-rose-200' : 'bg-[#CFFFDC]/40 border-[#68BA7F]/20'}`}>
+                            <div className="flex items-center gap-2">
+                                <span className="text-lg">{isOverBalance ? '⚠️' : '✅'}</span>
+                                <span className={`text-[10px] font-black uppercase tracking-wider ${isOverBalance ? 'text-rose-600' : 'text-[#2E6F40]'}`}>
+                                    {daysCount} Days Requested
+                                </span>
+                            </div>
+                            {isOverBalance && (
+                                <span className="text-[9px] font-bold text-rose-500 max-w-[150px] text-right leading-tight">
+                                    Exceeds availability. Approval might be rejected.
+                                </span>
+                            )}
+                        </div>
+                    )}
                 </div>
             )}
 
@@ -53,9 +92,9 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
                 <button
                     onClick={submitRequest}
                     disabled={loading || !query.trim()}
-                    className="btn-premium px-8 py-3 bg-[#2E6F40] text-white rounded-xl font-bold text-sm hover:bg-[#253D2C] hover:shadow-xl hover:shadow-[#2E6F40]/20"
+                    className={`btn-premium px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-lg ${isOverBalance ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-200 text-white' : 'bg-[#2E6F40] hover:bg-[#253D2C] shadow-[#2E6F40]/20 text-white'}`}
                 >
-                    {loading ? "Submitting..." : "Post Request"}
+                    {loading ? "Submitting..." : isOverBalance ? "Submit Anyway" : "Post Request"}
                 </button>
             </div>
         </div>
@@ -63,3 +102,4 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
 };
 
 export default RequestForm;
+

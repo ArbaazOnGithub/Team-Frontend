@@ -400,6 +400,7 @@ function App() {
               requestType={requestType} setRequestType={setRequestType}
               startDate={startDate} setStartDate={setStartDate}
               endDate={endDate} setEndDate={setEndDate}
+              paidLeaveBalance={user.paidLeaveBalance}
             />
 
             <div className="flex items-center gap-4 mb-8">

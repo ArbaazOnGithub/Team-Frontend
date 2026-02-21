@@ -144,20 +144,17 @@ export const getImageUrl = (path) => {
     if (!path) return "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff";
     if (path.startsWith("http")) return path;
 
+    // Clean path and handle potential double uploads
     let cleanPath = path.replace(/\\/g, "/");
+    if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
 
-    // Proactively replace legacy via.placeholder.com with ui-avatars.com
+    // Proactively replace legacy via.placeholder.com
     if (cleanPath.includes("via.placeholder.com")) {
         return "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff";
     }
 
-    if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
-
-    // Ensure we don't have double uploads/ in the path if cleanPath already contains it
-    // and the static route is mounted at /uploads.
-    // However, the current backend serves /uploads/filename.
-    // If cleanPath is 'uploads/filename', it becomes BACKEND_URL + /uploads/filename.
-    // This is correct as Express treats /uploads as the route.
-
-    return `${BACKEND_URL}/${cleanPath}`;
+    // Ensure BACKEND_URL doesn't end with a slash to avoid double slashes
+    const baseUrl = BACKEND_URL.endsWith('/') ? BACKEND_URL.slice(0, -1) : BACKEND_URL;
+    return `${baseUrl}/${cleanPath}`;
 };
+
