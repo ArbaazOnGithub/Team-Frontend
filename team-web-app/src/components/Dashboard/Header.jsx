@@ -67,7 +67,7 @@ const Header = ({ user, handleLogout, setView }) => {
                 className="text-2xl font-black bg-gradient-to-r from-[#2E6F40] to-[#68BA7F] bg-clip-text text-transparent cursor-pointer"
                 onClick={() => setView('dashboard')}
             >
-                Team Queries
+                Team Queries <span className="text-[10px] bg-[#2E6F40] text-white px-2 py-0.5 rounded-full align-middle ml-1">v3.1</span>
             </h1>
 
             <div className="flex items-center gap-3 sm:gap-6">
