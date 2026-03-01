@@ -14,6 +14,7 @@ import ProfileModal from './components/Dashboard/ProfileModal';
 import RequestForm from './components/Requests/RequestForm';
 import RequestList from './components/Requests/RequestList';
 import AdminDashboard from './components/Admin/AdminDashboard';
+import AnnouncementModal from './components/Dashboard/AnnouncementModal';
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -62,6 +63,7 @@ function App() {
   }, [requests]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
 
 
   // --- SOCKET CONNECTION ---
@@ -87,6 +89,11 @@ function App() {
       socket.on("request_deleted", (data) => {
         setRequests((prev) => prev.filter(item => item._id !== data.id));
         loadStats();
+      });
+      socket.on("admin_announcement", (data) => {
+        setCurrentAnnouncement(data);
+        // Also refresh requests to show new notification in the bell
+        loadRequests();
       });
     }
     return () => { if (socket) socket.disconnect(); };
@@ -379,6 +386,11 @@ function App() {
         onClose={() => setIsProfileOpen(false)}
         onUpdate={handleProfileUpdate}
         loading={loading}
+      />
+
+      <AnnouncementModal
+        announcement={currentAnnouncement}
+        onClose={() => setCurrentAnnouncement(null)}
       />
 
       <div className="max-w-2xl mx-auto px-6 py-12">

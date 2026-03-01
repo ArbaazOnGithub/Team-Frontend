@@ -151,6 +151,17 @@ export const updateUserLeaveBalance = async (token, userId, newBalance, reason) 
     return data;
 };
 
+export const sendAnnouncement = async (token, message) => {
+    const res = await fetch(`${API_URL}/admin/announce`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ message })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to send announcement");
+    return data;
+};
+
 // --- NOTIFICATIONS API ---
 export const fetchNotifications = async (token) => {
     const res = await fetch(`${API_URL}/notifications`, {
