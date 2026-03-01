@@ -135,265 +135,266 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                             📢 Announce
                         </button>
                     </div>
+                </div>
 
-                    <AnimatePresence mode="wait">
-                        {activeTab === 'users' ? (
-                            <motion.div
-                                key="users-tab"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                            >
-                                {/* Search and Stats Grid for Users */}
-                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
-                                    <div className="relative group flex-1 max-w-md">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#68BA7F]/50 group-focus-within:text-[#2E6F40] transition-colors">🔍</span>
-                                        <input
-                                            type="text"
-                                            placeholder="Search by name, email, or mobile..."
-                                            value={searchTerm}
-                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                            className="input-premium pl-12 py-3 bg-white/70 border-[#68BA7F]/30 focus:bg-white"
+                <AnimatePresence mode="wait">
+                    {activeTab === 'users' ? (
+                        <motion.div
+                            key="users-tab"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                        >
+                            {/* Search and Stats Grid for Users */}
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                                <div className="relative group flex-1 max-w-md">
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#68BA7F]/50 group-focus-within:text-[#2E6F40] transition-colors">🔍</span>
+                                    <input
+                                        type="text"
+                                        placeholder="Search by name, email, or mobile..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="input-premium pl-12 py-3 bg-white/70 border-[#68BA7F]/30 focus:bg-white"
+                                    />
+                                </div>
+
+                                <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
+                                    <p className="text-[#2E6F40] font-bold uppercase text-[9px] tracking-widest mb-1">Total</p>
+                                    <h3 className="text-xl font-black text-[#253D2C]">{users.length}</h3>
+                                </div>
+                                <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
+                                    <p className="text-[#2E6F40] font-bold uppercase text-[9px] tracking-widest mb-1">Admins</p>
+                                    <h3 className="text-xl font-black text-[#253D2C]">{users.filter(u => u.role === 'admin').length}</h3>
+                                </div>
+                                <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
+                                    <p className="text-[#2E6F40] font-bold uppercase text-[9px] tracking-widest mb-1">Users</p>
+                                    <h3 className="text-xl font-black text-[#253D2C]">{users.filter(u => u.role === 'user').length}</h3>
+                                </div>
+                            </div>
+
+                            {/* Users Table */}
+                            <div className="glass-card overflow-hidden border-white/20">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr className="border-b border-black/5 bg-white/30">
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">User</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Contact</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Leave Balance</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Role</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Joined</th>
+                                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest text-right">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <AnimatePresence mode="popLayout">
+                                                {filteredUsers.length > 0 ? filteredUsers.map((user) => (
+                                                    <motion.tr
+                                                        key={user._id}
+                                                        layout
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{ opacity: 1 }}
+                                                        exit={{ opacity: 0 }}
+                                                        className="border-b border-black/5 hover:bg-white/50 transition-colors group"
+                                                    >
+                                                        <td className="p-5">
+                                                            <div className="flex items-center gap-3">
+                                                                <img
+                                                                    src={api.getImageUrl(user.profileImage)}
+                                                                    onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"}
+                                                                    alt={user.name}
+                                                                    className="w-10 h-10 rounded-full object-cover border-2 border-[#68BA7F]/20"
+                                                                />
+                                                                <div>
+                                                                    <p className="font-bold text-[#253D2C]">{user.name}</p>
+                                                                    <p className="text-[10px] text-[#68BA7F] font-mono">{user._id}</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="p-5 text-sm text-[#253D2C]">
+                                                            <p className="font-medium">{user.email}</p>
+                                                            <p className="text-xs text-gray-500">{user.mobile}</p>
+                                                        </td>
+                                                        <td className="p-5">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="font-black text-[#2E6F40] bg-[#CFFFDC] px-3 py-1 rounded-lg text-xs border border-[#68BA7F]/20">
+                                                                    {user.paidLeaveBalance || 0} PL
+                                                                </span>
+                                                                <button
+                                                                    onClick={() => setSelectedUserForLeave(user)}
+                                                                    className="p-1.5 hover:bg-[#68BA7F]/10 rounded-lg text-[#2E6F40] transition-colors"
+                                                                    title="Adjust Balance"
+                                                                >
+                                                                    ✏️
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                        <td className="p-5">
+                                                            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${user.role === 'admin'
+                                                                ? 'bg-[#2E6F40]/10 text-[#2E6F40]'
+                                                                : 'bg-slate-100 text-slate-600'
+                                                                }`}>
+                                                                {user.role}
+                                                            </span>
+                                                        </td>
+                                                        <td className="p-5 text-xs text-[#253D2C] font-bold">
+                                                            {new Date(user.createdAt).toLocaleDateString()}
+                                                        </td>
+                                                        <td className="p-5 text-right">
+                                                            <div className="flex items-center justify-end gap-2">
+                                                                <button
+                                                                    onClick={() => handleToggleRole(user._id, user.role)}
+                                                                    className="p-2.5 rounded-xl bg-[#2E6F40]/10 text-[#2E6F40] hover:bg-[#2E6F40] hover:text-white transition-all shadow-sm"
+                                                                    title={user.role === 'admin' ? "Make User" : "Make Admin"}
+                                                                >
+                                                                    {user.role === 'admin' ? "👑" : "👤"}
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleDeleteUser(user._id)}
+                                                                    className="p-2.5 rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-sm"
+                                                                    disabled={user._id === currentUser._id}
+                                                                    title="Delete User"
+                                                                >
+                                                                    🗑️
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </motion.tr>
+                                                )) : (
+                                                    <tr>
+                                                        <td colSpan="6" className="p-10 text-center font-bold text-[#253D2C]/40">No users found matching your search</td>
+                                                    </tr>
+                                                )}
+                                            </AnimatePresence>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ) : activeTab === 'logs' ? (
+                        <motion.div
+                            key="logs-tab"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                        >
+                            <AdminLogs token={token} />
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="announce-tab"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="max-w-2xl mx-auto"
+                        >
+                            <div className="glass-card p-8 border-white/20">
+                                <div className="text-center mb-8">
+                                    <div className="w-16 h-16 bg-[#CFFFDC] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 border border-[#68BA7F]/20 shadow-inner">📢</div>
+                                    <h2 className="text-2xl font-black text-[#253D2C]">Global Announcement</h2>
+                                    <p className="text-sm text-gray-500 mt-2">Send a real-time pop-up notification to all registered users.</p>
+                                </div>
+
+                                <div className="space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1 tracking-widest">Your Message</label>
+                                        <textarea
+                                            placeholder="Write something important to all users..."
+                                            value={announcementMsg}
+                                            onChange={(e) => setAnnouncementMsg(e.target.value)}
+                                            className="input-premium min-h-32 py-4 bg-white/50 border-dashed border-[#68BA7F]/40 focus:border-solid text-lg leading-relaxed"
                                         />
                                     </div>
 
-                                    <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
-                                        <p className="text-[#2E6F40] font-bold uppercase text-[9px] tracking-widest mb-1">Total</p>
-                                        <h3 className="text-xl font-black text-[#253D2C]">{users.length}</h3>
-                                    </div>
-                                    <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
-                                        <p className="text-[#2E6F40] font-bold uppercase text-[9px] tracking-widest mb-1">Admins</p>
-                                        <h3 className="text-xl font-black text-[#253D2C]">{users.filter(u => u.role === 'admin').length}</h3>
-                                    </div>
-                                    <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
-                                        <p className="text-[#2E6F40] font-bold uppercase text-[9px] tracking-widest mb-1">Users</p>
-                                        <h3 className="text-xl font-black text-[#253D2C]">{users.filter(u => u.role === 'user').length}</h3>
-                                    </div>
-                                </div>
+                                    <button
+                                        onClick={handleSendAnnouncement}
+                                        disabled={loading || !announcementMsg.trim()}
+                                        className="w-full py-5 rounded-2xl bg-[#2E6F40] text-white font-black uppercase tracking-widest hover:bg-[#253D2C] shadow-xl shadow-[#2E6F40]/20 disabled:opacity-50 transition-all flex items-center justify-center gap-3"
+                                    >
+                                        {loading ? "Broadcasting..." : (
+                                            <>
+                                                <span>🚀</span> BROADCAST TO EVERYONE
+                                            </>
+                                        )}
+                                    </button>
 
-                                {/* Users Table */}
-                                <div className="glass-card overflow-hidden border-white/20">
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left border-collapse">
-                                            <thead>
-                                                <tr className="border-b border-black/5 bg-white/30">
-                                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">User</th>
-                                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Contact</th>
-                                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Leave Balance</th>
-                                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Role</th>
-                                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest">Joined</th>
-                                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-xs tracking-widest text-right">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <AnimatePresence mode="popLayout">
-                                                    {filteredUsers.length > 0 ? filteredUsers.map((user) => (
-                                                        <motion.tr
-                                                            key={user._id}
-                                                            layout
-                                                            initial={{ opacity: 0 }}
-                                                            animate={{ opacity: 1 }}
-                                                            exit={{ opacity: 0 }}
-                                                            className="border-b border-black/5 hover:bg-white/50 transition-colors group"
-                                                        >
-                                                            <td className="p-5">
-                                                                <div className="flex items-center gap-3">
-                                                                    <img
-                                                                        src={api.getImageUrl(user.profileImage)}
-                                                                        onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"}
-                                                                        alt={user.name}
-                                                                        className="w-10 h-10 rounded-full object-cover border-2 border-[#68BA7F]/20"
-                                                                    />
-                                                                    <div>
-                                                                        <p className="font-bold text-[#253D2C]">{user.name}</p>
-                                                                        <p className="text-[10px] text-[#68BA7F] font-mono">{user._id}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td className="p-5 text-sm text-[#253D2C]">
-                                                                <p className="font-medium">{user.email}</p>
-                                                                <p className="text-xs text-gray-500">{user.mobile}</p>
-                                                            </td>
-                                                            <td className="p-5">
-                                                                <div className="flex items-center gap-2">
-                                                                    <span className="font-black text-[#2E6F40] bg-[#CFFFDC] px-3 py-1 rounded-lg text-xs border border-[#68BA7F]/20">
-                                                                        {user.paidLeaveBalance || 0} PL
-                                                                    </span>
-                                                                    <button
-                                                                        onClick={() => setSelectedUserForLeave(user)}
-                                                                        className="p-1.5 hover:bg-[#68BA7F]/10 rounded-lg text-[#2E6F40] transition-colors"
-                                                                        title="Adjust Balance"
-                                                                    >
-                                                                        ✏️
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                            <td className="p-5">
-                                                                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${user.role === 'admin'
-                                                                    ? 'bg-[#2E6F40]/10 text-[#2E6F40]'
-                                                                    : 'bg-slate-100 text-slate-600'
-                                                                    }`}>
-                                                                    {user.role}
-                                                                </span>
-                                                            </td>
-                                                            <td className="p-5 text-xs text-[#253D2C] font-bold">
-                                                                {new Date(user.createdAt).toLocaleDateString()}
-                                                            </td>
-                                                            <td className="p-5 text-right">
-                                                                <div className="flex items-center justify-end gap-2">
-                                                                    <button
-                                                                        onClick={() => handleToggleRole(user._id, user.role)}
-                                                                        className="p-2.5 rounded-xl bg-[#2E6F40]/10 text-[#2E6F40] hover:bg-[#2E6F40] hover:text-white transition-all shadow-sm"
-                                                                        title={user.role === 'admin' ? "Make User" : "Make Admin"}
-                                                                    >
-                                                                        {user.role === 'admin' ? "👑" : "👤"}
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => handleDeleteUser(user._id)}
-                                                                        className="p-2.5 rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-sm"
-                                                                        disabled={user._id === currentUser._id}
-                                                                        title="Delete User"
-                                                                    >
-                                                                        🗑️
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </motion.tr>
-                                                    )) : (
-                                                        <tr>
-                                                            <td colSpan="6" className="p-10 text-center font-bold text-[#253D2C]/40">No users found matching your search</td>
-                                                        </tr>
-                                                    )}
-                                                </AnimatePresence>
-                                            </tbody>
-                                        </table>
+                                    <div className="p-4 bg-amber-50 rounded-xl border border-amber-200/50 flex gap-3">
+                                        <span className="text-lg">⚠️</span>
+                                        <p className="text-[10px] text-amber-800 font-medium leading-relaxed uppercase tracking-tight">
+                                            This will trigger a real-time pop-up on all connected user screens and save a record in their notification history. Use responsibly.
+                                        </p>
                                     </div>
                                 </div>
-                            </motion.div>
-                        ) : activeTab === 'logs' ? (
-                            <motion.div
-                                key="logs-tab"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                            >
-                                <AdminLogs token={token} />
-                            </motion.div>
-                        ) : (
-                            <motion.div
-                                key="announce-tab"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                className="max-w-2xl mx-auto"
-                            >
-                                <div className="glass-card p-8 border-white/20">
-                                    <div className="text-center mb-8">
-                                        <div className="w-16 h-16 bg-[#CFFFDC] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 border border-[#68BA7F]/20 shadow-inner">📢</div>
-                                        <h2 className="text-2xl font-black text-[#253D2C]">Global Announcement</h2>
-                                        <p className="text-sm text-gray-500 mt-2">Send a real-time pop-up notification to all registered users.</p>
-                                    </div>
-
-                                    <div className="space-y-6">
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1 tracking-widest">Your Message</label>
-                                            <textarea
-                                                placeholder="Write something important to all users..."
-                                                value={announcementMsg}
-                                                onChange={(e) => setAnnouncementMsg(e.target.value)}
-                                                className="input-premium min-h-32 py-4 bg-white/50 border-dashed border-[#68BA7F]/40 focus:border-solid text-lg leading-relaxed"
-                                            />
-                                        </div>
-
-                                        <button
-                                            onClick={handleSendAnnouncement}
-                                            disabled={loading || !announcementMsg.trim()}
-                                            className="w-full py-5 rounded-2xl bg-[#2E6F40] text-white font-black uppercase tracking-widest hover:bg-[#253D2C] shadow-xl shadow-[#2E6F40]/20 disabled:opacity-50 transition-all flex items-center justify-center gap-3"
-                                        >
-                                            {loading ? "Broadcasting..." : (
-                                                <>
-                                                    <span>🚀</span> BROADCAST TO EVERYONE
-                                                </>
-                                            )}
-                                        </button>
-
-                                        <div className="p-4 bg-amber-50 rounded-xl border border-amber-200/50 flex gap-3">
-                                            <span className="text-lg">⚠️</span>
-                                            <p className="text-[10px] text-amber-800 font-medium leading-relaxed uppercase tracking-tight">
-                                                This will trigger a real-time pop-up on all connected user screens and save a record in their notification history. Use responsibly.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    {/* Adjust Balance Modal */}
-                    <AnimatePresence>
-                        {selectedUserForLeave && (
-                            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    onClick={() => setSelectedUserForLeave(null)}
-                                    className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-                                />
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                                    className="relative w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl border border-[#68BA7F]/20"
-                                >
-                                    <h3 className="text-2xl font-black text-[#253D2C] mb-2 text-center">Adjust Leave Balance</h3>
-                                    <p className="text-sm text-gray-500 text-center mb-6">Updating balance for <span className="text-[#2E6F40] font-bold">{selectedUserForLeave.name}</span></p>
-
-                                    <div className="space-y-6">
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1 tracking-widest">New Balance (Days)</label>
-                                            <input
-                                                type="number"
-                                                value={newLeaveBalance}
-                                                onChange={(e) => setNewLeaveBalance(parseFloat(e.target.value))}
-                                                className="input-premium py-4 font-black text-xl text-center bg-[#CFFFDC]/20 border-[#68BA7F]/30"
-                                                step="0.5"
-                                            />
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1 tracking-widest">Reason for Adjustment</label>
-                                            <textarea
-                                                placeholder="e.g., Deduction for unlogged leave, corrected month-end balance..."
-                                                value={leaveReason}
-                                                onChange={(e) => setLeaveReason(e.target.value)}
-                                                className="input-premium min-h-24 py-3 bg-white border-dashed border-[#68BA7F]/40"
-                                            />
-                                        </div>
-
-                                        <div className="flex gap-3">
-                                            <button
-                                                onClick={() => setSelectedUserForLeave(null)}
-                                                className="flex-1 py-4 rounded-2xl font-bold text-gray-400 hover:bg-gray-50 transition-all border border-gray-100"
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button
-                                                onClick={handleUpdateBalance}
-                                                disabled={loading || !leaveReason.trim()}
-                                                className="flex-[2] py-4 rounded-2xl bg-[#2E6F40] text-white font-bold hover:bg-[#253D2C] shadow-lg shadow-[#2E6F40]/20 disabled:opacity-50 transition-all"
-                                            >
-                                                {loading ? "Updating..." : "Confirm Update"}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </motion.div>
                             </div>
-                        )}
-                    </AnimatePresence>
-                </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Adjust Balance Modal */}
+                <AnimatePresence>
+                    {selectedUserForLeave && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setSelectedUserForLeave(null)}
+                                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                            />
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                                className="relative w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl border border-[#68BA7F]/20"
+                            >
+                                <h3 className="text-2xl font-black text-[#253D2C] mb-2 text-center">Adjust Leave Balance</h3>
+                                <p className="text-sm text-gray-500 text-center mb-6">Updating balance for <span className="text-[#2E6F40] font-bold">{selectedUserForLeave.name}</span></p>
+
+                                <div className="space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1 tracking-widest">New Balance (Days)</label>
+                                        <input
+                                            type="number"
+                                            value={newLeaveBalance}
+                                            onChange={(e) => setNewLeaveBalance(parseFloat(e.target.value))}
+                                            className="input-premium py-4 font-black text-xl text-center bg-[#CFFFDC]/20 border-[#68BA7F]/30"
+                                            step="0.5"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-[#2E6F40] uppercase ml-1 tracking-widest">Reason for Adjustment</label>
+                                        <textarea
+                                            placeholder="e.g., Deduction for unlogged leave, corrected month-end balance..."
+                                            value={leaveReason}
+                                            onChange={(e) => setLeaveReason(e.target.value)}
+                                            className="input-premium min-h-24 py-3 bg-white border-dashed border-[#68BA7F]/40"
+                                        />
+                                    </div>
+
+                                    <div className="flex gap-3">
+                                        <button
+                                            onClick={() => setSelectedUserForLeave(null)}
+                                            className="flex-1 py-4 rounded-2xl font-bold text-gray-400 hover:bg-gray-50 transition-all border border-gray-100"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={handleUpdateBalance}
+                                            disabled={loading || !leaveReason.trim()}
+                                            className="flex-[2] py-4 rounded-2xl bg-[#2E6F40] text-white font-bold hover:bg-[#253D2C] shadow-lg shadow-[#2E6F40]/20 disabled:opacity-50 transition-all"
+                                        >
+                                            {loading ? "Updating..." : "Confirm Update"}
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
             </div>
-            );
+        </div>
+    );
 };
 
-            export default AdminDashboard;
+export default AdminDashboard;
