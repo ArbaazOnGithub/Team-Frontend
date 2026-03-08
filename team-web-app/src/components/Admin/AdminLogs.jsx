@@ -9,10 +9,25 @@ const AdminLogs = ({ token }) => {
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
+    const [activeSubTab, setActiveSubTab] = useState('requests'); // 'requests' or 'system'
+    const [systemLogs, setSystemLogs] = useState([]);
 
     useEffect(() => {
-        loadLogs();
-    }, []);
+        if (activeSubTab === 'requests') loadLogs();
+        else loadSystemLogs();
+    }, [activeSubTab]);
+
+    const loadSystemLogs = async () => {
+        setLoading(true);
+        try {
+            const data = await api.fetchSystemLogs(token);
+            setSystemLogs(data);
+        } catch (err) {
+            toast.error("Failed to fetch system logs");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const loadLogs = async () => {
         setLoading(true);
@@ -62,6 +77,22 @@ const AdminLogs = ({ token }) => {
 
     return (
         <div className="animate-fadeIn">
+            {/* Sub-tabs for Logs */}
+            <div className="flex gap-4 mb-6 border-b border-[#68BA7F]/10 pb-4">
+                <button
+                    onClick={() => setActiveSubTab('requests')}
+                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'requests' ? 'bg-[#2E6F40] text-white shadow-md' : 'text-[#2E6F40]/60 hover:bg-white'}`}
+                >
+                    Ticket Logs
+                </button>
+                <button
+                    onClick={() => setActiveSubTab('system')}
+                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'system' ? 'bg-[#2E6F40] text-white shadow-md' : 'text-[#2E6F40]/60 hover:bg-white'}`}
+                >
+                    System Activity
+                </button>
+            </div>
+
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div className="flex flex-1 gap-4 max-w-2xl">
                     <div className="relative group flex-1">
@@ -166,6 +197,45 @@ const AdminLogs = ({ token }) => {
                     </div>
                 )}
             </div>
+
+            {activeSubTab === 'system' && (
+                <div className="glass-card overflow-hidden border-white/20 mt-8">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="border-b border-black/5 bg-white/30">
+                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">User</th>
+                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Action</th>
+                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Type</th>
+                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {systemLogs.map((log) => (
+                                    <tr key={log._id} className="border-b border-black/5 hover:bg-white/50 transition-colors">
+                                        <td className="p-5">
+                                            <div className="font-bold text-[#253D2C]">{log.user?.name || 'Unknown'}</div>
+                                            <div className="text-[10px] text-[#68BA7F]">{log.user?.role}</div>
+                                        </td>
+                                        <td className="p-5">
+                                            <p className="text-xs font-medium text-[#253D2C]">{log.action}</p>
+                                        </td>
+                                        <td className="p-5">
+                                            <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest bg-gray-100 text-gray-600`}>
+                                                {log.type}
+                                            </span>
+                                        </td>
+                                        <td className="p-5">
+                                            <div className="text-[10px] font-bold text-[#253D2C]">{new Date(log.createdAt).toLocaleDateString()}</div>
+                                            <div className="text-[9px] text-[#68BA7F]">{new Date(log.createdAt).toLocaleTimeString()}</div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

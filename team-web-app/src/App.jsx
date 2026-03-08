@@ -116,6 +116,9 @@ function App() {
       socket.on("message_read_update", ({ messageId, readBy }) => {
         setChatMessages(prev => prev.map(m => m._id === messageId ? { ...m, readBy } : m));
       });
+      socket.on("message_deleted", (messageId) => {
+        setChatMessages(prev => prev.filter(m => m._id !== messageId));
+      });
     }
     return () => { if (socket) socket.disconnect(); };
   }, [token, user]);
@@ -362,6 +365,15 @@ function App() {
     socket.emit('mark_read', messageId);
   };
 
+  const handleDeleteChatMessage = async (messageId) => {
+    try {
+      await api.deleteChatMessage(token, messageId);
+      toast.success("Message deleted");
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   const filteredRequests = requests.filter(req =>
     (filterStatus === "all" || req.status.toLowerCase() === filterStatus.toLowerCase()) &&
     (req.query.toLowerCase().includes(searchQuery.toLowerCase()) || (req.user?.name || "").toLowerCase().includes(searchQuery.toLowerCase()))
@@ -466,6 +478,7 @@ function App() {
         onSendMessage={handleSendMessage}
         onTogglePin={handleTogglePinMessage}
         onMarkRead={handleMarkRead}
+        onDeleteMessage={handleDeleteChatMessage}
       />
 
       <div className="max-w-2xl mx-auto px-6 py-12">

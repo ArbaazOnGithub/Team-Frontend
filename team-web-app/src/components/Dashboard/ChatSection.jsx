@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import * as api from '../../services/api';
 
-const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMessage, onTogglePin, onMarkRead }) => {
+const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMessage, onTogglePin, onMarkRead, onDeleteMessage }) => {
     const [newMessage, setNewMessage] = useState("");
     const scrollRef = useRef(null);
 
@@ -125,6 +125,21 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                         >
                                                             {msg.isPinned ? '📍' : '📌'}
                                                         </button>
+
+                                                        {/* Delete Action */}
+                                                        {(isMe || user.role === 'admin') && (
+                                                            <button
+                                                                onClick={() => {
+                                                                    if (window.confirm("Delete this message?")) {
+                                                                        onDeleteMessage(msg._id);
+                                                                    }
+                                                                }}
+                                                                className={`absolute top-0 ${isMe ? '-left-14' : '-right-14'} p-1.5 opacity-0 group-hover:opacity-100 transition-all hover:scale-110 text-rose-500`}
+                                                                title="Delete Message"
+                                                            >
+                                                                🗑️
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>

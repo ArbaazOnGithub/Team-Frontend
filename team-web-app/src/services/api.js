@@ -151,6 +151,14 @@ export const updateUserLeaveBalance = async (token, userId, newBalance, reason) 
     return data;
 };
 
+export const fetchSystemLogs = async (token) => {
+    const res = await fetch(`${API_URL}/admin/system-logs`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error("Failed to fetch system logs");
+    return await res.json();
+};
+
 export const sendAnnouncement = async (token, message) => {
     const res = await fetch(`${API_URL}/admin/announce`, {
         method: "POST",
@@ -205,6 +213,16 @@ export const fetchChatUsers = async (token) => {
     });
     if (!res.ok) throw new Error("Failed to fetch chat users");
     return await res.json();
+};
+
+export const deleteChatMessage = async (token, messageId) => {
+    const res = await fetch(`${API_URL}/chat/${messageId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to delete message");
+    return data;
 };
 
 export const getImageUrl = (path) => {
