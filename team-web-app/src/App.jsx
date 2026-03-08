@@ -66,6 +66,7 @@ function App() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
+  const [chatUsers, setChatUsers] = useState([]);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
 
@@ -112,6 +113,9 @@ function App() {
       socket.on("message_pinned", (updatedMsg) => {
         setChatMessages(prev => prev.map(m => m._id === updatedMsg._id ? updatedMsg : m));
       });
+      socket.on("message_read_update", ({ messageId, readBy }) => {
+        setChatMessages(prev => prev.map(m => m._id === messageId ? { ...m, readBy } : m));
+      });
     }
     return () => { if (socket) socket.disconnect(); };
   }, [token, user]);
@@ -122,6 +126,7 @@ function App() {
       loadRequests();
       loadStats();
       loadChat();
+      loadChatUsers();
     }
   }, [user, token]);
 
@@ -130,6 +135,13 @@ function App() {
       const msgs = await api.fetchChatMessages(token);
       setChatMessages(msgs);
     } catch (err) { console.error("Chat load failed"); }
+  };
+
+  const loadChatUsers = async () => {
+    try {
+      const users = await api.fetchChatUsers(token);
+      setChatUsers(users);
+    } catch (err) { console.error("Users load failed"); }
   };
 
   useEffect(() => {
@@ -345,6 +357,11 @@ function App() {
     }
   };
 
+  const handleMarkRead = (messageId) => {
+    const socket = io(api.BACKEND_URL, { auth: { token } });
+    socket.emit('mark_read', messageId);
+  };
+
   const filteredRequests = requests.filter(req =>
     (filterStatus === "all" || req.status.toLowerCase() === filterStatus.toLowerCase()) &&
     (req.query.toLowerCase().includes(searchQuery.toLowerCase()) || (req.user?.name || "").toLowerCase().includes(searchQuery.toLowerCase()))
@@ -445,8 +462,10 @@ function App() {
         user={user}
         token={token}
         messages={chatMessages}
+        users={chatUsers}
         onSendMessage={handleSendMessage}
         onTogglePin={handleTogglePinMessage}
+        onMarkRead={handleMarkRead}
       />
 
       <div className="max-w-2xl mx-auto px-6 py-12">

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import * as api from '../../services/api';
 
-const ChatSection = ({ isOpen, onClose, user, token, messages, onSendMessage, onTogglePin }) => {
+const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMessage, onTogglePin, onMarkRead }) => {
     const [newMessage, setNewMessage] = useState("");
     const scrollRef = useRef(null);
 
@@ -12,6 +12,18 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, onSendMessage, on
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messages, isOpen]);
+
+    // Track seen messages
+    useEffect(() => {
+        if (isOpen && messages.length > 0) {
+            messages.forEach(msg => {
+                const isReadByMe = msg.readBy?.some(r => (r._id || r) === user._id);
+                if (!isReadByMe && msg.user?._id !== user._id) {
+                    onMarkRead(msg._id);
+                }
+            });
+        }
+    }, [isOpen, messages, user._id, onMarkRead]);
 
     const handleSend = (e) => {
         e.preventDefault();
@@ -46,7 +58,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, onSendMessage, on
                                 <span className="text-2xl">💬</span>
                                 <div>
                                     <h3 className="text-xl font-black text-[#253D2C]">Team Chat</h3>
-                                    <p className="text-[10px] text-[#2E6F40] font-bold uppercase tracking-widest">Real-time sync</p>
+                                    <p className="text-[10px] text-[#2E6F40] font-bold uppercase tracking-widest">Real-time sync • {users.length} members</p>
                                 </div>
                             </div>
                             <button onClick={onClose} className="p-2 hover:bg-rose-50 rounded-xl text-rose-500 transition-colors">✕</button>
@@ -82,6 +94,12 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, onSendMessage, on
                             ) : (
                                 messages.map((msg, idx) => {
                                     const isMe = msg.user?._id === user._id;
+                                    const readBy = msg.readBy || [];
+                                    const unreadBy = users.filter(u =>
+                                        u._id !== msg.user?._id &&
+                                        !readBy.some(r => (r._id || r) === u._id)
+                                    );
+
                                     return (
                                         <div key={msg._id || idx} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                             <div className={`flex items-end gap-2 max-w-[85%] ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
@@ -94,8 +112,8 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, onSendMessage, on
                                                 <div className="space-y-1">
                                                     {!isMe && <p className="text-[10px] font-bold text-[#2E6F40] ml-1">{msg.user?.name}</p>}
                                                     <div className={`p-4 rounded-2xl text-sm leading-relaxed relative group ${isMe
-                                                            ? 'bg-[#2E6F40] text-white rounded-tr-none'
-                                                            : 'bg-white text-[#253D2C] border border-[#68BA7F]/10 rounded-tl-none shadow-sm'
+                                                        ? 'bg-[#2E6F40] text-white rounded-tr-none'
+                                                        : 'bg-white text-[#253D2C] border border-[#68BA7F]/10 rounded-tl-none shadow-sm'
                                                         }`}>
                                                         {msg.content}
 
@@ -110,9 +128,56 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, onSendMessage, on
                                                     </div>
                                                 </div>
                                             </div>
-                                            <p className="text-[8px] text-gray-400 mt-1 uppercase font-bold tracking-tighter">
-                                                {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                            </p>
+
+                                            {/* Read Receipts UI */}
+                                            <div className={`mt-1 flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                                                <div className="flex items-center gap-1.5 px-1">
+                                                    <p className="text-[8px] text-gray-400 uppercase font-bold tracking-tighter">
+                                                        {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </p>
+                                                    {readBy.length > 0 && (
+                                                        <div className="flex items-center -space-x-1 ml-1 group/receipt">
+                                                            {readBy.slice(0, 3).map((r, i) => (
+                                                                <img
+                                                                    key={r._id || i}
+                                                                    src={api.getImageUrl(r.profileImage)}
+                                                                    className="w-3 h-3 rounded-full border border-white ring-1 ring-gray-100"
+                                                                    title={r.name}
+                                                                />
+                                                            ))}
+                                                            {readBy.length > 3 && (
+                                                                <span className="w-3 h-3 rounded-full bg-gray-100 text-[6px] flex items-center justify-center font-bold text-gray-500 border border-white">
+                                                                    +{readBy.length - 3}
+                                                                </span>
+                                                            )}
+                                                            <div className="hidden group-hover/receipt:block absolute bottom-full mb-2 bg-white border border-[#68BA7F]/20 p-2 rounded-lg shadow-xl z-50 min-w-[120px]">
+                                                                <p className="text-[8px] font-black text-[#2E6F40] uppercase mb-1">Read By:</p>
+                                                                <div className="space-y-1">
+                                                                    {readBy.map(r => (
+                                                                        <div key={r._id} className="flex items-center gap-1 text-[9px]">
+                                                                            <div className="w-1 h-1 bg-green-500 rounded-full" />
+                                                                            {r.name}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                                {unreadBy.length > 0 && (
+                                                                    <>
+                                                                        <p className="text-[8px] font-black text-rose-400 uppercase mt-2 mb-1">Unread By:</p>
+                                                                        <div className="space-y-1">
+                                                                            {unreadBy.map(u => (
+                                                                                <div key={u._id} className="flex items-center gap-1 text-[9px] text-gray-400">
+                                                                                    <div className="w-1 h-1 bg-gray-300 rounded-full" />
+                                                                                    {u.name}
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
                                     );
                                 })
