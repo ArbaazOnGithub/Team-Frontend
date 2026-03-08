@@ -71,6 +71,15 @@ const Header = ({ user, handleLogout, setView }) => {
             </h1>
 
             <div className="flex items-center gap-3 sm:gap-6">
+                {/* Chat Toggle Button */}
+                <button
+                    onClick={() => window.dispatchEvent(new Event('open-chat'))}
+                    className="p-2.5 rounded-xl bg-white/50 border border-[#68BA7F]/20 hover:bg-white transition-all text-xl"
+                    title="Team Chat"
+                >
+                    💬
+                </button>
+
                 {/* Notifications Bell */}
                 <div className="relative" ref={notifRef}>
                     <button

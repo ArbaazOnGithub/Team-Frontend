@@ -15,6 +15,7 @@ import RequestForm from './components/Requests/RequestForm';
 import RequestList from './components/Requests/RequestList';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import AnnouncementModal from './components/Dashboard/AnnouncementModal';
+import ChatSection from './components/Dashboard/ChatSection';
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -64,6 +65,8 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [currentAnnouncement, setCurrentAnnouncement] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
 
   // --- SOCKET CONNECTION ---
@@ -103,6 +106,12 @@ function App() {
         // Also refresh requests to show new notification in the bell
         loadRequests();
       });
+      socket.on("receive_message", (msg) => {
+        setChatMessages(prev => [...prev, msg]);
+      });
+      socket.on("message_pinned", (updatedMsg) => {
+        setChatMessages(prev => prev.map(m => m._id === updatedMsg._id ? updatedMsg : m));
+      });
     }
     return () => { if (socket) socket.disconnect(); };
   }, [token, user]);
@@ -112,13 +121,26 @@ function App() {
     if (user && token) {
       loadRequests();
       loadStats();
+      loadChat();
     }
   }, [user, token]);
 
+  const loadChat = async () => {
+    try {
+      const msgs = await api.fetchChatMessages(token);
+      setChatMessages(msgs);
+    } catch (err) { console.error("Chat load failed"); }
+  };
+
   useEffect(() => {
     const handleOpenProfile = () => setIsProfileOpen(true);
+    const handleOpenChat = () => setIsChatOpen(true);
     window.addEventListener('open-profile', handleOpenProfile);
-    return () => window.removeEventListener('open-profile', handleOpenProfile);
+    window.addEventListener('open-chat', handleOpenChat);
+    return () => {
+      window.removeEventListener('open-profile', handleOpenProfile);
+      window.removeEventListener('open-chat', handleOpenChat);
+    };
   }, []);
 
   const loadRequests = async () => {
@@ -310,6 +332,19 @@ function App() {
     }
   };
 
+  const handleSendMessage = (content) => {
+    const socket = io(api.BACKEND_URL, { auth: { token } });
+    socket.emit('send_message', content);
+  };
+
+  const handleTogglePinMessage = async (id) => {
+    try {
+      await api.togglePinMessage(token, id);
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   const filteredRequests = requests.filter(req =>
     (filterStatus === "all" || req.status.toLowerCase() === filterStatus.toLowerCase()) &&
     (req.query.toLowerCase().includes(searchQuery.toLowerCase()) || (req.user?.name || "").toLowerCase().includes(searchQuery.toLowerCase()))
@@ -402,6 +437,16 @@ function App() {
       <AnnouncementModal
         announcement={currentAnnouncement}
         onClose={() => setCurrentAnnouncement(null)}
+      />
+
+      <ChatSection
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        user={user}
+        token={token}
+        messages={chatMessages}
+        onSendMessage={handleSendMessage}
+        onTogglePin={handleTogglePinMessage}
       />
 
       <div className="max-w-2xl mx-auto px-6 py-12">

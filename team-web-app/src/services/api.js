@@ -181,6 +181,24 @@ export const markNotificationsAsRead = async (token) => {
     return data;
 };
 
+// --- CHAT API ---
+export const fetchChatMessages = async (token) => {
+    const res = await fetch(`${API_URL}/chat`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error("Failed to fetch chat history");
+    return await res.json();
+};
+
+export const togglePinMessage = async (token, messageId) => {
+    const res = await fetch(`${API_URL}/chat/pin/${messageId}`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error("Failed to toggle pin");
+    return await res.json();
+};
+
 export const getImageUrl = (path) => {
     if (!path) return "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff";
     if (path.startsWith("http")) return path;
