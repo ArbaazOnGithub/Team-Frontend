@@ -74,9 +74,17 @@ function App() {
       socket.on("connect", () => console.log("Connected to Socket"));
       socket.on("new_request", (data) => {
         if (user.role === 'admin' || data.user._id === user._id) {
-          setRequests((prev) => [data, ...prev]);
+          setRequests((prev) => {
+            // Deduplicate: If request already exists in state, don't add it again
+            if (prev.some(req => req._id === data._id)) return prev;
+            return [data, ...prev];
+          });
           loadStats();
-          toast.success(`New request from ${data.user.name}`, { icon: '📝' });
+
+          // Only show toast if the request is NOT from the current user
+          if (data.user._id !== user._id) {
+            toast.success(`New request from ${data.user.name}`, { icon: '📝' });
+          }
         }
       });
       socket.on("status_update", (updatedItem) => {
@@ -252,7 +260,10 @@ function App() {
     setLoading(true);
     try {
       const newReq = await api.submitRequest(token, payload);
-      setRequests(prev => [newReq, ...prev]);
+      setRequests((prev) => {
+        if (prev.some(r => r._id === newReq._id)) return prev;
+        return [newReq, ...prev];
+      });
       resetForms();
       toast.success("Request submitted!");
     } catch (err) {
