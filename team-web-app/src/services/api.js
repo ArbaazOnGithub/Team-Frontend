@@ -160,6 +160,14 @@ export const fetchSystemLogs = async (token) => {
     return await res.json();
 };
 
+export const fetchSystemErrorLogs = async (token) => {
+    const res = await fetch(`${API_URL}/admin/superadmin/error-logs`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error("Failed to fetch error logs");
+    return await res.json();
+};
+
 export const sendAnnouncement = async (token, message) => {
     const res = await fetch(`${API_URL}/admin/announce`, {
         method: "POST",

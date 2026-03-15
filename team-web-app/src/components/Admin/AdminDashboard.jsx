@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import * as api from '../../services/api';
 import AdminLogs from './AdminLogs';
+import ErrorLogs from './ErrorLogs';
 
 const AdminDashboard = ({ token, user: currentUser, onBack }) => {
     const [users, setUsers] = useState([]);
@@ -69,6 +70,9 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
     };
 
     const handleToggleRole = async (userId, currentRole) => {
+        if (currentUser.role !== 'superadmin') {
+            return toast.error("Only Super Admins can manage roles.");
+        }
         const newRole = currentRole === 'admin' ? 'user' : 'admin';
         if (!window.confirm(`Are you sure you want to change this user's role to ${newRole}?`)) return;
 
@@ -128,6 +132,14 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                         >
                             Logs
                         </button>
+                        {currentUser.role === 'superadmin' && (
+                            <button
+                                onClick={() => setActiveTab('error-logs')}
+                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'error-logs' ? 'bg-rose-500 text-white shadow-lg shadow-rose-200' : 'text-[#253D2C]/60 hover:text-rose-500'}`}
+                            >
+                                ⚠️ Error Logs
+                            </button>
+                        )}
                         <button
                             onClick={() => setActiveTab('announce')}
                             className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'announce' ? 'bg-[#2E6F40] text-white shadow-lg' : 'text-[#253D2C]/60 hover:text-[#2E6F40]'}`}
@@ -242,13 +254,15 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                                                         </td>
                                                         <td className="p-5 text-right">
                                                             <div className="flex items-center justify-end gap-2">
-                                                                <button
-                                                                    onClick={() => handleToggleRole(user._id, user.role)}
-                                                                    className="p-2.5 rounded-xl bg-[#2E6F40]/10 text-[#2E6F40] hover:bg-[#2E6F40] hover:text-white transition-all shadow-sm"
-                                                                    title={user.role === 'admin' ? "Make User" : "Make Admin"}
-                                                                >
-                                                                    {user.role === 'admin' ? "👑" : "👤"}
-                                                                </button>
+                                                                {currentUser.role === 'superadmin' && (
+                                                                    <button
+                                                                        onClick={() => handleToggleRole(user._id, user.role)}
+                                                                        className="p-2.5 rounded-xl bg-[#2E6F40]/10 text-[#2E6F40] hover:bg-[#2E6F40] hover:text-white transition-all shadow-sm"
+                                                                        title={user.role === 'admin' ? "Make User" : "Make Admin"}
+                                                                    >
+                                                                        {user.role === 'admin' ? "👑" : "👤"}
+                                                                    </button>
+                                                                )}
                                                                 <button
                                                                     onClick={() => handleDeleteUser(user._id)}
                                                                     className="p-2.5 rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-sm"
@@ -279,6 +293,15 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                             exit={{ opacity: 0, y: -10 }}
                         >
                             <AdminLogs token={token} />
+                        </motion.div>
+                    ) : activeTab === 'error-logs' && currentUser.role === 'superadmin' ? (
+                        <motion.div
+                            key="error-logs-tab"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                        >
+                            <ErrorLogs token={token} />
                         </motion.div>
                     ) : (
                         <motion.div
