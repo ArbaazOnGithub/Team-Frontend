@@ -60,8 +60,9 @@ export const submitRequest = async (token, payload) => {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(payload)
     });
-    if (!res.ok) throw new Error("Failed to submit request");
-    return await res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to submit request");
+    return data;
 };
 
 export const updateRequestStatus = async (token, id, status, comment = "") => {

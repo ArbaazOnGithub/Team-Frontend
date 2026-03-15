@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import io from 'socket.io-client';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -49,6 +49,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
+  const isSubmittingRef = useRef(false);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -282,7 +283,7 @@ function App() {
 
   // --- DASHBOARD ACTIONS ---
   const handleRequestSubmit = async () => {
-    if (!query.trim()) return;
+    if (!query.trim() || isSubmittingRef.current) return;
 
     let payload = { query: query.trim(), requestType };
     if (requestType === 'Leave') {
@@ -294,6 +295,7 @@ function App() {
       payload = { ...payload, startDate, endDate, daysCount: diffDays };
     }
 
+    isSubmittingRef.current = true;
     setLoading(true);
     try {
       const newReq = await api.submitRequest(token, payload);
@@ -304,9 +306,12 @@ function App() {
       resetForms();
       toast.success("Request submitted!");
     } catch (err) {
-      setError("Failed to submit");
-      toast.error("Failed to submit");
-    } finally { setLoading(false); }
+      setError(err.message || "Failed to submit");
+      toast.error(err.message || "Failed to submit");
+    } finally {
+      setLoading(false);
+      isSubmittingRef.current = false;
+    }
   };
 
   const handleChangeStatus = async (id, newStatus, comment = "") => {
