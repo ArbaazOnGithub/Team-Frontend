@@ -199,7 +199,7 @@ const Header = ({ user, handleLogout, setView }) => {
                                         <span className="font-bold">Edit Profile</span>
                                     </button>
 
-                                    {user.role === 'admin' && (
+                                    {['admin', 'superadmin'].includes(user.role) && (
                                         <button
                                             className="w-full text-left px-4 py-3 text-sm text-[#253D2C] hover:bg-[#CFFFDC] transition-colors flex items-center gap-3 group"
                                             onClick={() => {
