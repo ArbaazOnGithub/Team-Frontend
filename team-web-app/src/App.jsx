@@ -78,7 +78,7 @@ function App() {
       socket = io(api.BACKEND_URL, { auth: { token } });
       socket.on("connect", () => console.log("Connected to Socket"));
       socket.on("new_request", (data) => {
-        if (user.role === 'admin' || data.user._id === user._id) {
+        if (['admin', 'superadmin'].includes(user.role) || data.user._id === user._id) {
           setRequests((prev) => {
             // Deduplicate: If request already exists in state, don't add it again
             if (prev.some(req => req._id === data._id)) return prev;
