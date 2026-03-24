@@ -276,8 +276,9 @@ function App() {
       toast.success(data.message);
       setTimeout(() => setView("reset-password"), 1500);
     } catch (err) {
-      setError(err.message);
-      toast.error(err.message);
+      const msg = err.response?.data?.details || err.response?.data?.error || err.message || "Request failed";
+      setError(msg);
+      toast.error(msg);
     } finally { setLoading(false); }
   };
 
