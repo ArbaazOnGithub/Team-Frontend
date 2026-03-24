@@ -288,7 +288,8 @@ function App() {
 
     setLoading(true);
     try {
-      await api.resetPassword(email, otp, newPassword);
+      const company = await api.fetchCompanyBySlug(companySlug.toLowerCase().trim());
+      await api.resetPassword(email, otp, newPassword, company._id);
       setSuccessMsg("Password reset successfully! Redirecting to login...");
       toast.success("Password reset successfully! Redirecting to login...");
       setTimeout(() => {

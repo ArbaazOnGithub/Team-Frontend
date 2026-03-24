@@ -64,8 +64,8 @@ export const forgotPassword = async (email, companyId) => {
     return res.data;
 };
 
-export const resetPassword = async (email, otp, newPassword) => {
-    const res = await api.post('/reset-password', { email, otp, newPassword });
+export const resetPassword = async (email, otp, newPassword, companyId) => {
+    const res = await api.post('/reset-password', { email, otp, newPassword, companyId });
     return res.data;
 };
 
