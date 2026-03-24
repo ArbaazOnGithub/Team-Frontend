@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 import io from 'socket.io-client';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,9 +14,9 @@ import Stats from './components/Dashboard/Stats';
 import ProfileModal from './components/Dashboard/ProfileModal';
 import RequestForm from './components/Requests/RequestForm';
 import RequestList from './components/Requests/RequestList';
-import AdminDashboard from './components/Admin/AdminDashboard';
-import AnnouncementModal from './components/Dashboard/AnnouncementModal';
-import ChatSection from './components/Dashboard/ChatSection';
+const AdminDashboard = lazy(() => import('./components/Admin/AdminDashboard'));
+const AnnouncementModal = lazy(() => import('./components/Dashboard/AnnouncementModal'));
+const ChatSection = lazy(() => import('./components/Dashboard/ChatSection'));
 
 function App() {
   const { user, token, login, logout, updateUserData } = useAuth();
@@ -476,31 +476,35 @@ function App() {
         loading={loading}
       />
 
-      <AnnouncementModal
-        announcement={currentAnnouncement}
-        onClose={() => setCurrentAnnouncement(null)}
-      />
+      <Suspense fallback={null}>
+        <AnnouncementModal
+          announcement={currentAnnouncement}
+          onClose={() => setCurrentAnnouncement(null)}
+        />
+      </Suspense>
 
-      <ChatSection
-        isOpen={isChatOpen}
-        onClose={() => setIsChatOpen(false)}
-        user={user}
-        token={token}
-        messages={chatMessages}
-        users={chatUsers}
-        onSendMessage={handleSendMessage}
-        onTogglePin={handleTogglePinMessage}
-        onMarkRead={handleMarkRead}
-        onDeleteMessage={handleDeleteChatMessage}
-      />
+      <Suspense fallback={null}>
+        <ChatSection
+          isOpen={isChatOpen}
+          onClose={() => setIsChatOpen(false)}
+          user={user}
+          token={token}
+          messages={chatMessages}
+          users={chatUsers}
+          onSendMessage={handleSendMessage}
+          onTogglePin={handleTogglePinMessage}
+          onMarkRead={handleMarkRead}
+          onDeleteMessage={handleDeleteChatMessage}
+        />
+      </Suspense>
 
       <div className="max-w-2xl mx-auto px-6 py-12">
         {view === 'admin' ? (
-          <AdminDashboard
-            token={token}
-            user={user}
-            onBack={() => setView('dashboard')}
-          />
+          <Suspense fallback={<div className="p-10 text-center font-bold text-[#68BA7F]">Loading Admin Dashboard...</div>}>
+            <AdminDashboard
+              onBack={() => setView('dashboard')}
+            />
+          </Suspense>
         ) : (
           <>
             {error && <div className="glass bg-emerald-50/50 text-[#2E6F40] p-4 rounded-xl mb-8 text-center text-sm font-bold border-[#68BA7F]/20">{error}</div>}
