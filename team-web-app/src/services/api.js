@@ -13,6 +13,12 @@ api.interceptors.request.use((config) => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    const companyContext = localStorage.getItem("team_company_context");
+    if (companyContext) {
+        config.headers['x-company-context'] = companyContext;
+    }
+
     return config;
 }, (error) => {
     return Promise.reject(error);

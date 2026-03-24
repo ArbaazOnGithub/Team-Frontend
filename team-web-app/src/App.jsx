@@ -67,6 +67,8 @@ function App() {
   const [chatMessages, setChatMessages] = useState([]);
   const [chatUsers, setChatUsers] = useState([]);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [availableCompanies, setAvailableCompanies] = useState([]);
+  const [selectedCompanyId, setSelectedCompanyId] = useState(() => localStorage.getItem("team_company_context") || "");
 
 
   // --- SOCKET CONNECTION ---
@@ -129,8 +131,32 @@ function App() {
       loadStats();
       loadChat();
       loadChatUsers();
+
+      if (user.role === 'superadmin') {
+        loadAvailableCompanies();
+      }
     }
-  }, [user, token]);
+  }, [user, token, selectedCompanyId]);
+
+  const loadAvailableCompanies = async () => {
+    try {
+      const data = await api.fetchAllCompanies();
+      setAvailableCompanies(data);
+    } catch (err) {
+      console.error("Failed to load companies for switcher");
+    }
+  };
+
+  const handleCompanyContextChange = (companyId) => {
+    setSelectedCompanyId(companyId);
+    if (companyId) {
+      localStorage.setItem("team_company_context", companyId);
+      toast.success("Switched company context");
+    } else {
+      localStorage.removeItem("team_company_context");
+      toast.success("Reset to default company");
+    }
+  };
 
   const loadChat = async () => {
     try {
@@ -518,6 +544,26 @@ function App() {
           </Suspense>
         ) : (
           <>
+            {user.role === 'superadmin' && availableCompanies.length > 0 && (
+              <div className="glass p-4 rounded-2xl mb-8 border-[#68BA7F]/30 bg-white/50 animate-fade-in shadow-sm">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🏢</span>
+                    <h4 className="font-black text-[#2E6F40] text-xs uppercase tracking-widest">Global Company View</h4>
+                  </div>
+                  <select 
+                    value={selectedCompanyId} 
+                    onChange={(e) => handleCompanyContextChange(e.target.value)}
+                    className="bg-white border-[#68BA7F]/30 text-[#253D2C] font-bold text-sm rounded-xl px-4 py-2 outline-none focus:ring-2 ring-[#68BA7F]/20 transition-all min-w-[200px]"
+                  >
+                    <option value="">My Default Company (N1Solution)</option>
+                    {availableCompanies.map(comp => (
+                      <option key={comp._id} value={comp._id}>{comp.name} ({comp.slug})</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
             {error && <div className="glass bg-emerald-50/50 text-[#2E6F40] p-4 rounded-xl mb-8 text-center text-sm font-bold border-[#68BA7F]/20">{error}</div>}
 
             <Stats stats={stats} loading={loading} />
