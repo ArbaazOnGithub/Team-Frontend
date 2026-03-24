@@ -114,7 +114,7 @@ const AdminDashboard = ({ onBack }) => {
                     <div>
                         <button
                             onClick={onBack}
-                            className="flex items-center gap-2 text-white/80 hover:text-white font-bold hover:gap-3 transition-all mb-2"
+                            className="flex items-center gap-2 text-[#68BA7F] hover:text-[#CFFFDC] font-bold hover:gap-3 transition-all mb-2"
                         >
                             <span>←</span> Back to Dashboard
                         </button>
