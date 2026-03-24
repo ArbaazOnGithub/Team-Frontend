@@ -46,7 +46,7 @@ const CompanyManagement = () => {
     };
 
     const handleDeleteCompany = async (companyId, companyName, companySlug) => {
-        if (companySlug === 'turbo-net') {
+        if (companySlug === 'n1solution') {
             return toast.error("Cannot delete the root company!");
         }
 
@@ -125,7 +125,7 @@ const CompanyManagement = () => {
                                     <tr key={company._id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
                                         <td className="p-4 font-bold text-slate-700">
                                             {company.name}
-                                            {company.slug === 'turbo-net' && <span className="ml-2 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full uppercase">Root Tenant</span>}
+                                            {company.slug === 'n1solution' && <span className="ml-2 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full uppercase">Root Tenant</span>}
                                         </td>
                                         <td className="p-4 font-mono text-sm text-[#2E6F40] font-bold">
                                             {company.slug}
@@ -134,7 +134,7 @@ const CompanyManagement = () => {
                                             {company.userCount || 0}
                                         </td>
                                         <td className="p-4 text-right">
-                                            {company.slug !== 'turbo-net' && (
+                                            {company.slug !== 'n1solution' && (
                                                 <button 
                                                     onClick={() => handleDeleteCompany(company._id, company.name, company.slug)}
                                                     className="text-red-500 hover:text-red-700 font-bold text-sm bg-red-50 hover:bg-red-100 px-3 py-1 rounded-lg transition-colors"
