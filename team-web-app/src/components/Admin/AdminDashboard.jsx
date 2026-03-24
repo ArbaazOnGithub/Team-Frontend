@@ -5,6 +5,7 @@ import * as api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import AdminLogs from './AdminLogs';
 import ErrorLogs from './ErrorLogs';
+import CompanyManagement from './CompanyManagement';
 
 const AdminDashboard = ({ onBack }) => {
     const { token, user: currentUser } = useAuth();
@@ -135,12 +136,20 @@ const AdminDashboard = ({ onBack }) => {
                             Logs
                         </button>
                         {currentUser.role === 'superadmin' && (
-                            <button
-                                onClick={() => setActiveTab('error-logs')}
-                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'error-logs' ? 'bg-rose-500 text-white shadow-lg shadow-rose-200' : 'text-[#253D2C]/60 hover:text-rose-500'}`}
-                            >
-                                ⚠️ Error Logs
-                            </button>
+                            <>
+                                <button
+                                    onClick={() => setActiveTab('companies')}
+                                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'companies' ? 'bg-[#2E6F40] text-white shadow-lg' : 'text-[#253D2C]/60 hover:text-[#2E6F40]'}`}
+                                >
+                                    🏢 Companies
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('error-logs')}
+                                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'error-logs' ? 'bg-rose-500 text-white shadow-lg shadow-rose-200' : 'text-[#253D2C]/60 hover:text-rose-500'}`}
+                                >
+                                    ⚠️ Error Logs
+                                </button>
+                            </>
                         )}
                         <button
                             onClick={() => setActiveTab('announce')}
@@ -304,6 +313,15 @@ const AdminDashboard = ({ onBack }) => {
                             exit={{ opacity: 0, y: -10 }}
                         >
                             <ErrorLogs />
+                        </motion.div>
+                    ) : activeTab === 'companies' && currentUser.role === 'superadmin' ? (
+                        <motion.div
+                            key="companies-tab"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                        >
+                            <CompanyManagement />
                         </motion.div>
                     ) : (
                         <motion.div

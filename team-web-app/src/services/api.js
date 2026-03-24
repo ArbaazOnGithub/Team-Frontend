@@ -129,6 +129,22 @@ export const sendAnnouncement = async (message) => {
     return res.data;
 };
 
+// --- SUPERADMIN COMPANY API ---
+export const fetchAllCompanies = async () => {
+    const res = await api.get('/admin/superadmin/companies');
+    return res.data;
+};
+
+export const createCompany = async (payload) => {
+    const res = await api.post('/admin/superadmin/companies', payload);
+    return res.data;
+};
+
+export const deleteCompany = async (companyId) => {
+    const res = await api.delete(`/admin/superadmin/companies/${companyId}`);
+    return res.data;
+};
+
 // --- NOTIFICATIONS API ---
 export const fetchNotifications = async () => {
     const res = await api.get('/notifications');
