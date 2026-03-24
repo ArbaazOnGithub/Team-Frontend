@@ -10,7 +10,7 @@ const Register = ({ companySlug, setCompanySlug, name, setName, email, setEmail,
                 </label>
                 <input id="file-upload" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
             </div>
-            <input type="text" placeholder="Company ID / Slug (e.g. n1solution)" value={companySlug} onChange={(e) => setCompanySlug(e.target.value)} className="input-premium mb-3 uppercase" />
+            <input type="text" placeholder="Company ID" value={companySlug} onChange={(e) => setCompanySlug(e.target.value)} className="input-premium mb-3 uppercase" />
             <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} className="input-premium mb-3" />
             <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} className="input-premium mb-3" />
             <input type="tel" placeholder="Mobile Number" value={mobile} onChange={(e) => setMobile(e.target.value)} className="input-premium mb-3" maxLength={10} />
