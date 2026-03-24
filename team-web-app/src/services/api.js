@@ -1,254 +1,172 @@
+import axios from 'axios';
+
 export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
-export const fetchRequests = async (token) => {
-    const res = await fetch(`${API_URL}/requests`, { headers: { Authorization: `Bearer ${token}` } });
-    if (!res.ok) throw new Error("Failed to load requests");
-    const data = await res.json();
-    return data.requests || data;
+const api = axios.create({
+    baseURL: API_URL,
+});
+
+// Interceptor to add token to every request
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("team_token");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
+// Interceptor to handle 401s
+api.interceptors.response.use((response) => {
+    return response;
+}, (error) => {
+    if (error.response && error.response.status === 401) {
+        window.dispatchEvent(new Event('force-logout'));
+    }
+    return Promise.reject(error);
+});
+
+export const fetchRequests = async () => {
+    const res = await api.get('/requests');
+    return res.data.requests || res.data;
 };
 
-export const fetchStats = async (token) => {
-    const res = await fetch(`${API_URL}/stats`, { headers: { Authorization: `Bearer ${token}` } });
-    if (!res.ok) throw new Error("Failed to load stats");
-    return await res.json();
+export const fetchStats = async () => {
+    const res = await api.get('/stats');
+    return res.data;
 };
 
 export const loginUser = async (mobile, password) => {
-    const res = await fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mobile, password })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Login failed");
-    return data;
+    const res = await api.post('/login', { mobile, password });
+    return res.data;
 };
 
 export const registerUser = async (formData) => {
-    const res = await fetch(`${API_URL}/register`, { method: "POST", body: formData });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Registration failed");
-    return data;
+    const res = await api.post('/register', formData);
+    return res.data;
 };
 
 export const forgotPassword = async (email) => {
-    const res = await fetch(`${API_URL}/forgot-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to send OTP");
-    return data;
+    const res = await api.post('/forgot-password', { email });
+    return res.data;
 };
 
 export const resetPassword = async (email, otp, newPassword) => {
-    const res = await fetch(`${API_URL}/reset-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp, newPassword })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Reset failed");
-    return data;
+    const res = await api.post('/reset-password', { email, otp, newPassword });
+    return res.data;
 };
 
-export const submitRequest = async (token, payload) => {
-    const res = await fetch(`${API_URL}/requests`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to submit request");
-    return data;
+export const submitRequest = async (payload) => {
+    const res = await api.post('/requests', payload);
+    return res.data;
 };
 
-export const updateRequestStatus = async (token, id, status, comment = "") => {
-    const res = await fetch(`${API_URL}/requests/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ status, comment })
-    });
-    if (!res.ok) throw new Error("Failed to update status");
-    return await res.json();
+export const updateRequestStatus = async (id, status, comment = "") => {
+    const res = await api.put(`/requests/${id}`, { status, comment });
+    return res.data;
 };
 
-export const deleteRequest = async (token, id) => {
-    const res = await fetch(`${API_URL}/requests/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error("Failed to delete request");
-    return await res.json();
+export const deleteRequest = async (id) => {
+    const res = await api.delete(`/requests/${id}`);
+    return res.data;
 };
 
-export const updateProfile = async (token, formData) => {
-    const res = await fetch(`${API_URL}/profile`, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Update failed");
-    return data;
+export const updateProfile = async (formData) => {
+    const res = await api.put('/profile', formData);
+    return res.data;
 };
 
-export const fetchDetailedStats = async (token) => {
-    const res = await fetch(`${API_URL}/requests/detailed`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error("Failed to load detailed stats");
-    return await res.json();
+export const fetchDetailedStats = async () => {
+    const res = await api.get('/requests/detailed');
+    return res.data;
 };
 
 // --- ADMIN API ---
-export const fetchAllUsers = async (token) => {
-    const res = await fetch(`${API_URL}/admin/users`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error("Failed to fetch users");
-    return await res.json();
+export const fetchAllUsers = async () => {
+    const res = await api.get('/admin/users');
+    return res.data;
 };
 
-export const updateUserRole = async (token, userId, role) => {
-    const res = await fetch(`${API_URL}/admin/users/role`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ userId, role })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to update role");
-    return data;
+export const updateUserRole = async (userId, role) => {
+    const res = await api.put('/admin/users/role', { userId, role });
+    return res.data;
 };
 
-export const deleteUser = async (token, userId) => {
-    const res = await fetch(`${API_URL}/admin/users/${userId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to delete user");
-    return data;
+export const deleteUser = async (userId) => {
+    const res = await api.delete(`/admin/users/${userId}`);
+    return res.data;
 };
 
-export const fetchRequestLogs = async (token) => {
-    const res = await fetch(`${API_URL}/admin/requests/logs`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error("Failed to fetch logs");
-    return await res.json();
+export const fetchRequestLogs = async () => {
+    const res = await api.get('/admin/requests/logs');
+    return res.data;
 };
 
-export const updateUserLeaveBalance = async (token, userId, newBalance, reason) => {
-    const res = await fetch(`${API_URL}/admin/users/leave-balance`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ userId, newBalance, reason })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to update balance");
-    return data;
+export const updateUserLeaveBalance = async (userId, newBalance, reason) => {
+    const res = await api.put('/admin/users/leave-balance', { userId, newBalance, reason });
+    return res.data;
 };
 
-export const fetchSystemLogs = async (token) => {
-    const res = await fetch(`${API_URL}/admin/system-logs`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error("Failed to fetch system logs");
-    return await res.json();
+export const fetchSystemLogs = async () => {
+    const res = await api.get('/admin/system-logs');
+    return res.data;
 };
 
-export const fetchSystemErrorLogs = async (token) => {
-    const res = await fetch(`${API_URL}/admin/superadmin/error-logs`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error("Failed to fetch error logs");
-    return await res.json();
+export const fetchSystemErrorLogs = async () => {
+    const res = await api.get('/admin/superadmin/error-logs');
+    return res.data;
 };
 
-export const sendAnnouncement = async (token, message) => {
-    const res = await fetch(`${API_URL}/admin/announce`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ message })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to send announcement");
-    return data;
+export const sendAnnouncement = async (message) => {
+    const res = await api.post('/admin/announce', { message });
+    return res.data;
 };
 
 // --- NOTIFICATIONS API ---
-export const fetchNotifications = async (token) => {
-    const res = await fetch(`${API_URL}/notifications`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error("Failed to fetch notifications");
-    return await res.json();
+export const fetchNotifications = async () => {
+    const res = await api.get('/notifications');
+    return res.data;
 };
 
-export const markNotificationsAsRead = async (token) => {
-    const res = await fetch(`${API_URL}/notifications/mark-read`, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to mark as read");
-    return data;
+export const markNotificationsAsRead = async () => {
+    const res = await api.put('/notifications/mark-read');
+    return res.data;
 };
 
 // --- CHAT API ---
-export const fetchChatMessages = async (token) => {
-    const res = await fetch(`${API_URL}/chat`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error("Failed to fetch chat history");
-    return await res.json();
+export const fetchChatMessages = async () => {
+    const res = await api.get('/chat');
+    return res.data;
 };
 
-export const togglePinMessage = async (token, messageId) => {
-    const res = await fetch(`${API_URL}/chat/pin/${messageId}`, {
-        method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error("Failed to toggle pin");
-    return await res.json();
+export const togglePinMessage = async (messageId) => {
+    const res = await api.patch(`/chat/pin/${messageId}`);
+    return res.data;
 };
 
-export const fetchChatUsers = async (token) => {
-    const res = await fetch(`${API_URL}/chat/users`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error("Failed to fetch chat users");
-    return await res.json();
+export const fetchChatUsers = async () => {
+    const res = await api.get('/chat/users');
+    return res.data;
 };
 
-export const deleteChatMessage = async (token, messageId) => {
-    const res = await fetch(`${API_URL}/chat/${messageId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to delete message");
-    return data;
+export const deleteChatMessage = async (messageId) => {
+    const res = await api.delete(`/chat/${messageId}`);
+    return res.data;
 };
 
 export const getImageUrl = (path) => {
     if (!path) return "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff";
     if (path.startsWith("http")) return path;
 
-    // Clean path and handle potential double uploads
     let cleanPath = path.replace(/\\/g, "/");
     if (cleanPath.startsWith("/")) cleanPath = cleanPath.substring(1);
 
-    // Proactively replace legacy via.placeholder.com
     if (cleanPath.includes("via.placeholder.com")) {
         return "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff";
     }
 
-    // Ensure BACKEND_URL doesn't end with a slash to avoid double slashes
     const baseUrl = BACKEND_URL.endsWith('/') ? BACKEND_URL.slice(0, -1) : BACKEND_URL;
     return `${baseUrl}/${cleanPath}`;
 };
-

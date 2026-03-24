@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import * as api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import AdminLogs from './AdminLogs';
 import ErrorLogs from './ErrorLogs';
 
-const AdminDashboard = ({ token, user: currentUser, onBack }) => {
+const AdminDashboard = ({ onBack }) => {
+    const { token, user: currentUser } = useAuth();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -32,11 +34,11 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
 
         setLoading(true);
         try {
-            await api.sendAnnouncement(token, announcementMsg);
+            await api.sendAnnouncement(announcementMsg);
             toast.success("Announcement broadcasted!");
             setAnnouncementMsg("");
         } catch (err) {
-            toast.error(err.message);
+            toast.error(err.response?.data?.error || err.message);
         } finally {
             setLoading(false);
         }
@@ -46,7 +48,7 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
         if (!leaveReason.trim()) return toast.error("Please provide a reason");
         setLoading(true);
         try {
-            await api.updateUserLeaveBalance(token, selectedUserForLeave._id, newLeaveBalance, leaveReason);
+            await api.updateUserLeaveBalance(selectedUserForLeave._id, newLeaveBalance, leaveReason);
             setUsers(prev => prev.map(u => u._id === selectedUserForLeave._id ? { ...u, paidLeaveBalance: newLeaveBalance } : u));
             toast.success("Leave balance updated!");
             setSelectedUserForLeave(null);
@@ -60,7 +62,7 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
     const loadUsers = async () => {
         setLoading(true);
         try {
-            const data = await api.fetchAllUsers(token);
+            const data = await api.fetchAllUsers();
             setUsers(data);
         } catch (err) {
             toast.error("Failed to fetch users");
@@ -77,7 +79,7 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
         if (!window.confirm(`Are you sure you want to change this user's role to ${newRole}?`)) return;
 
         try {
-            await api.updateUserRole(token, userId, newRole);
+            await api.updateUserRole(userId, newRole);
             setUsers(prev => prev.map(u => u._id === userId ? { ...u, role: newRole } : u));
             toast.success("Role updated successfully");
         } catch (err) {
@@ -90,7 +92,7 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
         if (!window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) return;
 
         try {
-            await api.deleteUser(token, userId);
+            await api.deleteUser(userId);
             setUsers(prev => prev.filter(u => u._id !== userId));
             toast.success("User deleted successfully");
         } catch (err) {
@@ -292,7 +294,7 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                         >
-                            <AdminLogs token={token} />
+                            <AdminLogs />
                         </motion.div>
                     ) : activeTab === 'error-logs' && currentUser.role === 'superadmin' ? (
                         <motion.div
@@ -301,7 +303,7 @@ const AdminDashboard = ({ token, user: currentUser, onBack }) => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                         >
-                            <ErrorLogs token={token} />
+                            <ErrorLogs />
                         </motion.div>
                     ) : (
                         <motion.div

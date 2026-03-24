@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as api from './services/api';
+import { useAuth } from './context/AuthContext';
 
 // Components
 import Login from './components/Auth/Login';
@@ -18,11 +19,7 @@ import AnnouncementModal from './components/Dashboard/AnnouncementModal';
 import ChatSection from './components/Dashboard/ChatSection';
 
 function App() {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("team_user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-  const [token, setToken] = useState(() => localStorage.getItem("team_token") || null);
+  const { user, token, login, logout, updateUserData } = useAuth();
 
   // Views: 'login', 'register', 'forgot-password', 'reset-password'
   const [view, setView] = useState("login");
@@ -136,14 +133,14 @@ function App() {
 
   const loadChat = async () => {
     try {
-      const msgs = await api.fetchChatMessages(token);
+      const msgs = await api.fetchChatMessages();
       setChatMessages(msgs);
     } catch (err) { console.error("Chat load failed"); }
   };
 
   const loadChatUsers = async () => {
     try {
-      const users = await api.fetchChatUsers(token);
+      const users = await api.fetchChatUsers();
       setChatUsers(users);
     } catch (err) { console.error("Users load failed"); }
   };
@@ -151,18 +148,34 @@ function App() {
   useEffect(() => {
     const handleOpenProfile = () => setIsProfileOpen(true);
     const handleOpenChat = () => setIsChatOpen(true);
+    const handleForceLogout = () => handleLogout();
+
     window.addEventListener('open-profile', handleOpenProfile);
     window.addEventListener('open-chat', handleOpenChat);
+    window.addEventListener('force-logout', handleForceLogout);
+
     return () => {
       window.removeEventListener('open-profile', handleOpenProfile);
       window.removeEventListener('open-chat', handleOpenChat);
+      window.removeEventListener('force-logout', handleForceLogout);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleOnline = () => toast.success("Back online!", { icon: '🌐' });
+    const handleOffline = () => toast.error("You are offline", { icon: '📶' });
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
   const loadRequests = async () => {
     setLoading(true);
     try {
-      const data = await api.fetchRequests(token);
+      const data = await api.fetchRequests();
       setRequests(data);
     } catch (err) { setError("Failed to load requests"); } finally { setLoading(false); }
   };
@@ -188,15 +201,13 @@ function App() {
     setLoading(true);
     try {
       const data = await api.registerUser(formData);
-      setUser(data.user);
-      setToken(data.token);
-      localStorage.setItem("team_user", JSON.stringify(data.user));
-      localStorage.setItem("team_token", data.token);
+      login(data.user, data.token);
       resetForms();
       toast.success("Account created successfully!");
     } catch (err) {
-      setError(err.message || "Registration Failed");
-      toast.error(err.message || "Registration Failed");
+      const msg = err.response?.data?.error || err.message || "Registration Failed";
+      setError(msg);
+      toast.error(msg);
     } finally { setLoading(false); }
   };
 
@@ -208,15 +219,13 @@ function App() {
     setLoading(true);
     try {
       const data = await api.loginUser(mobile, password);
-      setUser(data.user);
-      setToken(data.token);
-      localStorage.setItem("team_user", JSON.stringify(data.user));
-      localStorage.setItem("team_token", data.token);
+      login(data.user, data.token);
       resetForms();
       toast.success(`Welcome back, ${data.user.name}!`);
     } catch (err) {
-      setError(err.message || "Login Failed");
-      toast.error(err.message || "Login Failed");
+      const errorMsg = err.response?.data?.error || err.message || "Login Failed";
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally { setLoading(false); }
   };
 
@@ -259,10 +268,9 @@ function App() {
   }
 
   const handleLogout = () => {
-    setUser(null); setToken(null); setRequests([]); setView("login");
-    localStorage.removeItem("team_user");
-    localStorage.removeItem("team_token");
-    toast.success("Logged out successfully!");
+    logout();
+    setRequests([]);
+    setView("login");
   };
 
   const resetForms = () => {
@@ -298,7 +306,7 @@ function App() {
     isSubmittingRef.current = true;
     setLoading(true);
     try {
-      const newReq = await api.submitRequest(token, payload);
+      const newReq = await api.submitRequest(payload);
       setRequests((prev) => {
         if (prev.some(r => r._id === newReq._id)) return prev;
         return [newReq, ...prev];
@@ -306,8 +314,9 @@ function App() {
       resetForms();
       toast.success("Request submitted!");
     } catch (err) {
-      setError(err.message || "Failed to submit");
-      toast.error(err.message || "Failed to submit");
+      const msg = err.response?.data?.error || err.message || "Failed to submit";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
       isSubmittingRef.current = false;
@@ -316,7 +325,7 @@ function App() {
 
   const handleChangeStatus = async (id, newStatus, comment = "") => {
     try {
-      await api.updateRequestStatus(token, id, newStatus, comment);
+      await api.updateRequestStatus(id, newStatus, comment);
       toast.success(`Updated to ${newStatus}`);
     }
     catch (err) {
@@ -328,7 +337,7 @@ function App() {
   const handleDeleteRequest = async (id) => {
     if (!window.confirm("Delete?")) return;
     try {
-      await api.deleteRequest(token, id);
+      await api.deleteRequest(id);
       toast.success("Request deleted");
     }
     catch (err) {
@@ -340,13 +349,12 @@ function App() {
   const handleProfileUpdate = async (formData) => {
     setLoading(true);
     try {
-      const data = await api.updateProfile(token, formData);
-      setUser(data.user);
-      localStorage.setItem("team_user", JSON.stringify(data.user));
+      const data = await api.updateProfile(formData);
+      updateUserData(data.user);
       setIsProfileOpen(false);
       toast.success("Profile updated!");
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     } finally {
       setLoading(false);
     }
@@ -497,7 +505,7 @@ function App() {
           <>
             {error && <div className="glass bg-emerald-50/50 text-[#2E6F40] p-4 rounded-xl mb-8 text-center text-sm font-bold border-[#68BA7F]/20">{error}</div>}
 
-            <Stats stats={stats} />
+            <Stats stats={stats} loading={loading} />
 
             <RequestForm
               query={query} setQuery={setQuery}
@@ -538,6 +546,7 @@ function App() {
               changeStatus={handleChangeStatus}
               deleteRequest={handleDeleteRequest}
               formatDate={formatDate}
+              loading={loading}
             />
           </>
         )}

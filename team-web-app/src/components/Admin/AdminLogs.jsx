@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import * as api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import * as XLSX from 'xlsx';
 
-const AdminLogs = ({ token }) => {
+const AdminLogs = () => {
+    const { token } = useAuth();
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -20,7 +22,7 @@ const AdminLogs = ({ token }) => {
     const loadSystemLogs = async () => {
         setLoading(true);
         try {
-            const data = await api.fetchSystemLogs(token);
+            const data = await api.fetchSystemLogs();
             setSystemLogs(data);
         } catch (err) {
             toast.error("Failed to fetch system logs");
@@ -32,7 +34,7 @@ const AdminLogs = ({ token }) => {
     const loadLogs = async () => {
         setLoading(true);
         try {
-            const data = await api.fetchRequestLogs(token);
+            const data = await api.fetchRequestLogs();
             setLogs(data);
         } catch (err) {
             toast.error("Failed to fetch logs");

@@ -1,6 +1,7 @@
 import React from 'react';
+import Skeleton from '../Common/Skeleton';
 
-const Stats = ({ stats }) => {
+const Stats = ({ stats, loading }) => {
     // Calculate total from all keys in stats object
     const totalRequests = Object.values(stats).reduce((acc, curr) => acc + (typeof curr === 'number' ? curr : 0), 0);
 
@@ -16,7 +17,7 @@ const Stats = ({ stats }) => {
             {cards.map((card, index) => (
                 <div key={index} className={`glass-card bg-white/95 p-6 text-center group border border-[#68BA7F]/30`}>
                     <div className={`text-4xl font-black transition-transform group-hover:scale-110 duration-300 ${card.color}`}>
-                        {card.value}
+                        {loading ? <Skeleton className="h-10 w-12 mx-auto" /> : card.value}
                     </div>
                     <div className="text-xs text-[#253D2C] uppercase font-black tracking-widest mt-2">{card.label}</div>
                     <div className={`h-1 w-0 group-hover:w-full transition-all duration-300 mx-auto mt-3 rounded-full ${card.bg}`}></div>

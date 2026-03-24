@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
-const ErrorLogs = ({ token }) => {
+const ErrorLogs = () => {
+    const { token } = useAuth();
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedLog, setSelectedLog] = useState(null);
@@ -15,7 +17,7 @@ const ErrorLogs = ({ token }) => {
     const loadLogs = async () => {
         setLoading(true);
         try {
-            const data = await api.fetchSystemErrorLogs(token);
+            const data = await api.fetchSystemErrorLogs();
             setLogs(data);
         } catch (err) {
             toast.error("Failed to fetch system error logs.");
