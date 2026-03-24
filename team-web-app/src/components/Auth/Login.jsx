@@ -5,7 +5,7 @@ const Login = ({ companySlug, setCompanySlug, mobile, setMobile, password, setPa
         <div>
             <input
                 type="text"
-                placeholder="Company ID / Slug (e.g. turbo-net)"
+                placeholder="Company ID / Slug (e.g. n1solution)"
                 value={companySlug}
                 onChange={(e) => setCompanySlug(e.target.value)}
                 className="input-premium mb-4 uppercase"
