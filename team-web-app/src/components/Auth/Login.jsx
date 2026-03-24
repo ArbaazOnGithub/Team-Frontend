@@ -1,8 +1,15 @@
 import React from 'react';
 
-const Login = ({ mobile, setMobile, password, setPassword, loading, handleLogin, setView, resetForms }) => {
+const Login = ({ companySlug, setCompanySlug, mobile, setMobile, password, setPassword, loading, handleLogin, setView, resetForms }) => {
     return (
         <div>
+            <input
+                type="text"
+                placeholder="Company ID / Slug (e.g. turbo-net)"
+                value={companySlug}
+                onChange={(e) => setCompanySlug(e.target.value)}
+                className="input-premium mb-4 uppercase"
+            />
             <input
                 type="tel"
                 placeholder="Mobile Number"

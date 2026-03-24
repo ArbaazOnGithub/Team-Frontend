@@ -28,6 +28,7 @@ function App() {
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [companySlug, setCompanySlug] = useState("");
   const [name, setName] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -200,6 +201,9 @@ function App() {
 
     setLoading(true);
     try {
+      const company = await api.fetchCompanyBySlug(companySlug.toLowerCase().trim());
+      formData.append("companyId", company._id);
+
       const data = await api.registerUser(formData);
       login(data.user, data.token);
       resetForms();
@@ -214,11 +218,13 @@ function App() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(""); setSuccessMsg("");
+    if (!companySlug) return setError("Company ID is required");
     if (!mobile || !password) return setError("Please enter credentials");
 
     setLoading(true);
     try {
-      const data = await api.loginUser(mobile, password);
+      const company = await api.fetchCompanyBySlug(companySlug.toLowerCase().trim());
+      const data = await api.loginUser(mobile, password, company._id);
       login(data.user, data.token);
       resetForms();
       toast.success(`Welcome back, ${data.user.name}!`);
@@ -232,11 +238,13 @@ function App() {
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     setError(""); setSuccessMsg("");
+    if (!companySlug) return setError("Company ID is required");
     if (!email) return setError("Please enter your registered email");
 
     setLoading(true);
     try {
-      const data = await api.forgotPassword(email);
+      const company = await api.fetchCompanyBySlug(companySlug.toLowerCase().trim());
+      const data = await api.forgotPassword(email, company._id);
       setSuccessMsg(data.message);
       if (data.mobile) setResetMobile(data.mobile);
       toast.success(data.message);
@@ -274,7 +282,7 @@ function App() {
   };
 
   const resetForms = () => {
-    setMobile(""); setName(""); setPassword(""); setEmail(""); setOtp(""); setNewPassword("");
+    setMobile(""); setName(""); setPassword(""); setEmail(""); setOtp(""); setNewPassword(""); setCompanySlug("");
     setImageFile(null); setImagePreview(null); setError(""); setSuccessMsg("");
     setQuery(""); setRequestType("General"); setStartDate(""); setEndDate("");
   };
@@ -422,6 +430,7 @@ function App() {
 
             {view === "login" && (
               <Login
+                companySlug={companySlug} setCompanySlug={setCompanySlug}
                 mobile={mobile} setMobile={setMobile}
                 password={password} setPassword={setPassword}
                 loading={loading} handleLogin={handleLogin}
@@ -431,6 +440,7 @@ function App() {
 
             {view === "register" && (
               <Register
+                companySlug={companySlug} setCompanySlug={setCompanySlug}
                 name={name} setName={setName}
                 email={email} setEmail={setEmail}
                 mobile={mobile} setMobile={setMobile}
@@ -443,6 +453,7 @@ function App() {
 
             {view === "forgot-password" && (
               <ForgotPassword
+                companySlug={companySlug} setCompanySlug={setCompanySlug}
                 email={email} setEmail={setEmail}
                 loading={loading} handleForgotPassword={handleForgotPassword}
                 setView={setView}

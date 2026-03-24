@@ -38,8 +38,13 @@ export const fetchStats = async () => {
     return res.data;
 };
 
-export const loginUser = async (mobile, password) => {
-    const res = await api.post('/login', { mobile, password });
+export const fetchCompanyBySlug = async (slug) => {
+    const res = await api.get(`/companies/${slug}`);
+    return res.data;
+};
+
+export const loginUser = async (mobile, password, companyId) => {
+    const res = await api.post('/login', { mobile, password, companyId });
     return res.data;
 };
 
@@ -48,8 +53,8 @@ export const registerUser = async (formData) => {
     return res.data;
 };
 
-export const forgotPassword = async (email) => {
-    const res = await api.post('/forgot-password', { email });
+export const forgotPassword = async (email, companyId) => {
+    const res = await api.post('/forgot-password', { email, companyId });
     return res.data;
 };
 

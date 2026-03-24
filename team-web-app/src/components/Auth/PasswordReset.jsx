@@ -1,8 +1,9 @@
 import React from 'react';
 
-export const ForgotPassword = ({ email, setEmail, loading, handleForgotPassword, setView }) => {
+export const ForgotPassword = ({ companySlug, setCompanySlug, email, setEmail, loading, handleForgotPassword, setView }) => {
     return (
         <div>
+            <input type="text" placeholder="Company ID / Slug" value={companySlug} onChange={(e) => setCompanySlug(e.target.value)} className="input-premium mb-3 uppercase" />
             <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} className="input-premium mb-6" />
             <button
                 onClick={handleForgotPassword}
