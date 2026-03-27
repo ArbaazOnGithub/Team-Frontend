@@ -6,6 +6,7 @@ import * as api from '../../services/api';
 const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMessage, onTogglePin, onMarkRead, onDeleteMessage }) => {
     const [newMessage, setNewMessage] = useState("");
     const [activeMenuId, setActiveMenuId] = useState(null);
+    const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
     const scrollRef = useRef(null);
 
     useEffect(() => {
@@ -126,55 +127,25 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                         }`}>
                                                         {msg.content}
 
-                                                        {/* Message Options Menu */}
+                                                        {/* Message Options — button only, dropdown rendered outside scroll container */}
                                                         {(isMe || ['admin', 'superadmin'].includes(user.role)) && (
                                                             <div className={`absolute top-0 ${isMe ? '-left-8' : '-right-8'}`}>
                                                                 <button
                                                                     type="button"
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
-                                                                        setActiveMenuId(activeMenuId === msg._id ? null : msg._id);
+                                                                        if (activeMenuId === msg._id) {
+                                                                            setActiveMenuId(null);
+                                                                        } else {
+                                                                            const rect = e.currentTarget.getBoundingClientRect();
+                                                                            setMenuPos({ top: rect.bottom + 4, left: isMe ? rect.right - 144 : rect.left, msgId: msg._id });
+                                                                            setActiveMenuId(msg._id);
+                                                                        }
                                                                     }}
                                                                     className="p-1.5 text-gray-400 hover:text-[#2E6F40] transition-colors rounded-lg hover:bg-black/5"
                                                                 >
                                                                     ⋮
                                                                 </button>
-
-                                                                <AnimatePresence>
-                                                                    {activeMenuId === msg._id && (
-                                                                        <motion.div
-                                                                            initial={{ opacity: 0, scale: 0.9, y: -10 }}
-                                                                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                                                                            exit={{ opacity: 0, scale: 0.9, y: -10 }}
-                                                                            className={`absolute bottom-full mb-2 ${isMe ? 'left-0' : 'right-0'} bg-white border border-[#68BA7F]/20 rounded-xl shadow-2xl z-50 min-w-[140px] overflow-hidden`}
-                                                                        >
-                                                                            <button
-                                                                                type="button"
-                                                                                onClick={() => {
-                                                                                    onTogglePin(msg._id);
-                                                                                    setActiveMenuId(null);
-                                                                                }}
-                                                                                className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-[#253D2C] hover:bg-[#F0FDF4] flex items-center gap-3 transition-colors border-b border-gray-50"
-                                                                            >
-                                                                                <span className="text-base">{msg.isPinned ? '📍' : '📌'}</span>
-                                                                                {msg.isPinned ? 'Unpin' : 'Pin Message'}
-                                                                            </button>
-                                                                            <button
-                                                                                type="button"
-                                                                                onClick={() => {
-                                                                                    if (window.confirm("Delete this message?")) {
-                                                                                        onDeleteMessage(msg._id);
-                                                                                    }
-                                                                                    setActiveMenuId(null);
-                                                                                }}
-                                                                                className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-rose-500 hover:bg-rose-50 flex items-center gap-3 transition-colors"
-                                                                            >
-                                                                                <span className="text-base">🗑️</span>
-                                                                                Delete
-                                                                            </button>
-                                                                        </motion.div>
-                                                                    )}
-                                                                </AnimatePresence>
                                                             </div>
                                                         )}
                                                     </div>
@@ -255,6 +226,42 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                 </button>
                             </div>
                         </form>
+
+                        {/* Fixed-position dropdown — renders outside scroll container, never clipped */}
+                        <AnimatePresence>
+                            {activeMenuId && (() => {
+                                const activeMsg = messages.find(m => m._id === activeMenuId);
+                                if (!activeMsg) return null;
+                                return (
+                                    <motion.div
+                                        key={activeMenuId}
+                                        initial={{ opacity: 0, scale: 0.9, y: -6 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.9, y: -6 }}
+                                        style={{ position: 'fixed', top: menuPos.top, left: menuPos.left, zIndex: 9999 }}
+                                        className="bg-white border border-[#68BA7F]/20 rounded-xl shadow-2xl min-w-[144px] overflow-hidden"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <button
+                                            type="button"
+                                            onClick={() => { onTogglePin(activeMenuId); setActiveMenuId(null); }}
+                                            className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-[#253D2C] hover:bg-[#F0FDF4] flex items-center gap-3 transition-colors border-b border-gray-50"
+                                        >
+                                            <span className="text-base">{activeMsg.isPinned ? '📍' : '📌'}</span>
+                                            {activeMsg.isPinned ? 'Unpin' : 'Pin Message'}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => { if (window.confirm("Delete this message?")) onDeleteMessage(activeMenuId); setActiveMenuId(null); }}
+                                            className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-rose-500 hover:bg-rose-50 flex items-center gap-3 transition-colors"
+                                        >
+                                            <span className="text-base">🗑️</span>
+                                            Delete
+                                        </button>
+                                    </motion.div>
+                                );
+                            })()}
+                        </AnimatePresence>
                     </motion.div>
                 </>
             )}
