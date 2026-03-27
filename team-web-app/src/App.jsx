@@ -403,9 +403,9 @@ function App() {
 
   const handleTogglePinMessage = async (id) => {
     try {
-      await api.togglePinMessage(token, id);
+      await api.togglePinMessage(id);
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     }
   };
 
@@ -416,10 +416,10 @@ function App() {
 
   const handleDeleteChatMessage = async (messageId) => {
     try {
-      await api.deleteChatMessage(token, messageId);
+      await api.deleteChatMessage(messageId);
       toast.success("Message deleted");
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response?.data?.error || err.message);
     }
   };
 
