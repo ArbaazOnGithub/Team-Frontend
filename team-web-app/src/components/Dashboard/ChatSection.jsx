@@ -5,6 +5,7 @@ import * as api from '../../services/api';
 
 const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMessage, onTogglePin, onMarkRead, onDeleteMessage }) => {
     const [newMessage, setNewMessage] = useState("");
+    const [activeMenuId, setActiveMenuId] = useState(null);
     const scrollRef = useRef(null);
 
     useEffect(() => {
@@ -24,6 +25,14 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
             });
         }
     }, [isOpen, messages, user._id, onMarkRead]);
+
+    useEffect(() => {
+        const handleClickOutside = () => setActiveMenuId(null);
+        if (activeMenuId) {
+            window.addEventListener('click', handleClickOutside);
+        }
+        return () => window.removeEventListener('click', handleClickOutside);
+    }, [activeMenuId]);
 
     const handleSend = (e) => {
         e.preventDefault();
@@ -117,28 +126,56 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                         }`}>
                                                         {msg.content}
 
-                                                        {/* Pin Action */}
-                                                        <button
-                                                            onClick={() => onTogglePin(msg._id)}
-                                                            className={`absolute top-0 ${isMe ? '-left-8' : '-right-8'} p-1.5 opacity-0 group-hover:opacity-100 transition-all hover:scale-110 ${msg.isPinned ? 'opacity-100' : ''}`}
-                                                            title={msg.isPinned ? "Unpin" : "Pin"}
-                                                        >
-                                                            {msg.isPinned ? '📍' : '📌'}
-                                                        </button>
+                                                        {/* Message Options Menu */}
+                                                        {(isMe || ['admin', 'superadmin'].includes(user.role)) && (
+                                                            <div className={`absolute top-0 ${isMe ? '-left-8' : '-right-8'}`}>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setActiveMenuId(activeMenuId === msg._id ? null : msg._id);
+                                                                    }}
+                                                                    className="p-1.5 text-gray-400 hover:text-[#2E6F40] transition-colors rounded-lg hover:bg-black/5"
+                                                                >
+                                                                    ⋮
+                                                                </button>
 
-                                                        {/* Delete Action */}
-                                                        {(isMe || user.role === 'admin') && (
-                                                            <button
-                                                                onClick={() => {
-                                                                    if (window.confirm("Delete this message?")) {
-                                                                        onDeleteMessage(msg._id);
-                                                                    }
-                                                                }}
-                                                                className={`absolute top-0 ${isMe ? '-left-14' : '-right-14'} p-1.5 opacity-0 group-hover:opacity-100 transition-all hover:scale-110 text-rose-500`}
-                                                                title="Delete Message"
-                                                            >
-                                                                🗑️
-                                                            </button>
+                                                                <AnimatePresence>
+                                                                    {activeMenuId === msg._id && (
+                                                                        <motion.div
+                                                                            initial={{ opacity: 0, scale: 0.9, y: -10 }}
+                                                                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                                            exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                                                                            className={`absolute bottom-full mb-2 ${isMe ? 'left-0' : 'right-0'} bg-white border border-[#68BA7F]/20 rounded-xl shadow-2xl z-50 min-w-[140px] overflow-hidden`}
+                                                                        >
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() => {
+                                                                                    onTogglePin(msg._id);
+                                                                                    setActiveMenuId(null);
+                                                                                }}
+                                                                                className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-[#253D2C] hover:bg-[#F0FDF4] flex items-center gap-3 transition-colors border-b border-gray-50"
+                                                                            >
+                                                                                <span className="text-base">{msg.isPinned ? '📍' : '📌'}</span>
+                                                                                {msg.isPinned ? 'Unpin' : 'Pin Message'}
+                                                                            </button>
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() => {
+                                                                                    if (window.confirm("Delete this message?")) {
+                                                                                        onDeleteMessage(msg._id);
+                                                                                    }
+                                                                                    setActiveMenuId(null);
+                                                                                }}
+                                                                                className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-rose-500 hover:bg-rose-50 flex items-center gap-3 transition-colors"
+                                                                            >
+                                                                                <span className="text-base">🗑️</span>
+                                                                                Delete
+                                                                            </button>
+                                                                        </motion.div>
+                                                                    )}
+                                                                </AnimatePresence>
+                                                            </div>
                                                         )}
                                                     </div>
                                                 </div>
