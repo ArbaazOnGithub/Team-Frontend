@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "118113313955",
+    "project_id": "teamwebapp-27cf4",
+    "storage_bucket": "teamwebapp-27cf4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118113313955:android:2e91266c02810765df8b16",
+        "android_client_info": {
+          "package_name": "com.teamwebapp.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJe1wA6z5gtxJnNfNpIkhpFHX-af5y1q8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

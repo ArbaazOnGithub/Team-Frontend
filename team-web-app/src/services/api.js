@@ -7,6 +7,11 @@ const api = axios.create({
     baseURL: API_URL,
 });
 
+export const updateFcmToken = async (fcmToken) => {
+    const res = await api.put('/profile/fcm-token', { fcmToken });
+    return res.data;
+};
+
 // Interceptor to add token to every request
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem("team_token");
@@ -180,6 +185,15 @@ export const fetchChatUsers = async () => {
 
 export const deleteChatMessage = async (messageId) => {
     const res = await api.delete(`/chat/${messageId}`);
+    return res.data;
+};
+
+export const uploadChatMessageFile = async (file) => {
+    const formData = new FormData();
+    formData.append('chatFile', file);
+    const res = await api.post('/chat/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
     return res.data;
 };
 

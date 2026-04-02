@@ -4,6 +4,13 @@ import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as api from './services/api';
 import { useAuth } from './context/AuthContext';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { LocalNotifications } from '@capacitor/local-notifications';
+import { Capacitor } from '@capacitor/core';
+import { Preferences } from '@capacitor/preferences';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { checkBiometricAvailability, authenticateWithBiometrics } from './utils/biometricAuth';
 
 // Components
 import Login from './components/Auth/Login';
@@ -20,6 +27,56 @@ const ChatSection = lazy(() => import('./components/Dashboard/ChatSection'));
 
 function App() {
   const { user, token, login, logout, updateUserData } = useAuth();
+
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+  const [hasSavedCredentials, setHasSavedCredentials] = useState(false);
+  const [useBiometric, setUseBiometric] = useState(false);
+
+  // --- CAPACITOR INITIALIZATION ---
+  useEffect(() => {
+    const initCapacitor = async () => {
+      if (Capacitor.isNativePlatform()) {
+        StatusBar.setOverlaysWebView({ overlay: false });
+        StatusBar.setBackgroundColor({ color: '#2E6F40' });
+        StatusBar.setStyle({ style: Style.Dark });
+        LocalNotifications.requestPermissions();
+
+        // Check Biometrics
+        const available = await checkBiometricAvailability();
+        setIsBiometricSupported(available);
+        if (available) {
+          const { value } = await Preferences.get({ key: 'biometric_credentials' });
+          if (value) setHasSavedCredentials(true);
+        }
+      }
+    };
+    initCapacitor();
+  }, []);
+
+  const triggerHaptic = async (style = ImpactStyle.Light) => {
+    if (Capacitor.isNativePlatform()) {
+      await Haptics.impact({ style });
+    }
+  };
+
+  const handleBiometricLogin = async () => {
+    const authenticated = await authenticateWithBiometrics();
+    if (authenticated) {
+      const { value } = await Preferences.get({ key: 'biometric_credentials' });
+      if (value) {
+        const { mobile, password, companySlug } = JSON.parse(value);
+        // Simulate auto-login call
+        setCompanySlug(companySlug);
+        setMobile(mobile);
+        setPassword(password);
+        // Trigger actual login
+        setTimeout(() => {
+          const fakeEvent = { preventDefault: () => { } };
+          handleLogin(fakeEvent, mobile, password, companySlug);
+        }, 100);
+      }
+    }
+  };
 
   // Views: 'login', 'register', 'forgot-password', 'reset-password'
   const [view, setView] = useState("login");
@@ -42,6 +99,7 @@ function App() {
   const [requestType, setRequestType] = useState("General");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [attachmentUrl, setAttachmentUrl] = useState("");
 
   // Dashboard States
   const [query, setQuery] = useState("");
@@ -110,6 +168,22 @@ function App() {
       });
       socket.on("receive_message", (msg) => {
         setChatMessages(prev => [...prev, msg]);
+        
+        // Local Notification for Chat
+        if (Capacitor.isNativePlatform() && (msg.sender._id !== user._id)) {
+          LocalNotifications.schedule({
+            notifications: [
+              {
+                title: `New message from ${msg.sender.name}`,
+                body: msg.content,
+                id: Math.floor(Math.random() * 10000),
+                schedule: { at: new Date(Date.now() + 1000) },
+                sound: 'default'
+              }
+            ]
+          });
+          triggerHaptic(ImpactStyle.Medium);
+        }
       });
       socket.on("message_pinned", (updatedMsg) => {
         setChatMessages(prev => prev.map(m => m._id === updatedMsg._id ? updatedMsg : m));
@@ -132,11 +206,58 @@ function App() {
       loadChat();
       loadChatUsers();
 
+      if (Capacitor.isNativePlatform()) {
+        setupPushNotifications();
+      }
+
       if (user.role === 'superadmin') {
         loadAvailableCompanies();
       }
     }
   }, [user, token, selectedCompanyId]);
+
+  const setupPushNotifications = async () => {
+    try {
+      let permStatus = await PushNotifications.checkPermissions();
+
+      if (permStatus.receive === 'prompt') {
+        permStatus = await PushNotifications.requestPermissions();
+      }
+
+      if (permStatus.receive !== 'granted') {
+        throw new Error('Push notification permission denied');
+      }
+
+      await PushNotifications.register();
+
+      PushNotifications.addListener('registration', async (token) => {
+        console.log('Push registration success, token: ' + token.value);
+        try {
+          await api.updateFcmToken(token.value);
+        } catch (err) {
+          console.error("Failed to sync FCM token to backend", err);
+        }
+      });
+
+      PushNotifications.addListener('registrationError', (error) => {
+        console.error('Error on registration: ' + JSON.stringify(error));
+      });
+
+      PushNotifications.addListener('pushNotificationReceived', (notification) => {
+        console.log('Push received: ' + JSON.stringify(notification));
+        toast.success(notification.title || 'Notification received', { icon: '🔔' });
+      });
+
+      PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
+        console.log('Push action performed: ' + JSON.stringify(notification));
+        if (notification.notification.data?.type === 'chat') {
+          setIsChatOpen(true);
+        }
+      });
+    } catch (err) {
+      console.error("Push Notifications Setup Failed:", err);
+    }
+  };
 
   const loadAvailableCompanies = async () => {
     try {
@@ -241,18 +362,34 @@ function App() {
     } finally { setLoading(false); }
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (e, forcedMobile, forcedPassword, forcedSlug) => {
+    if (e) e.preventDefault();
     setError(""); setSuccessMsg("");
-    if (!companySlug) return setError("Company ID is required");
-    if (!mobile || !password) return setError("Please enter credentials");
+
+    const loginSlug = forcedSlug || companySlug;
+    const loginMobile = forcedMobile || mobile;
+    const loginPassword = forcedPassword || password;
+
+    if (!loginSlug) return setError("Company ID is required");
+    if (!loginMobile || !loginPassword) return setError("Please enter credentials");
 
     setLoading(true);
     try {
-      const company = await api.fetchCompanyBySlug(companySlug.toLowerCase().trim());
-      const data = await api.loginUser(mobile, password, company._id);
+      const company = await api.fetchCompanyBySlug(loginSlug.toLowerCase().trim());
+      const data = await api.loginUser(loginMobile, loginPassword, company._id);
+      
+      // Save for Biometrics if requested
+      if (isBiometricSupported && useBiometric) {
+        await Preferences.set({
+          key: 'biometric_credentials',
+          value: JSON.stringify({ mobile: loginMobile, password: loginPassword, companySlug: loginSlug })
+        });
+        setHasSavedCredentials(true);
+      }
+
       login(data.user, data.token);
       resetForms();
+      triggerHaptic(ImpactStyle.Medium);
       toast.success(`Welcome back, ${data.user.name}!`);
     } catch (err) {
       const errorMsg = err.response?.data?.error || err.message || "Login Failed";
@@ -338,6 +475,9 @@ function App() {
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
       payload = { ...payload, startDate, endDate, daysCount: diffDays };
     }
+    if (attachmentUrl) {
+      payload.attachmentUrl = attachmentUrl;
+    }
 
     isSubmittingRef.current = true;
     setLoading(true);
@@ -348,6 +488,7 @@ function App() {
         return [newReq, ...prev];
       });
       resetForms();
+      triggerHaptic(ImpactStyle.Heavy);
       toast.success("Request submitted!");
     } catch (err) {
       const msg = err.response?.data?.error || err.message || "Failed to submit";
@@ -463,6 +604,11 @@ function App() {
                 password={password} setPassword={setPassword}
                 loading={loading} handleLogin={handleLogin}
                 setView={setView} resetForms={resetForms}
+                isBiometricSupported={isBiometricSupported}
+                hasSavedCredentials={hasSavedCredentials}
+                handleBiometricLogin={handleBiometricLogin}
+                useBiometric={useBiometric}
+                setUseBiometric={setUseBiometric}
               />
             )}
 
@@ -577,6 +723,8 @@ function App() {
               startDate={startDate} setStartDate={setStartDate}
               endDate={endDate} setEndDate={setEndDate}
               paidLeaveBalance={user.paidLeaveBalance}
+              attachmentUrl={attachmentUrl}
+              setAttachmentUrl={setAttachmentUrl}
             />
 
             <div className="flex items-center gap-4 mb-8">

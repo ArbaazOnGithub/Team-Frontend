@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import toast from 'react-hot-toast';
 import * as api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
+  PieChart, Pie, Cell, AreaChart, Area, Legend 
+} from 'recharts';
 import AdminLogs from './AdminLogs';
 import ErrorLogs from './ErrorLogs';
 import CompanyManagement from './CompanyManagement';
@@ -10,9 +11,10 @@ import CompanyManagement from './CompanyManagement';
 const AdminDashboard = ({ onBack }) => {
     const { token, user: currentUser } = useAuth();
     const [users, setUsers] = useState([]);
+    const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [activeTab, setActiveTab] = useState('users'); // 'users' or 'logs'
+    const [activeTab, setActiveTab] = useState('analytics'); // Default to analytics for Phase 2
     const [selectedUserForLeave, setSelectedUserForLeave] = useState(null);
     const [newLeaveBalance, setNewLeaveBalance] = useState(0);
     const [leaveReason, setLeaveReason] = useState("");
@@ -20,7 +22,24 @@ const AdminDashboard = ({ onBack }) => {
 
     useEffect(() => {
         if (activeTab === 'users') loadUsers();
+        if (activeTab === 'analytics') loadAnalyticsData();
     }, [activeTab]);
+
+    const loadAnalyticsData = async () => {
+        setLoading(true);
+        try {
+            const [usersData, requestsData] = await Promise.all([
+                api.fetchAllUsers(),
+                api.fetchRequests()
+            ]);
+            setUsers(usersData);
+            setRequests(requestsData);
+        } catch (err) {
+            toast.error("Failed to load analytics data");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (selectedUserForLeave) {
@@ -124,6 +143,12 @@ const AdminDashboard = ({ onBack }) => {
 
                     <div className="flex bg-white/50 p-1 rounded-2xl border border-[#68BA7F]/20">
                         <button
+                            onClick={() => setActiveTab('analytics')}
+                            className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'analytics' ? 'bg-[#2E6F40] text-white shadow-lg' : 'text-[#253D2C]/60 hover:text-[#2E6F40]'}`}
+                        >
+                            📊 Analytics
+                        </button>
+                        <button
                             onClick={() => setActiveTab('users')}
                             className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'users' ? 'bg-[#2E6F40] text-white shadow-lg' : 'text-[#253D2C]/60 hover:text-[#2E6F40]'}`}
                         >
@@ -161,7 +186,112 @@ const AdminDashboard = ({ onBack }) => {
                 </div>
 
                 <AnimatePresence mode="wait">
-                    {activeTab === 'users' ? (
+                    {activeTab === 'analytics' ? (
+                        <motion.div
+                            key="analytics-tab"
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.98 }}
+                            className="space-y-8"
+                        >
+                            {/* Summary Cards */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                {[
+                                    { label: 'Total Team', val: users.length, icon: '👥' },
+                                    { label: 'Total Requests', val: requests.length, icon: '📝' },
+                                    { label: 'Pending', val: requests.filter(r => r.status === 'Pending').length, icon: '⏳' },
+                                    { label: 'Companies', val: currentUser.role === 'superadmin' ? 'Global' : 'My Team', icon: '🏢' }
+                                ].map((s, idx) => (
+                                    <div key={idx} className="glass-card p-6 border-white/20 hover:scale-[1.02] transition-transform">
+                                        <div className="text-2xl mb-1">{s.icon}</div>
+                                        <div className="text-[10px] font-black text-[#2E6F40] uppercase tracking-widest opacity-60">{s.label}</div>
+                                        <div className="text-3xl font-black text-[#253D2C]">{s.val}</div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                {/* Chart 1: Request Status Pulse */}
+                                <div className="glass-card p-8 border-white/20">
+                                    <h3 className="text-sm font-black text-[#2E6F40] uppercase tracking-widest mb-8">Request Pulse</h3>
+                                    <div className="h-[300px] w-full">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart data={[
+                                                { name: 'Pending', count: requests.filter(r => r.status === 'Pending').length },
+                                                { name: 'Approved', count: requests.filter(r => r.status === 'Approved').length },
+                                                { name: 'Resolved', count: requests.filter(r => r.status === 'Resolved').length },
+                                                { name: 'Cancelled', count: requests.filter(r => r.status === 'Cancelled').length },
+                                            ]}>
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#64748B' }} />
+                                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#64748B' }} />
+                                                <Tooltip 
+                                                    cursor={{ fill: '#F1F5F9' }}
+                                                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 800 }}
+                                                />
+                                                <Bar dataKey="count" fill="#2E6F40" radius={[4, 4, 0, 0]} barSize={40} />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+
+                                {/* Chart 2: Team Roles */}
+                                <div className="glass-card p-8 border-white/20">
+                                    <h3 className="text-sm font-black text-[#2E6F40] uppercase tracking-widest mb-8">Team Composition</h3>
+                                    <div className="h-[300px] w-full">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                                <Pie
+                                                    data={[
+                                                        { name: 'Admins', value: users.filter(u => u.role === 'admin').length },
+                                                        { name: 'Employees', value: users.filter(u => u.role === 'user').length },
+                                                        { name: 'Superadmin', value: users.filter(u => u.role === 'superadmin').length },
+                                                    ]}
+                                                    cx="50%" cy="50%"
+                                                    innerRadius={60} outerRadius={80}
+                                                    paddingAngle={5}
+                                                    dataKey="value"
+                                                >
+                                                    {[ '#2E6F40', '#68BA7F', '#253D2C' ].map((color, idx) => (
+                                                        <Cell key={`cell-${idx}`} fill={color} />
+                                                    ))}
+                                                </Pie>
+                                                <Tooltip />
+                                                <Legend iconType="circle" />
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Chart 3: Trends over time */}
+                            <div className="glass-card p-8 border-white/20">
+                                <h3 className="text-sm font-black text-[#2E6F40] uppercase tracking-widest mb-8">Activity Trends (Last 7 Days)</h3>
+                                <div className="h-[300px] w-full">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <AreaChart data={[...Array(7)].map((_, i) => {
+                                            const d = new Date();
+                                            d.setDate(d.getDate() - (6 - i));
+                                            const dateStr = d.toLocaleDateString(undefined, { weekday: 'short' });
+                                            const count = requests.filter(r => new Date(r.createdAt).toDateString() === d.toDateString()).length;
+                                            return { name: dateStr, count };
+                                        })}>
+                                            <defs>
+                                                <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="5%" stopColor="#68BA7F" stopOpacity={0.3} />
+                                                    <stop offset="95%" stopColor="#68BA7F" stopOpacity={0} />
+                                                </linearGradient>
+                                            </defs>
+                                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#64748B' }} />
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                                            <Tooltip />
+                                            <Area type="monotone" dataKey="count" stroke="#2E6F40" strokeWidth={2} fillOpacity={1} fill="url(#colorCount)" />
+                                        </AreaChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ) : activeTab === 'users' ? (
                         <motion.div
                             key="users-tab"
                             initial={{ opacity: 0, y: 10 }}

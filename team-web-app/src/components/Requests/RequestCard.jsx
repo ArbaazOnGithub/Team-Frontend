@@ -55,6 +55,29 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                         )}
                     </div>
                 )}
+                {req.attachmentUrl && (
+                    <div className="mt-4">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-[#2E6F40] mb-2">Attachment:</p>
+                        <a 
+                            href={req.attachmentUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="inline-block relative group"
+                        >
+                            {req.attachmentUrl.match(/\.(jpg|jpeg|png|gif)$/i) ? (
+                                <img 
+                                    src={req.attachmentUrl} 
+                                    alt="Attachment" 
+                                    className="max-w-[200px] rounded-lg border-2 border-[#68BA7F]/20 shadow-sm hover:scale-105 transition-transform"
+                                />
+                            ) : (
+                                <div className="px-4 py-2 bg-white/60 border border-[#68BA7F]/20 rounded-xl text-[10px] font-black text-[#2E6F40] uppercase tracking-widest flex items-center gap-2 hover:bg-white transition-all">
+                                    📄 View Document
+                                </div>
+                            )}
+                        </a>
+                    </div>
+                )}
                 {req.comment && (
                     <div className={`mt-4 p-3 rounded-lg border ${req.status === 'Cancelled' ? 'bg-rose-50 border-rose-100' : 'bg-[#2E6F40]/10 border-[#2E6F40]/20'}`}>
                         <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${req.status === 'Cancelled' ? 'text-rose-500' : 'text-[#2E6F40]'}`}>

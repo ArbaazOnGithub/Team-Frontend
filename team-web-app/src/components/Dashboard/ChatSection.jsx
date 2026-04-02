@@ -5,9 +5,11 @@ import * as api from '../../services/api';
 
 const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMessage, onTogglePin, onMarkRead, onDeleteMessage }) => {
     const [newMessage, setNewMessage] = useState("");
+    const [uploading, setUploading] = useState(false);
     const [activeMenuId, setActiveMenuId] = useState(null);
     const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
     const scrollRef = useRef(null);
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -40,6 +42,27 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
         if (!newMessage.trim()) return;
         onSendMessage(newMessage);
         setNewMessage("");
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploading(true);
+        try {
+            const data = await api.uploadChatMessageFile(file);
+            onSendMessage({ 
+                content: file.name, 
+                fileUrl: data.fileUrl, 
+                fileType: data.fileType 
+            });
+            toast.success("File shared!");
+        } catch (err) {
+            toast.error("Upload failed");
+        } finally {
+            setUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        }
     };
 
     const pinnedMessages = messages.filter(m => m.isPinned);
@@ -125,9 +148,34 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                         ? 'bg-[#2E6F40] text-white rounded-tr-none'
                                                         : 'bg-white text-[#253D2C] border border-[#68BA7F]/10 rounded-tl-none shadow-sm'
                                                         }`}>
-                                                        {msg.content}
+                                                        {msg.fileUrl ? (
+                                                            <div className="space-y-2">
+                                                                {msg.fileType === 'image' ? (
+                                                                    <img 
+                                                                        src={api.getImageUrl(msg.fileUrl)} 
+                                                                        className="max-w-full rounded-lg border border-white/20 shadow-inner cursor-pointer hover:scale-[1.02] transition-transform"
+                                                                        alt="shared" 
+                                                                        onClick={() => window.open(api.getImageUrl(msg.fileUrl), '_blank')}
+                                                                    />
+                                                                ) : (
+                                                                    <a 
+                                                                        href={api.getImageUrl(msg.fileUrl)} 
+                                                                        target="_blank" 
+                                                                        rel="noreferrer"
+                                                                        className={`flex items-center gap-3 p-3 rounded-xl border ${isMe ? 'bg-white/10 border-white/20' : 'bg-gray-50 border-gray-100'} hover:bg-opacity-80 transition-all`}
+                                                                    >
+                                                                        <span className="text-xl">📄</span>
+                                                                        <div className="flex-1 overflow-hidden font-bold">
+                                                                            <p className={`truncate text-[11px] ${isMe ? 'text-white' : 'text-[#2E6F40]'}`}>{msg.content || 'Document'}</p>
+                                                                            <p className="text-[9px] opacity-60 uppercase font-black tracking-widest">Download File</p>
+                                                                        </div>
+                                                                    </a>
+                                                                )}
+                                                            </div>
+                                                        ) : (
+                                                            msg.content
+                                                        )}
 
-                                                        {/* Message Options — button only, dropdown rendered outside scroll container */}
                                                         {(isMe || ['admin', 'superadmin'].includes(user.role)) && (
                                                             <div className={`absolute top-0 ${isMe ? '-left-8' : '-right-8'}`}>
                                                                 <button
@@ -152,14 +200,13 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                 </div>
                                             </div>
 
-                                            {/* Read Receipts UI */}
                                             <div className={`mt-1 flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                                 <div className="flex items-center gap-1.5 px-1">
                                                     <p className="text-[8px] text-gray-400 uppercase font-bold tracking-tighter">
                                                         {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                     </p>
                                                     {readBy.length > 0 && (
-                                                        <div className="flex items-center -space-x-1 ml-1 group/receipt">
+                                                        <div className="flex items-center -space-x-1 ml-1 group/receipt relative">
                                                             {readBy.slice(0, 3).map((r, i) => (
                                                                 <img
                                                                     key={r._id || i}
@@ -173,30 +220,6 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                                     +{readBy.length - 3}
                                                                 </span>
                                                             )}
-                                                            <div className="hidden group-hover/receipt:block absolute bottom-full mb-2 bg-white border border-[#68BA7F]/20 p-2 rounded-lg shadow-xl z-50 min-w-[120px]">
-                                                                <p className="text-[8px] font-black text-[#2E6F40] uppercase mb-1">Read By:</p>
-                                                                <div className="space-y-1">
-                                                                    {readBy.map(r => (
-                                                                        <div key={r._id} className="flex items-center gap-1 text-[9px]">
-                                                                            <div className="w-1 h-1 bg-green-500 rounded-full" />
-                                                                            {r.name}
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                                {unreadBy.length > 0 && (
-                                                                    <>
-                                                                        <p className="text-[8px] font-black text-rose-400 uppercase mt-2 mb-1">Unread By:</p>
-                                                                        <div className="space-y-1">
-                                                                            {unreadBy.map(u => (
-                                                                                <div key={u._id} className="flex items-center gap-1 text-[9px] text-gray-400">
-                                                                                    <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                                                                                    {u.name}
-                                                                                </div>
-                                                                            ))}
-                                                                        </div>
-                                                                    </>
-                                                                )}
-                                                            </div>
                                                         </div>
                                                     )}
                                                 </div>
@@ -209,25 +232,41 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
 
                         {/* Input Area */}
                         <form onSubmit={handleSend} className="p-6 bg-white border-t border-[#68BA7F]/10">
-                            <div className="relative group">
-                                <input
-                                    type="text"
-                                    placeholder="Type your message..."
-                                    value={newMessage}
-                                    onChange={(e) => setNewMessage(e.target.value)}
-                                    className="input-premium py-4 pr-14 bg-[#F8FAF9] border-[#68BA7F]/20 focus:bg-white"
+                            <div className="relative group flex items-center gap-2">
+                                <input 
+                                    type="file" 
+                                    ref={fileInputRef} 
+                                    className="hidden" 
+                                    onChange={handleFileChange}
+                                    accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx"
                                 />
-                                <button
-                                    type="submit"
-                                    disabled={!newMessage.trim()}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-[#2E6F40] text-white rounded-xl shadow-lg shadow-[#2E6F40]/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                                <button 
+                                    type="button"
+                                    disabled={uploading}
+                                    onClick={() => fileInputRef.current.click()}
+                                    className="p-3 bg-[#F8FAF9] text-[#2E6F40] rounded-xl hover:bg-[#CFFFDC] transition-all border border-[#68BA7F]/10 disabled:opacity-50"
                                 >
-                                    🚀
+                                    {uploading ? "⏳" : "📎"}
                                 </button>
+                                <div className="relative flex-1">
+                                    <input
+                                        type="text"
+                                        placeholder="Type your message..."
+                                        value={newMessage}
+                                        onChange={(e) => setNewMessage(e.target.value)}
+                                        className="input-premium py-4 pr-14 bg-[#F8FAF9] border-[#68BA7F]/20 focus:bg-white"
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={!newMessage.trim() || uploading}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-[#2E6F40] text-white rounded-xl shadow-lg shadow-[#2E6F40]/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                                    >
+                                        🚀
+                                    </button>
+                                </div>
                             </div>
                         </form>
 
-                        {/* Fixed-position dropdown — renders outside scroll container, never clipped */}
                         <AnimatePresence>
                             {activeMenuId && (() => {
                                 const activeMsg = messages.find(m => m._id === activeMenuId);

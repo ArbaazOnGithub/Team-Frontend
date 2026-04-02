@@ -1,6 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Camera, CameraResultType } from '@capacitor/camera';
+import toast from 'react-hot-toast';
+import * as api from '../../services/api';
 
-const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, setRequestType, startDate, setStartDate, endDate, setEndDate, paidLeaveBalance }) => {
+const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, setRequestType, startDate, setStartDate, endDate, setEndDate, paidLeaveBalance, attachmentUrl, setAttachmentUrl }) => {
+    const [uploading, setUploading] = useState(false);
+
+    const takePhoto = async () => {
+        try {
+            const image = await Camera.getPhoto({
+                quality: 90,
+                allowEditing: true,
+                resultType: CameraResultType.Base64
+            });
+
+            setUploading(true);
+            const blob = await (await fetch(`data:image/${image.format};base64,${image.base64String}`)).blob();
+            const file = new File([blob], `request_attachment.${image.format}`, { type: `image/${image.format}` });
+            
+            // Use the chat upload service for convenience
+            const data = await api.uploadChatMessageFile(file);
+            setAttachmentUrl(data.fileUrl);
+            toast.success("Attachment added!");
+        } catch (err) {
+            if (err.message !== "User cancelled photos app") {
+                toast.error("Failed to capture image");
+            }
+        } finally {
+            setUploading(false);
+        }
+    };
 
     // Calculate preview of days
     const getDaysCount = () => {
@@ -80,18 +109,41 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
                 </div>
             )}
 
-            <textarea
-                placeholder={requestType === 'General' ? "How can we help you today?" : "Reason for leave..."}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="input-premium min-h-24 mb-4 text-[#253D2C] placeholder:text-[#253D2C]/90 border-dashed border-[#68BA7F]/40"
-                maxLength={1000}
-            />
+            <div className="flex flex-col gap-2 mb-4">
+                <textarea
+                    placeholder={requestType === 'General' ? "How can we help you today?" : "Reason for leave..."}
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    className="input-premium min-h-24 text-[#253D2C] placeholder:text-[#253D2C]/90 border-dashed border-[#68BA7F]/40"
+                    maxLength={1000}
+                />
+                
+                <div className="flex items-center gap-3">
+                    <button 
+                        type="button"
+                        onClick={takePhoto}
+                        disabled={uploading}
+                        className="flex items-center gap-2 px-4 py-2 bg-white/60 border border-[#68BA7F]/20 rounded-xl text-[10px] font-black text-[#2E6F40] uppercase tracking-widest hover:bg-white transition-all disabled:opacity-50"
+                    >
+                        {uploading ? "⏳ Uploading..." : attachmentUrl ? "✅ Photo Attached" : "📸 Attach Photo"}
+                    </button>
+                    {attachmentUrl && (
+                        <button 
+                            type="button"
+                            onClick={() => setAttachmentUrl("")}
+                            className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
+                        >
+                            ✕
+                        </button>
+                    )}
+                </div>
+            </div>
+
             <div className="flex justify-between items-center">
                 <span className="text-[10px] font-bold text-black/40 uppercase tracking-widest">{query.length} / 1000 characters</span>
                 <button
                     onClick={submitRequest}
-                    disabled={loading || !query.trim()}
+                    disabled={loading || !query.trim() || uploading}
                     className={`btn-premium px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-lg ${isOverBalance ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-200 text-white' : 'bg-[#2E6F40] hover:bg-[#253D2C] shadow-[#2E6F40]/20 text-white'}`}
                 >
                     {loading ? "Submitting..." : isOverBalance ? "Submit Anyway" : "Post Request"}
