@@ -10,6 +10,7 @@ import { LocalNotifications } from '@capacitor/local-notifications';
 import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
 import { PushNotifications } from '@capacitor/push-notifications';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { checkBiometricAvailability, authenticateWithBiometrics } from './utils/biometricAuth';
 
 // Components
@@ -48,6 +49,7 @@ function App() {
           const { value } = await Preferences.get({ key: 'biometric_credentials' });
           if (value) setHasSavedCredentials(true);
         }
+        SplashScreen.hide();
       }
     };
     initCapacitor();
