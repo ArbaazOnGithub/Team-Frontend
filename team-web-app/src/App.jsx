@@ -449,7 +449,7 @@ function App() {
   const resetForms = () => {
     setMobile(""); setName(""); setPassword(""); setEmail(""); setOtp(""); setNewPassword(""); setCompanySlug("");
     setImageFile(null); setImagePreview(null); setError(""); setSuccessMsg("");
-    setQuery(""); setRequestType("General"); setStartDate(""); setEndDate("");
+    setQuery(""); setRequestType("General"); setStartDate(""); setEndDate(""); setAttachmentUrl("");
   };
 
   const handleImageChange = (e) => {
