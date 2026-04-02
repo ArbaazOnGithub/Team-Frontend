@@ -1,4 +1,4 @@
-package com.arbaaz.teamapp;
+package com.teamwebapp.app;
 
 import com.getcapacitor.BridgeActivity;
 
