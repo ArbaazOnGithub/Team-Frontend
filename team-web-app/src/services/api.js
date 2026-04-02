@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-// For Android Emulator, use http://10.0.2.2:5000/api
-// For Physical Device, use your computer's local IP (e.g., http://192.168.1.100:5000/api)
-export const API_URL = import.meta.env.VITE_API_URL || "http://10.0.2.2:5000/api";
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://10.0.2.2:5000";
+// Production Render Backend (Works on any device with internet)
+export const API_URL = import.meta.env.VITE_API_URL || "https://team-backend-8gkd.onrender.com/api";
+export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://team-backend-8gkd.onrender.com";
 
 const api = axios.create({
     baseURL: API_URL,
