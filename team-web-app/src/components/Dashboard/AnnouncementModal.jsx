@@ -30,19 +30,19 @@ const AnnouncementModal = ({ announcement, onClose }) => {
                         </span>
                     </div>
 
-                    <h2 className="text-3xl font-black text-[#213448] mb-6 leading-tight">
+                    <h2 className="text-3xl font-black text-[#EAE0CF] mb-6 leading-tight">
                         Message from {announcement.senderName || 'Admin'}
                     </h2>
 
                     <div className="bg-[#94B4C1]/20 p-8 rounded-3xl border border-dashed border-[#547792]/30 mb-8 max-h-64 overflow-y-auto">
-                        <p className="text-lg text-[#213448] leading-relaxed font-medium">
+                        <p className="text-lg text-[#EAE0CF] leading-relaxed font-medium">
                             {announcement.message}
                         </p>
                     </div>
 
                     <button
                         onClick={onClose}
-                        className="w-full py-5 bg-[#213448] text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-[#213448] shadow-2xl shadow-[#213448]/30 transition-all active:scale-95"
+                        className="w-full py-5 bg-[#EAE0CF] text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-[#EAE0CF] shadow-2xl shadow-[#EAE0CF]/30 transition-all active:scale-95"
                     >
                         Understood, Proceed
                     </button>

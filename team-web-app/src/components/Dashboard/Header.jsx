@@ -62,7 +62,7 @@ const Header = ({ user, handleLogout, setView }) => {
     const unreadCount = notifications.filter(n => !n.isRead).length;
 
     return (
-        <header className="glass !bg-white/80 px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/20">
+        <header className="glass !bg-white/80 px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/5">
             <div className="flex items-center gap-2">
                <div className="w-8 h-8 bg-brand-500 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/20">
                     <span className="text-white text-lg">📁</span>
@@ -79,7 +79,7 @@ const Header = ({ user, handleLogout, setView }) => {
                 {/* Chat Toggle Button */}
                 <button
                     onClick={() => window.dispatchEvent(new Event('open-chat'))}
-                    className="p-2.5 rounded-2xl bg-white/50 border border-white/80 hover:bg-white shadow-sm hover:shadow-md transition-all text-xl"
+                    className="p-2.5 rounded-2xl bg-black/30 border border-white/80 hover:bg-white shadow-sm hover:shadow-md transition-all text-xl"
                     title="Team Chat"
                 >
                     💬
@@ -92,7 +92,7 @@ const Header = ({ user, handleLogout, setView }) => {
                             setIsNotifOpen(!isNotifOpen);
                             if (!isNotifOpen) handleMarkRead();
                         }}
-                        className="p-2.5 rounded-2xl bg-white/50 border border-white/80 hover:bg-white shadow-sm hover:shadow-md transition-all text-xl relative"
+                        className="p-2.5 rounded-2xl bg-black/30 border border-white/80 hover:bg-white shadow-sm hover:shadow-md transition-all text-xl relative"
                     >
                         🔔
                         {unreadCount > 0 && (

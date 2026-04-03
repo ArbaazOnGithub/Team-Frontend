@@ -1,33 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #EAE0CF;
-  --color-brand-100: #e2d2bb;
-  --color-brand-200: #94B4C1;
+  --color-brand-50: #213448;
+  --color-brand-100: #1b2a3a;
+  --color-brand-200: #547792;
   --color-brand-300: #749fb0;
-  --color-brand-400: #547792;
-  --color-brand-500: #213448;
-  --color-brand-600: #1b2a3a;
-  --color-brand-700: #15202d;
+  --color-brand-400: #94B4C1;
+  --color-brand-500: #EAE0CF;
+  --color-brand-600: #e2d2bb;
+  --color-brand-700: #c9b9a4;
 }
 
 @layer base {
   body {
-    @apply bg-[#EAE0CF] text-[#213448] antialiased selection:bg-[#547792] selection:text-white font-sans;
+    @apply bg-[#213448] text-[#EAE0CF] antialiased selection:bg-[#547792] selection:text-white font-sans;
   }
 }
 
 @layer components {
   .glass {
-    @apply backdrop-blur-2xl bg-white/60 border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
+    @apply backdrop-blur-2xl bg-black/20 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
   }
 
   .glass-card {
-    @apply backdrop-blur-2xl bg-white/70 border border-white/60 shadow-[0_12px_40px_-15px_rgba(33,52,72,0.1)] rounded-3xl transition-all duration-500;
+    @apply backdrop-blur-2xl bg-white/5 border border-white/10 shadow-[0_12px_40px_-15px_rgba(0,0,0,0.4)] rounded-3xl transition-all duration-500;
   }
 
   .glass-card:hover {
-    @apply bg-white/90 shadow-[0_20px_50px_-12px_rgba(33,52,72,0.15)] -translate-y-1;
+    @apply bg-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] -translate-y-1;
   }
 
   .btn-premium {
@@ -35,7 +35,7 @@
   }
 
   .input-premium {
-    @apply w-full p-4 bg-white/50 border border-white/80 rounded-2xl transition-all duration-300 focus:outline-none focus:border-[#213448] focus:bg-white focus:ring-8 focus:ring-[#213448]/5 placeholder:text-[#213448]/40 shadow-sm;
+    @apply w-full p-4 bg-black/20 border border-white/10 rounded-2xl transition-all duration-300 focus:outline-none focus:border-[#547792] focus:bg-black/30 focus:ring-8 focus:ring-[#547792]/5 placeholder:text-white/20 shadow-sm text-white;
   }
   
   .card-highlight {
@@ -54,13 +54,13 @@
 
 .bg-mesh {
   position: relative;
-  background-color: #EAE0CF;
+  background-color: #213448;
   background-image:
-    radial-gradient(at 0% 0%, hsla(211, 37%, 21%, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(206, 27%, 45%, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(211, 37%, 21%, 0.08) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(206, 27%, 45%, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, hsla(197, 28%, 67%, 0.03) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, hsla(211, 37%, 35%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(206, 27%, 45%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(211, 37%, 35%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(206, 27%, 45%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, hsla(197, 28%, 67%, 0.05) 0px, transparent 50%);
   background-attachment: fixed;
 }
 

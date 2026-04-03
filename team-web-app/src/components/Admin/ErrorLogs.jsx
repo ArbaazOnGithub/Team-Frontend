@@ -62,11 +62,11 @@ const ErrorLogs = () => {
                                     exit={{ opacity: 0 }}
                                     className="border-b border-rose-50 hover:bg-rose-50/30 transition-colors"
                                 >
-                                    <td className="p-4 text-xs font-medium text-slate-600">
+                                    <td className="p-4 text-xs font-medium text-slate-300">
                                         {new Date(log.createdAt).toLocaleString()}
                                     </td>
                                     <td className="p-4">
-                                        <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded text-[10px] font-black uppercase">
+                                        <span className="px-2 py-1 bg-slate-800 text-slate-300 rounded text-[10px] font-black uppercase">
                                             {log.method || 'UKNWN'}
                                         </span>
                                     </td>

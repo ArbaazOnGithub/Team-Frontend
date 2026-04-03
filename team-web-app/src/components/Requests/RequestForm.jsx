@@ -49,13 +49,13 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
             <div className="flex gap-4 mb-4">
                 <button
                     onClick={() => setRequestType('General')}
-                    className={`flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${requestType === 'General' ? 'bg-[#213448] text-white' : 'bg-white/50 text-[#213448]/60 hover:bg-white'}`}
+                    className={`flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${requestType === 'General' ? 'bg-[#EAE0CF] text-white' : 'bg-black/30 text-[#EAE0CF]/60 hover:bg-white'}`}
                 >
                     💬 General Query
                 </button>
                 <button
                     onClick={() => setRequestType('Leave')}
-                    className={`flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${requestType === 'Leave' ? 'bg-[#213448] text-white' : 'bg-white/50 text-[#213448]/60 hover:bg-white'}`}
+                    className={`flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${requestType === 'Leave' ? 'bg-[#EAE0CF] text-white' : 'bg-black/30 text-[#EAE0CF]/60 hover:bg-white'}`}
                 >
                     📅 Leave Request
                 </button>
@@ -65,28 +65,28 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
                 <div className="mb-4 animate-fadeIn">
                     <div className="flex justify-between items-center mb-4 px-2">
                         <span className="text-[10px] font-black uppercase text-[#547792]">Leave Balance</span>
-                        <span className="text-xs font-black text-[#213448] bg-[#94B4C1] px-3 py-1 rounded-full border border-[#547792]/30 shadow-sm">
+                        <span className="text-xs font-black text-[#EAE0CF] bg-[#94B4C1] px-3 py-1 rounded-full border border-[#547792]/30 shadow-sm">
                             {paidLeaveBalance || 0} Days Available
                         </span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 mb-4">
                         <div className="space-y-1">
-                            <label className="text-[10px] font-black text-[#213448] uppercase ml-1">From Date</label>
+                            <label className="text-[10px] font-black text-[#EAE0CF] uppercase ml-1">From Date</label>
                             <input
                                 type="date"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
-                                className="input-premium py-2 bg-white/70 border-[#547792]/30"
+                                className="input-premium py-2 bg-black/20 border-[#547792]/30"
                             />
                         </div>
                         <div className="space-y-1">
-                            <label className="text-[10px] font-black text-[#213448] uppercase ml-1">To Date</label>
+                            <label className="text-[10px] font-black text-[#EAE0CF] uppercase ml-1">To Date</label>
                             <input
                                 type="date"
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
-                                className="input-premium py-2 bg-white/70 border-[#547792]/30"
+                                className="input-premium py-2 bg-black/20 border-[#547792]/30"
                             />
                         </div>
                     </div>
@@ -95,7 +95,7 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
                         <div className={`flex items-center justify-between p-3 rounded-xl mb-4 border ${isOverBalance ? 'bg-rose-50 border-rose-200' : 'bg-[#94B4C1]/40 border-[#547792]/20'}`}>
                             <div className="flex items-center gap-2">
                                 <span className="text-lg">{isOverBalance ? '⚠️' : '✅'}</span>
-                                <span className={`text-[10px] font-black uppercase tracking-wider ${isOverBalance ? 'text-rose-600' : 'text-[#213448]'}`}>
+                                <span className={`text-[10px] font-black uppercase tracking-wider ${isOverBalance ? 'text-rose-600' : 'text-[#EAE0CF]'}`}>
                                     {daysCount} Days Requested
                                 </span>
                             </div>
@@ -114,7 +114,7 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
                     placeholder={requestType === 'General' ? "How can we help you today?" : "Reason for leave..."}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="input-premium min-h-24 text-[#213448] placeholder:text-[#213448]/90 border-dashed border-[#547792]/40"
+                    className="input-premium min-h-24 text-[#EAE0CF] placeholder:text-[#EAE0CF]/90 border-dashed border-[#547792]/40"
                     maxLength={1000}
                 />
                 
@@ -123,7 +123,7 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
                         type="button"
                         onClick={takePhoto}
                         disabled={uploading}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/60 border border-[#547792]/20 rounded-xl text-[10px] font-black text-[#213448] uppercase tracking-widest hover:bg-white transition-all disabled:opacity-50"
+                        className="flex items-center gap-2 px-4 py-2 bg-white/60 border border-[#547792]/20 rounded-xl text-[10px] font-black text-[#EAE0CF] uppercase tracking-widest hover:bg-white transition-all disabled:opacity-50"
                     >
                         {uploading ? "⏳ Uploading..." : attachmentUrl ? "✅ Photo Attached" : "📸 Attach Photo"}
                     </button>
@@ -144,7 +144,7 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
                 <button
                     onClick={submitRequest}
                     disabled={loading || !query.trim() || uploading}
-                    className={`btn-premium px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-lg ${isOverBalance ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-200 text-white' : 'bg-[#213448] hover:bg-[#213448] shadow-[#213448]/20 text-white'}`}
+                    className={`btn-premium px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-lg ${isOverBalance ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-200 text-white' : 'bg-[#EAE0CF] hover:bg-[#EAE0CF] shadow-[#EAE0CF]/20 text-white'}`}
                 >
                     {loading ? "Submitting..." : isOverBalance ? "Submit Anyway" : "Post Request"}
                 </button>

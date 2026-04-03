@@ -144,23 +144,23 @@ const AdminDashboard = ({ onBack }) => {
                         <h1 className="text-3xl font-black text-white">Admin Panel</h1>
                     </div>
 
-                    <div className="flex w-full md:w-auto overflow-x-auto bg-white/50 p-1 rounded-2xl border border-[#547792]/20">
+                    <div className="flex w-full md:w-auto overflow-x-auto bg-black/30 p-1 rounded-2xl border border-[#547792]/20">
                         <div className="flex min-w-max">
                             <button
                                 onClick={() => setActiveTab('analytics')}
-                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'analytics' ? 'bg-[#213448] text-white shadow-lg' : 'text-[#213448]/60 hover:text-[#213448]'}`}
+                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'analytics' ? 'bg-[#547792] text-white shadow-lg' : 'text-white/60 hover:text-white'}`}
                             >
                                 📊 Analytics
                             </button>
                             <button
                                 onClick={() => setActiveTab('users')}
-                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'users' ? 'bg-[#213448] text-white shadow-lg' : 'text-[#213448]/60 hover:text-[#213448]'}`}
+                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'users' ? 'bg-[#547792] text-white shadow-lg' : 'text-white/60 hover:text-white'}`}
                             >
                                 Users
                             </button>
                             <button
                                 onClick={() => setActiveTab('logs')}
-                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'logs' ? 'bg-[#213448] text-white shadow-lg' : 'text-[#213448]/60 hover:text-[#213448]'}`}
+                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'logs' ? 'bg-[#547792] text-white shadow-lg' : 'text-white/60 hover:text-white'}`}
                             >
                                 Logs
                             </button>
@@ -168,13 +168,13 @@ const AdminDashboard = ({ onBack }) => {
                             <>
                                 <button
                                     onClick={() => setActiveTab('companies')}
-                                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'companies' ? 'bg-[#213448] text-white shadow-lg' : 'text-[#213448]/60 hover:text-[#213448]'}`}
+                                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'companies' ? 'bg-[#547792] text-white shadow-lg' : 'text-white/60 hover:text-white'}`}
                                 >
                                     🏢 Companies
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('error-logs')}
-                                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'error-logs' ? 'bg-rose-500 text-white shadow-lg shadow-rose-200' : 'text-[#213448]/60 hover:text-rose-500'}`}
+                                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'error-logs' ? 'bg-rose-500 text-white shadow-lg shadow-rose-200' : 'text-white/60 hover:text-rose-500'}`}
                                 >
                                     ⚠️ Error Logs
                                 </button>
@@ -182,7 +182,7 @@ const AdminDashboard = ({ onBack }) => {
                         )}
                             <button
                                 onClick={() => setActiveTab('announce')}
-                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'announce' ? 'bg-[#213448] text-white shadow-lg' : 'text-[#213448]/60 hover:text-[#213448]'}`}
+                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'announce' ? 'bg-[#547792] text-white shadow-lg' : 'text-white/60 hover:text-white'}`}
                             >
                                 📢 Announce
                             </button>
@@ -207,18 +207,18 @@ const AdminDashboard = ({ onBack }) => {
                                     { label: 'Pending', val: requests.filter(r => r.status === 'Pending').length, icon: '⏳' },
                                     { label: 'Companies', val: currentUser.role === 'superadmin' ? 'Global' : 'My Team', icon: '🏢' }
                                 ].map((s, idx) => (
-                                    <div key={idx} className="glass-card p-6 border-white/20 hover:scale-[1.02] transition-transform">
+                                    <div key={idx} className="glass-card p-6 border-white/5 hover:scale-[1.02] transition-transform">
                                         <div className="text-2xl mb-1">{s.icon}</div>
-                                        <div className="text-[10px] font-black text-[#213448] uppercase tracking-widest opacity-60">{s.label}</div>
-                                        <div className="text-3xl font-black text-[#213448]">{s.val}</div>
+                                        <div className="text-[10px] font-black text-[#EAE0CF] uppercase tracking-widest opacity-60">{s.label}</div>
+                                        <div className="text-3xl font-black text-[#EAE0CF]">{s.val}</div>
                                     </div>
                                 ))}
                             </div>
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* Chart 1: Request Status Pulse */}
-                                <div className="glass-card p-8 border-white/20">
-                                    <h3 className="text-sm font-black text-[#213448] uppercase tracking-widest mb-8">Request Pulse</h3>
+                                <div className="glass-card p-8 border-white/5">
+                                    <h3 className="text-sm font-black text-[#EAE0CF] uppercase tracking-widest mb-8">Request Pulse</h3>
                                     <div className="h-[300px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <BarChart data={[
@@ -234,15 +234,15 @@ const AdminDashboard = ({ onBack }) => {
                                                     cursor={{ fill: '#F1F5F9' }}
                                                     contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 800 }}
                                                 />
-                                                <Bar dataKey="count" fill="#213448" radius={[4, 4, 0, 0]} barSize={40} />
+                                                <Bar dataKey="count" fill="#94B4C1" radius={[4, 4, 0, 0]} barSize={40} />
                                             </BarChart>
                                         </ResponsiveContainer>
                                     </div>
                                 </div>
 
                                 {/* Chart 2: Team Roles */}
-                                <div className="glass-card p-8 border-white/20">
-                                    <h3 className="text-sm font-black text-[#213448] uppercase tracking-widest mb-8">Team Composition</h3>
+                                <div className="glass-card p-8 border-white/5">
+                                    <h3 className="text-sm font-black text-[#EAE0CF] uppercase tracking-widest mb-8">Team Composition</h3>
                                     <div className="h-[300px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <PieChart>
@@ -257,7 +257,7 @@ const AdminDashboard = ({ onBack }) => {
                                                     paddingAngle={5}
                                                     dataKey="value"
                                                 >
-                                                    {[ '#213448', '#547792', '#213448' ].map((color, idx) => (
+                                                    {[ '#94B4C1', '#547792', '#EAE0CF' ].map((color, idx) => (
                                                         <Cell key={`cell-${idx}`} fill={color} />
                                                     ))}
                                                 </Pie>
@@ -270,8 +270,8 @@ const AdminDashboard = ({ onBack }) => {
                             </div>
 
                             {/* Chart 3: Trends over time */}
-                            <div className="glass-card p-8 border-white/20">
-                                <h3 className="text-sm font-black text-[#213448] uppercase tracking-widest mb-8">Activity Trends (Last 7 Days)</h3>
+                            <div className="glass-card p-8 border-white/5">
+                                <h3 className="text-sm font-black text-[#EAE0CF] uppercase tracking-widest mb-8">Activity Trends (Last 7 Days)</h3>
                                 <div className="h-[300px] w-full">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <AreaChart data={[...Array(7)].map((_, i) => {
@@ -290,7 +290,7 @@ const AdminDashboard = ({ onBack }) => {
                                             <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#64748B' }} />
                                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                                             <Tooltip />
-                                            <Area type="monotone" dataKey="count" stroke="#213448" strokeWidth={2} fillOpacity={1} fill="url(#colorCount)" />
+                                            <Area type="monotone" dataKey="count" stroke="#94B4C1" strokeWidth={2} fillOpacity={1} fill="url(#colorCount)" />
                                         </AreaChart>
                                     </ResponsiveContainer>
                                 </div>
@@ -306,42 +306,42 @@ const AdminDashboard = ({ onBack }) => {
                             {/* Search and Stats Grid for Users */}
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                                 <div className="relative group flex-1 max-w-md">
-                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#547792]/50 group-focus-within:text-[#213448] transition-colors">🔍</span>
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#547792]/50 group-focus-within:text-[#EAE0CF] transition-colors">🔍</span>
                                     <input
                                         type="text"
                                         placeholder="Search by name, email, or mobile..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="input-premium pl-12 py-3 bg-white/70 border-[#547792]/30 focus:bg-white"
+                                        className="input-premium pl-12 py-3 bg-black/20 border-[#547792]/30 focus:bg-black/40"
                                     />
                                 </div>
 
-                                <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
-                                    <p className="text-[#213448] font-bold uppercase text-[9px] tracking-widest mb-1">Total</p>
-                                    <h3 className="text-xl font-black text-[#213448]">{users.length}</h3>
+                                <div className="glass px-4 py-3 rounded-xl border-white/10 text-center">
+                                    <p className="text-[#EAE0CF] font-bold uppercase text-[9px] tracking-widest mb-1">Total</p>
+                                    <h3 className="text-xl font-black text-[#EAE0CF]">{users.length}</h3>
                                 </div>
-                                <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
-                                    <p className="text-[#213448] font-bold uppercase text-[9px] tracking-widest mb-1">Admins</p>
-                                    <h3 className="text-xl font-black text-[#213448]">{users.filter(u => u.role === 'admin').length}</h3>
+                                <div className="glass px-4 py-3 rounded-xl border-white/10 text-center">
+                                    <p className="text-[#EAE0CF] font-bold uppercase text-[9px] tracking-widest mb-1">Admins</p>
+                                    <h3 className="text-xl font-black text-[#EAE0CF]">{users.filter(u => u.role === 'admin').length}</h3>
                                 </div>
-                                <div className="glass px-4 py-3 rounded-xl border-white/40 text-center">
-                                    <p className="text-[#213448] font-bold uppercase text-[9px] tracking-widest mb-1">Users</p>
-                                    <h3 className="text-xl font-black text-[#213448]">{users.filter(u => u.role === 'user').length}</h3>
+                                <div className="glass px-4 py-3 rounded-xl border-white/10 text-center">
+                                    <p className="text-[#EAE0CF] font-bold uppercase text-[9px] tracking-widest mb-1">Users</p>
+                                    <h3 className="text-xl font-black text-[#EAE0CF]">{users.filter(u => u.role === 'user').length}</h3>
                                 </div>
                             </div>
 
                             {/* Users Table */}
-                            <div className="glass-card overflow-hidden border-white/20">
+                            <div className="glass-card overflow-hidden border-white/5">
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left border-collapse">
                                         <thead>
-                                            <tr className="border-b border-black/5 bg-white/30">
-                                                <th className="p-5 text-[#213448] font-bold uppercase text-xs tracking-widest">User</th>
-                                                <th className="p-5 text-[#213448] font-bold uppercase text-xs tracking-widest">Contact</th>
-                                                <th className="p-5 text-[#213448] font-bold uppercase text-xs tracking-widest">Leave Balance</th>
-                                                <th className="p-5 text-[#213448] font-bold uppercase text-xs tracking-widest">Role</th>
-                                                <th className="p-5 text-[#213448] font-bold uppercase text-xs tracking-widest">Joined</th>
-                                                <th className="p-5 text-[#213448] font-bold uppercase text-xs tracking-widest text-right">Actions</th>
+                                            <tr className="border-b border-black/5 bg-white/5">
+                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest">User</th>
+                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest">Contact</th>
+                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest">Leave Balance</th>
+                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest">Role</th>
+                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest">Joined</th>
+                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest text-right">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -353,7 +353,7 @@ const AdminDashboard = ({ onBack }) => {
                                                         initial={{ opacity: 0 }}
                                                         animate={{ opacity: 1 }}
                                                         exit={{ opacity: 0 }}
-                                                        className="border-b border-black/5 hover:bg-white/50 transition-colors group"
+                                                        className="border-b border-black/5 hover:bg-black/30 transition-colors group"
                                                     >
                                                         <td className="p-5">
                                                             <div className="flex items-center gap-3">
@@ -364,23 +364,23 @@ const AdminDashboard = ({ onBack }) => {
                                                                     className="w-10 h-10 rounded-full object-cover border-2 border-[#547792]/20"
                                                                 />
                                                                 <div>
-                                                                    <p className="font-bold text-[#213448]">{user.name}</p>
+                                                                    <p className="font-bold text-[#EAE0CF]">{user.name}</p>
                                                                     <p className="text-[10px] text-[#547792] font-mono">{user._id}</p>
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td className="p-5 text-sm text-[#213448]">
+                                                        <td className="p-5 text-sm text-[#EAE0CF]">
                                                             <p className="font-medium">{user.email}</p>
-                                                            <p className="text-xs text-gray-500">{user.mobile}</p>
+                                                            <p className="text-xs text-gray-400">{user.mobile}</p>
                                                         </td>
                                                         <td className="p-5">
                                                             <div className="flex items-center gap-2">
-                                                                <span className="font-black text-[#213448] bg-[#94B4C1] px-3 py-1 rounded-lg text-xs border border-[#547792]/20">
+                                                                <span className="font-black text-[#EAE0CF] bg-[#94B4C1] px-3 py-1 rounded-lg text-xs border border-[#547792]/20">
                                                                     {user.paidLeaveBalance || 0} PL
                                                                 </span>
                                                                 <button
                                                                     onClick={() => setSelectedUserForLeave(user)}
-                                                                    className="p-1.5 hover:bg-[#547792]/10 rounded-lg text-[#213448] transition-colors"
+                                                                    className="p-1.5 hover:bg-[#547792]/10 rounded-lg text-[#EAE0CF] transition-colors"
                                                                     title="Adjust Balance"
                                                                 >
                                                                     ✏️
@@ -389,13 +389,13 @@ const AdminDashboard = ({ onBack }) => {
                                                         </td>
                                                         <td className="p-5">
                                                             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${user.role === 'admin'
-                                                                ? 'bg-[#213448]/10 text-[#213448]'
-                                                                : 'bg-slate-100 text-slate-600'
+                                                                ? 'bg-[#EAE0CF]/10 text-[#EAE0CF]'
+                                                                : 'bg-slate-800 text-slate-300'
                                                                 }`}>
                                                                 {user.role}
                                                             </span>
                                                         </td>
-                                                        <td className="p-5 text-xs text-[#213448] font-bold">
+                                                        <td className="p-5 text-xs text-[#EAE0CF] font-bold">
                                                             {new Date(user.createdAt).toLocaleDateString()}
                                                         </td>
                                                         <td className="p-5 text-right">
@@ -403,7 +403,7 @@ const AdminDashboard = ({ onBack }) => {
                                                                 {currentUser.role === 'superadmin' && (
                                                                     <button
                                                                         onClick={() => handleToggleRole(user._id, user.role)}
-                                                                        className="p-2.5 rounded-xl bg-[#213448]/10 text-[#213448] hover:bg-[#213448] hover:text-white transition-all shadow-sm"
+                                                                        className="p-2.5 rounded-xl bg-[#EAE0CF]/10 text-[#EAE0CF] hover:bg-[#EAE0CF] hover:text-white transition-all shadow-sm"
                                                                         title={user.role === 'admin' ? "Make User" : "Make Admin"}
                                                                     >
                                                                         {user.role === 'admin' ? "👑" : "👤"}
@@ -422,7 +422,7 @@ const AdminDashboard = ({ onBack }) => {
                                                     </motion.tr>
                                                 )) : (
                                                     <tr>
-                                                        <td colSpan="6" className="p-10 text-center font-bold text-[#213448]/40">No users found matching your search</td>
+                                                        <td colSpan="6" className="p-10 text-center font-bold text-[#EAE0CF]/40">No users found matching your search</td>
                                                     </tr>
                                                 )}
                                             </AnimatePresence>
@@ -466,28 +466,28 @@ const AdminDashboard = ({ onBack }) => {
                             exit={{ opacity: 0, y: -10 }}
                             className="max-w-2xl mx-auto"
                         >
-                            <div className="glass-card p-8 border-white/20">
+                            <div className="glass-card p-8 border-white/5">
                                 <div className="text-center mb-8">
                                     <div className="w-16 h-16 bg-[#94B4C1] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 border border-[#547792]/20 shadow-inner">📢</div>
-                                    <h2 className="text-2xl font-black text-[#213448]">Global Announcement</h2>
-                                    <p className="text-sm text-gray-500 mt-2">Send a real-time pop-up notification to all registered users.</p>
+                                    <h2 className="text-2xl font-black text-[#EAE0CF]">Global Announcement</h2>
+                                    <p className="text-sm text-gray-400 mt-2">Send a real-time pop-up notification to all registered users.</p>
                                 </div>
 
                                 <div className="space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-[#213448] uppercase ml-1 tracking-widest">Your Message</label>
+                                        <label className="text-[10px] font-black text-[#EAE0CF] uppercase ml-1 tracking-widest">Your Message</label>
                                         <textarea
                                             placeholder="Write something important to all users..."
                                             value={announcementMsg}
                                             onChange={(e) => setAnnouncementMsg(e.target.value)}
-                                            className="input-premium min-h-32 py-4 bg-white/50 border-dashed border-[#547792]/40 focus:border-solid text-lg leading-relaxed"
+                                            className="input-premium min-h-32 py-4 bg-black/30 border-dashed border-[#547792]/40 focus:border-solid text-lg leading-relaxed"
                                         />
                                     </div>
 
                                     <button
                                         onClick={handleSendAnnouncement}
                                         disabled={loading || !announcementMsg.trim()}
-                                        className="w-full py-5 rounded-2xl bg-[#213448] text-white font-black uppercase tracking-widest hover:bg-[#213448] shadow-xl shadow-[#213448]/20 disabled:opacity-50 transition-all flex items-center justify-center gap-3"
+                                        className="w-full py-5 rounded-2xl bg-[#EAE0CF] text-white font-black uppercase tracking-widest hover:bg-[#EAE0CF] shadow-xl shadow-[#EAE0CF]/20 disabled:opacity-50 transition-all flex items-center justify-center gap-3"
                                     >
                                         {loading ? "Broadcasting..." : (
                                             <>
@@ -523,14 +523,14 @@ const AdminDashboard = ({ onBack }) => {
                                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                                className="relative w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl border border-[#547792]/20"
+                                className="relative w-full max-w-md bg-[#1b2a3a] rounded-3xl p-8 shadow-2xl border border-white/10"
                             >
-                                <h3 className="text-2xl font-black text-[#213448] mb-2 text-center">Adjust Leave Balance</h3>
-                                <p className="text-sm text-gray-500 text-center mb-6">Updating balance for <span className="text-[#213448] font-bold">{selectedUserForLeave.name}</span></p>
+                                <h3 className="text-2xl font-black text-[#EAE0CF] mb-2 text-center">Adjust Leave Balance</h3>
+                                <p className="text-sm text-gray-400 text-center mb-6">Updating balance for <span className="text-[#EAE0CF] font-bold">{selectedUserForLeave.name}</span></p>
 
                                 <div className="space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-[#213448] uppercase ml-1 tracking-widest">New Balance (Days)</label>
+                                        <label className="text-[10px] font-black text-[#EAE0CF] uppercase ml-1 tracking-widest">New Balance (Days)</label>
                                         <input
                                             type="number"
                                             value={newLeaveBalance}
@@ -541,7 +541,7 @@ const AdminDashboard = ({ onBack }) => {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-[#213448] uppercase ml-1 tracking-widest">Reason for Adjustment</label>
+                                        <label className="text-[10px] font-black text-[#EAE0CF] uppercase ml-1 tracking-widest">Reason for Adjustment</label>
                                         <textarea
                                             placeholder="e.g., Deduction for unlogged leave, corrected month-end balance..."
                                             value={leaveReason}
@@ -553,14 +553,14 @@ const AdminDashboard = ({ onBack }) => {
                                     <div className="flex gap-3">
                                         <button
                                             onClick={() => setSelectedUserForLeave(null)}
-                                            className="flex-1 py-4 rounded-2xl font-bold text-gray-400 hover:bg-gray-50 transition-all border border-gray-100"
+                                            className="flex-1 py-4 rounded-2xl font-bold text-white/40 hover:bg-white/5 transition-all border border-white/10"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             onClick={handleUpdateBalance}
                                             disabled={loading || !leaveReason.trim()}
-                                            className="flex-[2] py-4 rounded-2xl bg-[#213448] text-white font-bold hover:bg-[#213448] shadow-lg shadow-[#213448]/20 disabled:opacity-50 transition-all"
+                                            className="flex-[2] py-4 rounded-2xl bg-[#547792] text-white font-bold hover:bg-[#94B4C1] shadow-lg shadow-[#547792]/20 disabled:opacity-50 transition-all"
                                         >
                                             {loading ? "Updating..." : "Confirm Update"}
                                         </button>

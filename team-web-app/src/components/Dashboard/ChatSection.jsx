@@ -83,15 +83,15 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-[160] flex flex-col border-l border-[#547792]/20"
+                        className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#213448] shadow-2xl z-[160] flex flex-col border-l border-white/10"
                     >
                         {/* Header */}
-                        <div className="p-6 border-b border-[#547792]/10 flex items-center justify-between bg-mesh-light">
+                        <div className="p-6 border-b border-white/10 flex items-center justify-between bg-[#1b2a3a]">
                             <div className="flex items-center gap-3">
                                 <span className="text-2xl">💬</span>
                                 <div>
-                                    <h3 className="text-xl font-black text-[#213448]">Team Chat</h3>
-                                    <p className="text-[10px] text-[#213448] font-bold uppercase tracking-widest">Real-time sync • {users.length} members</p>
+                                    <h3 className="text-xl font-black text-[#EAE0CF]">Team Chat</h3>
+                                    <p className="text-[10px] text-[#EAE0CF] font-bold uppercase tracking-widest">Real-time sync • {users.length} members</p>
                                 </div>
                             </div>
                             <button onClick={onClose} className="p-2 hover:bg-rose-50 rounded-xl text-rose-500 transition-colors">✕</button>
@@ -99,15 +99,15 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
 
                         {/* Pinned Messages Area */}
                         {pinnedMessages.length > 0 && (
-                            <div className="bg-[#94B4C1]/30 p-4 border-b border-[#547792]/20">
-                                <p className="text-[9px] font-black text-[#213448] uppercase tracking-widest mb-2 flex items-center gap-1">
+                            <div className="bg-[#547792]/20 p-4 border-b border-white/10">
+                                <p className="text-[9px] font-black text-[#94B4C1] uppercase tracking-widest mb-2 flex items-center gap-1">
                                     📌 Pinned Messages ({pinnedMessages.length})
                                 </p>
                                 <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
                                     {pinnedMessages.map(msg => (
-                                        <div key={msg._id} className="bg-white/80 p-2 rounded-lg border border-[#547792]/30 text-xs shadow-sm flex justify-between items-start gap-3">
-                                            <p className="text-[#213448] leading-snug"><span className="font-bold">{msg.user?.name}:</span> {msg.content}</p>
-                                            <button onClick={() => onTogglePin(msg._id)} className="text-[10px] opacity-40 hover:opacity-100 transition-opacity">📍</button>
+                                        <div key={msg._id} className="bg-black/20 p-2 rounded-lg border border-white/5 text-xs shadow-sm flex justify-between items-start gap-3">
+                                            <p className="text-[#EAE0CF] leading-snug"><span className="font-bold">{msg.user?.name}:</span> {msg.content}</p>
+                                            <button onClick={() => onTogglePin(msg._id)} className="text-[10px] opacity-40 hover:opacity-100 transition-opacity whitespace-nowrap">📍</button>
                                         </div>
                                     ))}
                                 </div>
@@ -117,12 +117,12 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                         {/* Messages List */}
                         <div
                             ref={scrollRef}
-                            className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-[#F8FAF9]"
+                            className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-[#172432]"
                         >
                             {messages.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
                                     <span className="text-5xl mb-4">🍃</span>
-                                    <p className="font-bold text-[#213448]">Start the conversation!</p>
+                                    <p className="font-bold text-[#EAE0CF]">Start the conversation!</p>
                                 </div>
                             ) : (
                                 messages.map((msg, idx) => {
@@ -143,17 +143,17 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                     alt={msg.user?.name}
                                                 />
                                                 <div className="space-y-1">
-                                                    {!isMe && <p className="text-[10px] font-bold text-[#213448] ml-1">{msg.user?.name}</p>}
+                                                    {!isMe && <p className="text-[10px] font-bold text-[#EAE0CF] ml-1">{msg.user?.name}</p>}
                                                     <div className={`p-4 rounded-2xl text-sm leading-relaxed relative group ${isMe
-                                                        ? 'bg-[#213448] text-white rounded-tr-none'
-                                                        : 'bg-white text-[#213448] border border-[#547792]/10 rounded-tl-none shadow-sm'
+                                                        ? 'bg-[#94B4C1] text-[#213448] rounded-tr-none'
+                                                        : 'bg-[#2e435a] text-[#EAE0CF] border border-white/5 rounded-tl-none shadow-sm'
                                                         }`}>
                                                         {msg.fileUrl ? (
                                                             <div className="space-y-2">
                                                                 {msg.fileType === 'image' ? (
                                                                     <img 
                                                                         src={api.getImageUrl(msg.fileUrl)} 
-                                                                        className="max-w-full rounded-lg border border-white/20 shadow-inner cursor-pointer hover:scale-[1.02] transition-transform"
+                                                                        className="max-w-full rounded-lg border border-white/5 shadow-inner cursor-pointer hover:scale-[1.02] transition-transform"
                                                                         alt="shared" 
                                                                         onClick={() => window.open(api.getImageUrl(msg.fileUrl), '_blank')}
                                                                     />
@@ -162,11 +162,11 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                                         href={api.getImageUrl(msg.fileUrl)} 
                                                                         target="_blank" 
                                                                         rel="noreferrer"
-                                                                        className={`flex items-center gap-3 p-3 rounded-xl border ${isMe ? 'bg-white/10 border-white/20' : 'bg-gray-50 border-gray-100'} hover:bg-opacity-80 transition-all`}
+                                                                        className={`flex items-center gap-3 p-3 rounded-xl border ${isMe ? 'bg-black/20 border-white/5' : 'bg-black/40 border-white/5'} hover:bg-opacity-80 transition-all`}
                                                                     >
                                                                         <span className="text-xl">📄</span>
                                                                         <div className="flex-1 overflow-hidden font-bold">
-                                                                            <p className={`truncate text-[11px] ${isMe ? 'text-white' : 'text-[#213448]'}`}>{msg.content || 'Document'}</p>
+                                                                            <p className={`truncate text-[11px] ${isMe ? 'text-white' : 'text-[#EAE0CF]'}`}>{msg.content || 'Document'}</p>
                                                                             <p className="text-[9px] opacity-60 uppercase font-black tracking-widest">Download File</p>
                                                                         </div>
                                                                     </a>
@@ -190,7 +190,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                                             setActiveMenuId(msg._id);
                                                                         }
                                                                     }}
-                                                                    className="p-1.5 text-gray-400 hover:text-[#213448] transition-colors rounded-lg hover:bg-black/5"
+                                                                    className="p-1.5 text-gray-400 hover:text-[#EAE0CF] transition-colors rounded-lg hover:bg-black/5"
                                                                 >
                                                                     ⋮
                                                                 </button>
@@ -216,7 +216,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                                 />
                                                             ))}
                                                             {readBy.length > 3 && (
-                                                                <span className="w-3 h-3 rounded-full bg-gray-100 text-[6px] flex items-center justify-center font-bold text-gray-500 border border-white">
+                                                                <span className="w-3 h-3 rounded-full bg-gray-100 text-[6px] flex items-center justify-center font-bold text-gray-400 border border-white">
                                                                     +{readBy.length - 3}
                                                                 </span>
                                                             )}
@@ -231,7 +231,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                         </div>
 
                         {/* Input Area */}
-                        <form onSubmit={handleSend} className="p-6 bg-white border-t border-[#547792]/10">
+                        <form onSubmit={handleSend} className="p-6 bg-[#1b2a3a] border-t border-white/10">
                             <div className="relative group flex items-center gap-2">
                                 <input 
                                     type="file" 
@@ -244,7 +244,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                     type="button"
                                     disabled={uploading}
                                     onClick={() => fileInputRef.current.click()}
-                                    className="p-3 bg-[#F8FAF9] text-[#213448] rounded-xl hover:bg-[#94B4C1] transition-all border border-[#547792]/10 disabled:opacity-50"
+                                    className="p-3 bg-white/5 text-[#94B4C1] rounded-xl hover:bg-white/10 transition-all border border-white/10 disabled:opacity-50"
                                 >
                                     {uploading ? "⏳" : "📎"}
                                 </button>
@@ -259,7 +259,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                     <button
                                         type="submit"
                                         disabled={!newMessage.trim() || uploading}
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-[#213448] text-white rounded-xl shadow-lg shadow-[#213448]/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-[#94B4C1] text-[#213448] rounded-xl shadow-lg shadow-[#94B4C1]/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
                                     >
                                         🚀
                                     </button>
@@ -278,13 +278,13 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                         animate={{ opacity: 1, scale: 1, y: 0 }}
                                         exit={{ opacity: 0, scale: 0.9, y: -6 }}
                                         style={{ position: 'fixed', top: menuPos.top, left: menuPos.left, zIndex: 9999 }}
-                                        className="bg-white border border-[#547792]/20 rounded-xl shadow-2xl min-w-[144px] overflow-hidden"
+                                        className="bg-[#1b2a3a] border border-white/10 rounded-xl shadow-2xl min-w-[144px] overflow-hidden"
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         <button
                                             type="button"
                                             onClick={() => { onTogglePin(activeMenuId); setActiveMenuId(null); }}
-                                            className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-[#213448] hover:bg-[#F0FDF4] flex items-center gap-3 transition-colors border-b border-gray-50"
+                                            className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-[#EAE0CF] hover:bg-white/5 flex items-center gap-3 transition-colors border-b border-white/5"
                                         >
                                             <span className="text-base">{activeMsg.isPinned ? '📍' : '📌'}</span>
                                             {activeMsg.isPinned ? 'Unpin' : 'Pin Message'}

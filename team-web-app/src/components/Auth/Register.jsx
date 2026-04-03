@@ -4,7 +4,7 @@ const Register = ({ companySlug, setCompanySlug, name, setName, email, setEmail,
     return (
         <div>
             <div className="relative group w-24 h-24 mx-auto mb-6">
-                <img src={imagePreview || "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff&size=150"} onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"} className="w-full h-full rounded-full object-cover border-4 border-[#213448] shadow-md" alt="Preview" />
+                <img src={imagePreview || "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff&size=150"} onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"} className="w-full h-full rounded-full object-cover border-4 border-[#EAE0CF] shadow-md" alt="Preview" />
                 <label htmlFor="file-upload" className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                     <span className="text-white text-xs font-bold uppercase">Upload</span>
                 </label>
@@ -18,12 +18,12 @@ const Register = ({ companySlug, setCompanySlug, name, setName, email, setEmail,
             <button
                 onClick={handleRegister}
                 disabled={loading}
-                className="w-full p-4 bg-[#213448] text-white rounded-xl font-bold btn-premium hover:bg-[#213448] hover:shadow-lg"
+                className="w-full p-4 bg-[#EAE0CF] text-white rounded-xl font-bold btn-premium hover:bg-[#EAE0CF] hover:shadow-lg"
             >
                 {loading ? "Creating Account..." : "Register"}
             </button>
-            <p className="text-center mt-5 text-sm text-[#213448]/60 font-black">
-                Already have an account? <span onClick={() => { setView("login"); resetForms(); }} className="text-[#213448] cursor-pointer underline underline-offset-4 hover:text-[#213448] transition-colors">Login</span>
+            <p className="text-center mt-5 text-sm text-[#EAE0CF]/60 font-black">
+                Already have an account? <span onClick={() => { setView("login"); resetForms(); }} className="text-[#EAE0CF] cursor-pointer underline underline-offset-4 hover:text-[#EAE0CF] transition-colors">Login</span>
             </p>
         </div>
     );

@@ -125,7 +125,7 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                                 className="w-full"
                             >
                                 <textarea
-                                    className={`w-full p-4 text-xs bg-white/50 border rounded-2xl focus:outline-none mb-3 transition-all ${actionType === 'Cancelled' ? 'border-rose-200 focus:border-rose-400 focus:ring-4 focus:ring-rose-500/5' : 'border-brand-200 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5'}`}
+                                    className={`w-full p-4 text-xs bg-black/30 border rounded-2xl focus:outline-none mb-3 transition-all ${actionType === 'Cancelled' ? 'border-rose-200 focus:border-rose-400 focus:ring-4 focus:ring-rose-500/5' : 'border-brand-200 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5'}`}
                                     placeholder={actionType === 'Cancelled' ? "Reason for rejection..." : "Add a remark (optional)..."}
                                     value={remark}
                                     onChange={(e) => setRemark(e.target.value)}
@@ -139,7 +139,7 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                                         Confirm {actionType === 'Approved' ? 'Approval' : 'Rejection'}
                                     </button>
                                     <button
-                                        className="btn-premium flex-1 px-4 py-2 bg-slate-100 text-slate-500 text-[10px] font-black uppercase tracking-widest"
+                                        className="btn-premium flex-1 px-4 py-2 bg-slate-800 text-slate-500 text-[10px] font-black uppercase tracking-widest"
                                         onClick={() => { setIsActioning(false); setRemark(""); setActionType(""); }}
                                     >
                                         Cancel
