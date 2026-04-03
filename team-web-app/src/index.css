@@ -19,15 +19,15 @@
 
 @layer components {
   .glass {
-    @apply backdrop-blur-2xl bg-black/20 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+    @apply backdrop-blur-xl bg-[#1b2a3a]/80 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
   }
 
   .glass-card {
-    @apply backdrop-blur-2xl bg-white/5 border border-white/10 shadow-[0_12px_40px_-15px_rgba(0,0,0,0.4)] rounded-3xl transition-all duration-500;
+    @apply backdrop-blur-xl bg-[#1b2a3a]/40 border border-white/10 shadow-[0_12px_40px_-15px_rgba(0,0,0,0.4)] rounded-3xl transition-all duration-500;
   }
 
   .glass-card:hover {
-    @apply bg-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] -translate-y-1;
+    @apply bg-[#1b2a3a]/60 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] -translate-y-1;
   }
 
   .btn-premium {

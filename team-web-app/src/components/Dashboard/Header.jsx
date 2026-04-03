@@ -62,16 +62,16 @@ const Header = ({ user, handleLogout, setView }) => {
     const unreadCount = notifications.filter(n => !n.isRead).length;
 
     return (
-        <header className="glass !bg-white/80 px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/5">
+        <header className="glass bg-[#1b2a3a]/90 px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/10">
             <div className="flex items-center gap-2">
                <div className="w-8 h-8 bg-brand-500 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/20">
                     <span className="text-white text-lg">📁</span>
                </div>
                <h1
-                   className="text-xl font-black bg-gradient-to-r from-brand-600 to-brand-400 bg-clip-text text-transparent cursor-pointer tracking-tight"
+                   className="text-xl font-black bg-gradient-to-r from-brand-500 to-brand-200 bg-clip-text text-transparent cursor-pointer tracking-tight"
                    onClick={() => setView('dashboard')}
                >
-                   TeamQueries <span className="text-[10px] text-brand-500/60 font-black ml-1">v4.2</span>
+                   TeamQueries <span className="text-[10px] text-brand-300 font-black ml-1">v4.2</span>
                </h1>
             </div>
 
@@ -79,7 +79,7 @@ const Header = ({ user, handleLogout, setView }) => {
                 {/* Chat Toggle Button */}
                 <button
                     onClick={() => window.dispatchEvent(new Event('open-chat'))}
-                    className="p-2.5 rounded-2xl bg-black/30 border border-white/80 hover:bg-white shadow-sm hover:shadow-md transition-all text-xl"
+                    className="p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 shadow-sm hover:shadow-md transition-all text-xl"
                     title="Team Chat"
                 >
                     💬
@@ -92,7 +92,7 @@ const Header = ({ user, handleLogout, setView }) => {
                             setIsNotifOpen(!isNotifOpen);
                             if (!isNotifOpen) handleMarkRead();
                         }}
-                        className="p-2.5 rounded-2xl bg-black/30 border border-white/80 hover:bg-white shadow-sm hover:shadow-md transition-all text-xl relative"
+                        className="p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 shadow-sm hover:shadow-md transition-all text-xl relative"
                     >
                         🔔
                         {unreadCount > 0 && (
@@ -108,10 +108,10 @@ const Header = ({ user, handleLogout, setView }) => {
                                 initial={{ opacity: 0, scale: 0.9, y: 10 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                                className="absolute right-0 mt-4 w-80 glass-card bg-white/95 overflow-hidden z-[60]"
+                                className="absolute right-0 mt-4 w-80 glass-card bg-[#1b2a3a] border border-white/10 overflow-hidden z-[60]"
                             >
-                                <div className="p-4 bg-brand-50/50 border-b border-brand-100 flex justify-between items-center">
-                                    <span className="text-[10px] font-black uppercase text-brand-600 tracking-[0.2em]">Notifications</span>
+                                <div className="p-4 bg-white/5 border-b border-white/10 flex justify-between items-center">
+                                    <span className="text-[10px] font-black uppercase text-brand-500 tracking-[0.2em]">Notifications</span>
                                     {unreadCount > 0 && (
                                         <span className="text-[9px] bg-brand-500 text-white px-2 py-0.5 rounded-full font-bold">
                                             {unreadCount} NEW
@@ -121,12 +121,12 @@ const Header = ({ user, handleLogout, setView }) => {
                                 <div className="max-h-96 overflow-y-auto scroll-premium">
                                     {notifications.length > 0 ? (
                                         notifications.map((n) => (
-                                            <div key={n._id} className={`p-4 border-b border-brand-50 hover:bg-brand-50/30 transition-colors ${!n.isRead ? 'bg-brand-50/20' : ''}`}>
+                                            <div key={n._id} className={`p-4 border-b border-white/5 hover:bg-white/5 transition-colors ${!n.isRead ? 'bg-white/5' : ''}`}>
                                                 <div className="flex gap-3">
                                                     <span className="text-xl">{n.type === 'leave_update' ? '📅' : '📝'}</span>
                                                     <div className="flex-1">
-                                                        <p className="text-xs text-brand-600 leading-relaxed font-bold">{n.message}</p>
-                                                        <p className="text-[10px] text-brand-600/40 mt-1">{new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                                        <p className="text-xs text-brand-500 leading-relaxed font-bold">{n.message}</p>
+                                                        <p className="text-[10px] text-white/30 mt-1">{new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -145,20 +145,20 @@ const Header = ({ user, handleLogout, setView }) => {
                 <div className="relative" ref={dropdownRef}>
                     {/* User Profile Trigger */}
                     <div
-                        className="flex items-center gap-3 cursor-pointer group/profile p-1.5 rounded-2xl hover:bg-brand-500/5 transition-all"
+                        className="flex items-center gap-3 cursor-pointer group/profile p-1.5 rounded-2xl hover:bg-white/5 transition-all"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
                         <div className="relative">
                             <img
                                 src={api.getImageUrl(user.profileImage)}
                                 onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"}
-                                className="w-10 h-10 rounded-2xl object-cover border-2 border-white shadow-md transition-all group-hover/profile:scale-105 group-hover/profile:shadow-lg"
+                                className="w-10 h-10 rounded-2xl object-cover border-2 border-white/10 shadow-md transition-all group-hover/profile:scale-105 group-hover/profile:shadow-lg"
                                 alt="Profile"
                             />
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full shadow-sm"></div>
+                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-[#1b2a3a] rounded-full shadow-sm"></div>
                         </div>
                         <div className="hidden md:block mr-2 text-left">
-                            <div className="font-black text-sm text-brand-600 leading-tight tracking-tight flex items-center gap-1">
+                            <div className="font-black text-sm text-brand-500 leading-tight tracking-tight flex items-center gap-1">
                                 {user.name.split(' ')[0]}
                             </div>
                             <div className="text-[9px] font-black uppercase text-brand-400 tracking-widest">{user.role}</div>
@@ -172,14 +172,14 @@ const Header = ({ user, handleLogout, setView }) => {
                                 initial={{ opacity: 0, scale: 0.9, y: 10 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                                className="absolute right-0 mt-4 w-64 glass-card bg-white/95 overflow-hidden z-[60]"
+                                className="absolute right-0 mt-4 w-64 glass-card bg-[#1b2a3a] border border-white/10 overflow-hidden z-[60]"
                             >
-                                <div className="p-5 border-b border-brand-50 bg-brand-50/30">
-                                    <div className="font-black text-brand-600 tracking-tight">{user.name}</div>
-                                    <div className="text-[10px] text-brand-400 font-bold uppercase tracking-widest mt-0.5">{user.role}</div>
+                                <div className="p-5 border-b border-white/5 bg-white/5">
+                                    <div className="font-black text-brand-300 tracking-tight">{user.name}</div>
+                                    <div className="text-[10px] text-brand-200 font-bold uppercase tracking-widest mt-0.5">{user.role}</div>
                                     
                                     <div className="mt-4 flex gap-2">
-                                        <div className="flex-1 bg-brand-500 text-white p-2 rounded-xl text-center">
+                                        <div className="flex-1 bg-[#547792] text-white p-2 rounded-xl text-center">
                                             <div className="text-[8px] font-black uppercase tracking-widest opacity-70">Leave Balance</div>
                                             <div className="text-sm font-black">{user.paidLeaveBalance || 0}d</div>
                                         </div>
@@ -188,7 +188,7 @@ const Header = ({ user, handleLogout, setView }) => {
 
                                 <div className="py-2">
                                     <button
-                                        className="w-full text-left px-5 py-3 text-sm text-brand-600 hover:bg-brand-50 transition-colors flex items-center gap-4 group"
+                                        className="w-full text-left px-5 py-3 text-sm text-brand-500 hover:bg-white/5 transition-colors flex items-center gap-4 group"
                                         onClick={() => {
                                             window.dispatchEvent(new CustomEvent('open-profile'));
                                             setIsDropdownOpen(false);
@@ -200,7 +200,7 @@ const Header = ({ user, handleLogout, setView }) => {
 
                                     {['admin', 'superadmin'].includes(user.role) && (
                                         <button
-                                            className="w-full text-left px-5 py-3 text-sm text-brand-600 hover:bg-brand-50 transition-colors flex items-center gap-4 group"
+                                            className="w-full text-left px-5 py-3 text-sm text-brand-500 hover:bg-white/5 transition-colors flex items-center gap-4 group"
                                             onClick={() => {
                                                 setView('admin');
                                                 setIsDropdownOpen(false);
@@ -213,7 +213,7 @@ const Header = ({ user, handleLogout, setView }) => {
 
                                     <button
                                         onClick={handleLogout}
-                                        className="w-full text-left px-5 py-4 text-sm text-rose-500 font-black hover:bg-rose-50 transition-colors border-t border-brand-50 flex items-center gap-4 mt-2"
+                                        className="w-full text-left px-5 py-4 text-sm text-rose-500 font-black hover:bg-rose-500/10 transition-colors border-t border-white/5 flex items-center gap-4 mt-2"
                                     >
                                         <span className="text-lg">🚪</span>
                                         <span className="tracking-widest uppercase">Logout</span>
