@@ -209,8 +209,8 @@ const AdminDashboard = ({ onBack }) => {
                                 ].map((s, idx) => (
                                     <div key={idx} className="glass-card p-6 border-white/5 hover:scale-[1.02] transition-transform">
                                         <div className="text-2xl mb-1">{s.icon}</div>
-                                        <div className="text-[10px] font-black text-[#EAE0CF] uppercase tracking-widest opacity-60">{s.label}</div>
-                                        <div className="text-3xl font-black text-[#EAE0CF]">{s.val}</div>
+                                        <div className="text-[10px] font-black text-[#68BA7F] uppercase tracking-widest opacity-60">{s.label}</div>
+                                        <div className="text-3xl font-black text-[#68BA7F]">{s.val}</div>
                                     </div>
                                 ))}
                             </div>
@@ -218,7 +218,7 @@ const AdminDashboard = ({ onBack }) => {
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* Chart 1: Request Status Pulse */}
                                 <div className="glass-card p-8 border-white/5">
-                                    <h3 className="text-sm font-black text-[#EAE0CF] uppercase tracking-widest mb-8">Request Pulse</h3>
+                                    <h3 className="text-sm font-black text-[#68BA7F] uppercase tracking-widest mb-8">Request Pulse</h3>
                                     <div className="h-[300px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <BarChart data={[
@@ -242,7 +242,7 @@ const AdminDashboard = ({ onBack }) => {
 
                                 {/* Chart 2: Team Roles */}
                                 <div className="glass-card p-8 border-white/5">
-                                    <h3 className="text-sm font-black text-[#EAE0CF] uppercase tracking-widest mb-8">Team Composition</h3>
+                                    <h3 className="text-sm font-black text-[#68BA7F] uppercase tracking-widest mb-8">Team Composition</h3>
                                     <div className="h-[300px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <PieChart>
@@ -257,7 +257,7 @@ const AdminDashboard = ({ onBack }) => {
                                                     paddingAngle={5}
                                                     dataKey="value"
                                                 >
-                                                    {[ '#94B4C1', '#547792', '#EAE0CF' ].map((color, idx) => (
+                                                    {[ '#94B4C1', '#547792', '#68BA7F' ].map((color, idx) => (
                                                         <Cell key={`cell-${idx}`} fill={color} />
                                                     ))}
                                                 </Pie>
@@ -271,7 +271,7 @@ const AdminDashboard = ({ onBack }) => {
 
                             {/* Chart 3: Trends over time */}
                             <div className="glass-card p-8 border-white/5">
-                                <h3 className="text-sm font-black text-[#EAE0CF] uppercase tracking-widest mb-8">Activity Trends (Last 7 Days)</h3>
+                                <h3 className="text-sm font-black text-[#68BA7F] uppercase tracking-widest mb-8">Activity Trends (Last 7 Days)</h3>
                                 <div className="h-[300px] w-full">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <AreaChart data={[...Array(7)].map((_, i) => {
@@ -306,7 +306,7 @@ const AdminDashboard = ({ onBack }) => {
                             {/* Search and Stats Grid for Users */}
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                                 <div className="relative group flex-1 max-w-md">
-                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#547792]/50 group-focus-within:text-[#EAE0CF] transition-colors">🔍</span>
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#547792]/50 group-focus-within:text-[#68BA7F] transition-colors">🔍</span>
                                     <input
                                         type="text"
                                         placeholder="Search by name, email, or mobile..."
@@ -317,16 +317,16 @@ const AdminDashboard = ({ onBack }) => {
                                 </div>
 
                                 <div className="glass px-4 py-3 rounded-xl border-white/10 text-center">
-                                    <p className="text-[#EAE0CF] font-bold uppercase text-[9px] tracking-widest mb-1">Total</p>
-                                    <h3 className="text-xl font-black text-[#EAE0CF]">{users.length}</h3>
+                                    <p className="text-[#68BA7F] font-bold uppercase text-[9px] tracking-widest mb-1">Total</p>
+                                    <h3 className="text-xl font-black text-[#68BA7F]">{users.length}</h3>
                                 </div>
                                 <div className="glass px-4 py-3 rounded-xl border-white/10 text-center">
-                                    <p className="text-[#EAE0CF] font-bold uppercase text-[9px] tracking-widest mb-1">Admins</p>
-                                    <h3 className="text-xl font-black text-[#EAE0CF]">{users.filter(u => u.role === 'admin').length}</h3>
+                                    <p className="text-[#68BA7F] font-bold uppercase text-[9px] tracking-widest mb-1">Admins</p>
+                                    <h3 className="text-xl font-black text-[#68BA7F]">{users.filter(u => u.role === 'admin').length}</h3>
                                 </div>
                                 <div className="glass px-4 py-3 rounded-xl border-white/10 text-center">
-                                    <p className="text-[#EAE0CF] font-bold uppercase text-[9px] tracking-widest mb-1">Users</p>
-                                    <h3 className="text-xl font-black text-[#EAE0CF]">{users.filter(u => u.role === 'user').length}</h3>
+                                    <p className="text-[#68BA7F] font-bold uppercase text-[9px] tracking-widest mb-1">Users</p>
+                                    <h3 className="text-xl font-black text-[#68BA7F]">{users.filter(u => u.role === 'user').length}</h3>
                                 </div>
                             </div>
 
@@ -336,12 +336,12 @@ const AdminDashboard = ({ onBack }) => {
                                     <table className="w-full text-left border-collapse">
                                         <thead>
                                             <tr className="border-b border-black/5 bg-white/5">
-                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest">User</th>
-                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest">Contact</th>
-                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest">Leave Balance</th>
-                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest">Role</th>
-                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest">Joined</th>
-                                                <th className="p-5 text-[#EAE0CF] font-bold uppercase text-xs tracking-widest text-right">Actions</th>
+                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest">User</th>
+                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest">Contact</th>
+                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest">Leave Balance</th>
+                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest">Role</th>
+                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest">Joined</th>
+                                                <th className="p-5 text-[#68BA7F] font-bold uppercase text-xs tracking-widest text-right">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -364,23 +364,23 @@ const AdminDashboard = ({ onBack }) => {
                                                                     className="w-10 h-10 rounded-full object-cover border-2 border-[#547792]/20"
                                                                 />
                                                                 <div>
-                                                                    <p className="font-bold text-[#EAE0CF]">{user.name}</p>
+                                                                    <p className="font-bold text-[#68BA7F]">{user.name}</p>
                                                                     <p className="text-[10px] text-[#547792] font-mono">{user._id}</p>
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td className="p-5 text-sm text-[#EAE0CF]">
+                                                        <td className="p-5 text-sm text-[#68BA7F]">
                                                             <p className="font-medium">{user.email}</p>
                                                             <p className="text-xs text-gray-400">{user.mobile}</p>
                                                         </td>
                                                         <td className="p-5">
                                                             <div className="flex items-center gap-2">
-                                                                <span className="font-black text-[#EAE0CF] bg-[#94B4C1] px-3 py-1 rounded-lg text-xs border border-[#547792]/20">
+                                                                <span className="font-black text-[#68BA7F] bg-[#94B4C1] px-3 py-1 rounded-lg text-xs border border-[#547792]/20">
                                                                     {user.paidLeaveBalance || 0} PL
                                                                 </span>
                                                                 <button
                                                                     onClick={() => setSelectedUserForLeave(user)}
-                                                                    className="p-1.5 hover:bg-[#547792]/10 rounded-lg text-[#EAE0CF] transition-colors"
+                                                                    className="p-1.5 hover:bg-[#547792]/10 rounded-lg text-[#68BA7F] transition-colors"
                                                                     title="Adjust Balance"
                                                                 >
                                                                     ✏️
@@ -389,13 +389,13 @@ const AdminDashboard = ({ onBack }) => {
                                                         </td>
                                                         <td className="p-5">
                                                             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${user.role === 'admin'
-                                                                ? 'bg-[#EAE0CF]/10 text-[#EAE0CF]'
+                                                                ? 'bg-[#68BA7F]/10 text-[#68BA7F]'
                                                                 : 'bg-slate-800 text-slate-300'
                                                                 }`}>
                                                                 {user.role}
                                                             </span>
                                                         </td>
-                                                        <td className="p-5 text-xs text-[#EAE0CF] font-bold">
+                                                        <td className="p-5 text-xs text-[#68BA7F] font-bold">
                                                             {new Date(user.createdAt).toLocaleDateString()}
                                                         </td>
                                                         <td className="p-5 text-right">
@@ -403,7 +403,7 @@ const AdminDashboard = ({ onBack }) => {
                                                                 {currentUser.role === 'superadmin' && (
                                                                     <button
                                                                         onClick={() => handleToggleRole(user._id, user.role)}
-                                                                        className="p-2.5 rounded-xl bg-[#EAE0CF]/10 text-[#EAE0CF] hover:bg-[#EAE0CF] hover:text-white transition-all shadow-sm"
+                                                                        className="p-2.5 rounded-xl bg-[#68BA7F]/10 text-[#68BA7F] hover:bg-[#68BA7F] hover:text-white transition-all shadow-sm"
                                                                         title={user.role === 'admin' ? "Make User" : "Make Admin"}
                                                                     >
                                                                         {user.role === 'admin' ? "👑" : "👤"}
@@ -422,7 +422,7 @@ const AdminDashboard = ({ onBack }) => {
                                                     </motion.tr>
                                                 )) : (
                                                     <tr>
-                                                        <td colSpan="6" className="p-10 text-center font-bold text-[#EAE0CF]/40">No users found matching your search</td>
+                                                        <td colSpan="6" className="p-10 text-center font-bold text-[#68BA7F]/40">No users found matching your search</td>
                                                     </tr>
                                                 )}
                                             </AnimatePresence>
@@ -469,13 +469,13 @@ const AdminDashboard = ({ onBack }) => {
                             <div className="glass-card p-8 border-white/5">
                                 <div className="text-center mb-8">
                                     <div className="w-16 h-16 bg-[#94B4C1] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 border border-[#547792]/20 shadow-inner">📢</div>
-                                    <h2 className="text-2xl font-black text-[#EAE0CF]">Global Announcement</h2>
+                                    <h2 className="text-2xl font-black text-[#68BA7F]">Global Announcement</h2>
                                     <p className="text-sm text-gray-400 mt-2">Send a real-time pop-up notification to all registered users.</p>
                                 </div>
 
                                 <div className="space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-[#EAE0CF] uppercase ml-1 tracking-widest">Your Message</label>
+                                        <label className="text-[10px] font-black text-[#68BA7F] uppercase ml-1 tracking-widest">Your Message</label>
                                         <textarea
                                             placeholder="Write something important to all users..."
                                             value={announcementMsg}
@@ -487,7 +487,7 @@ const AdminDashboard = ({ onBack }) => {
                                     <button
                                         onClick={handleSendAnnouncement}
                                         disabled={loading || !announcementMsg.trim()}
-                                        className="w-full py-5 rounded-2xl bg-[#EAE0CF] text-white font-black uppercase tracking-widest hover:bg-[#EAE0CF] shadow-xl shadow-[#EAE0CF]/20 disabled:opacity-50 transition-all flex items-center justify-center gap-3"
+                                        className="w-full py-5 rounded-2xl bg-[#68BA7F] text-white font-black uppercase tracking-widest hover:bg-[#68BA7F] shadow-xl shadow-[#68BA7F]/20 disabled:opacity-50 transition-all flex items-center justify-center gap-3"
                                     >
                                         {loading ? "Broadcasting..." : (
                                             <>
@@ -525,12 +525,12 @@ const AdminDashboard = ({ onBack }) => {
                                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                                 className="relative w-full max-w-md bg-[#1b2a3a] rounded-3xl p-8 shadow-2xl border border-white/10"
                             >
-                                <h3 className="text-2xl font-black text-[#EAE0CF] mb-2 text-center">Adjust Leave Balance</h3>
-                                <p className="text-sm text-gray-400 text-center mb-6">Updating balance for <span className="text-[#EAE0CF] font-bold">{selectedUserForLeave.name}</span></p>
+                                <h3 className="text-2xl font-black text-[#68BA7F] mb-2 text-center">Adjust Leave Balance</h3>
+                                <p className="text-sm text-gray-400 text-center mb-6">Updating balance for <span className="text-[#68BA7F] font-bold">{selectedUserForLeave.name}</span></p>
 
                                 <div className="space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-[#EAE0CF] uppercase ml-1 tracking-widest">New Balance (Days)</label>
+                                        <label className="text-[10px] font-black text-[#68BA7F] uppercase ml-1 tracking-widest">New Balance (Days)</label>
                                         <input
                                             type="number"
                                             value={newLeaveBalance}
@@ -541,7 +541,7 @@ const AdminDashboard = ({ onBack }) => {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-[#EAE0CF] uppercase ml-1 tracking-widest">Reason for Adjustment</label>
+                                        <label className="text-[10px] font-black text-[#68BA7F] uppercase ml-1 tracking-widest">Reason for Adjustment</label>
                                         <textarea
                                             placeholder="e.g., Deduction for unlogged leave, corrected month-end balance..."
                                             value={leaveReason}

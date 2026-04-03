@@ -67,7 +67,7 @@ const CompanyManagement = () => {
             <h2 className="text-2xl font-black text-slate-800 mb-6">Manage Client Companies</h2>
             
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
-                <h3 className="text-lg font-bold text-[#EAE0CF] mb-4">Onboard New Company</h3>
+                <h3 className="text-lg font-bold text-[#68BA7F] mb-4">Onboard New Company</h3>
                 <form onSubmit={handleCreateCompany} className="flex flex-col md:flex-row gap-4 items-end">
                     <div className="flex-1 w-full">
                         <label className="text-xs font-bold text-slate-500 mb-1 block uppercase">Company Name</label>
@@ -92,7 +92,7 @@ const CompanyManagement = () => {
                     <button 
                         type="submit" 
                         disabled={creating}
-                        className="btn-premium bg-[#EAE0CF] text-white font-bold p-3 rounded-xl hover:bg-[#EAE0CF] w-full md:w-auto min-w-[150px]"
+                        className="btn-premium bg-[#68BA7F] text-white font-bold p-3 rounded-xl hover:bg-[#68BA7F] w-full md:w-auto min-w-[150px]"
                     >
                         {creating ? "Creating..." : "+ Create Company"}
                     </button>
@@ -102,7 +102,7 @@ const CompanyManagement = () => {
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                 <div className="p-5 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
                     <h3 className="font-bold text-slate-700">Registered Companies</h3>
-                    <span className="bg-[#EAE0CF] text-white text-xs font-bold px-3 py-1 rounded-full">
+                    <span className="bg-[#68BA7F] text-white text-xs font-bold px-3 py-1 rounded-full">
                         {companies.length} Total
                     </span>
                 </div>
@@ -127,7 +127,7 @@ const CompanyManagement = () => {
                                             {company.name}
                                             {company.slug === 'n1solution' && <span className="ml-2 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full uppercase">Root Tenant</span>}
                                         </td>
-                                        <td className="p-4 font-mono text-sm text-[#EAE0CF] font-bold">
+                                        <td className="p-4 font-mono text-sm text-[#68BA7F] font-bold">
                                             {company.slug}
                                         </td>
                                         <td className="p-4 text-slate-300 font-medium">
