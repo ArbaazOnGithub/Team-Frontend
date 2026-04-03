@@ -19,7 +19,7 @@ const Stats = ({ stats, loading }) => {
                     <div className={`text-4xl font-black transition-all mb-1 group-hover:scale-110 duration-500 ${card.color}`}>
                         {loading ? <Skeleton className="h-10 w-12 mx-auto" /> : card.value}
                     </div>
-                    <div className="text-[10px] text-[#68BA7F]/60 uppercase font-black tracking-[0.2em]">{card.label}</div>
+                    <div className="text-[10px] text-[#EAE0CF]/60 uppercase font-black tracking-[0.2em]">{card.label}</div>
                     <div className={`h-1.5 w-8 group-hover:w-16 transition-all duration-500 mx-auto mt-4 rounded-full ${card.bg} opacity-20 group-hover:opacity-100`}></div>
                 </div>
             ))}

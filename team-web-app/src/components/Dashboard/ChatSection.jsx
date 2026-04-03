@@ -90,8 +90,8 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                             <div className="flex items-center gap-3">
                                 <span className="text-2xl">💬</span>
                                 <div>
-                                    <h3 className="text-xl font-black text-[#68BA7F]">Team Chat</h3>
-                                    <p className="text-[10px] text-[#68BA7F] font-bold uppercase tracking-widest">Real-time sync • {users.length} members</p>
+                                    <h3 className="text-xl font-black text-[#EAE0CF]">Team Chat</h3>
+                                    <p className="text-[10px] text-[#EAE0CF] font-bold uppercase tracking-widest">Real-time sync • {users.length} members</p>
                                 </div>
                             </div>
                             <button onClick={onClose} className="p-2 hover:bg-rose-50 rounded-xl text-rose-500 transition-colors">✕</button>
@@ -106,7 +106,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                 <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
                                     {pinnedMessages.map(msg => (
                                         <div key={msg._id} className="bg-black/20 p-2 rounded-lg border border-white/5 text-xs shadow-sm flex justify-between items-start gap-3">
-                                            <p className="text-[#68BA7F] leading-snug"><span className="font-bold">{msg.user?.name}:</span> {msg.content}</p>
+                                            <p className="text-[#EAE0CF] leading-snug"><span className="font-bold">{msg.user?.name}:</span> {msg.content}</p>
                                             <button onClick={() => onTogglePin(msg._id)} className="text-[10px] opacity-40 hover:opacity-100 transition-opacity whitespace-nowrap">📍</button>
                                         </div>
                                     ))}
@@ -122,7 +122,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                             {messages.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
                                     <span className="text-5xl mb-4">🍃</span>
-                                    <p className="font-bold text-[#68BA7F]">Start the conversation!</p>
+                                    <p className="font-bold text-[#EAE0CF]">Start the conversation!</p>
                                 </div>
                             ) : (
                                 messages.map((msg, idx) => {
@@ -143,10 +143,10 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                     alt={msg.user?.name}
                                                 />
                                                 <div className="space-y-1">
-                                                    {!isMe && <p className="text-[10px] font-bold text-[#68BA7F] ml-1">{msg.user?.name}</p>}
+                                                    {!isMe && <p className="text-[10px] font-bold text-[#EAE0CF] ml-1">{msg.user?.name}</p>}
                                                     <div className={`p-4 rounded-2xl text-sm leading-relaxed relative group ${isMe
                                                         ? 'bg-[#94B4C1] text-[#213448] rounded-tr-none'
-                                                        : 'bg-[#2e435a] text-[#68BA7F] border border-white/5 rounded-tl-none shadow-sm'
+                                                        : 'bg-[#2e435a] text-[#EAE0CF] border border-white/5 rounded-tl-none shadow-sm'
                                                         }`}>
                                                         {msg.fileUrl ? (
                                                             <div className="space-y-2">
@@ -166,7 +166,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                                     >
                                                                         <span className="text-xl">📄</span>
                                                                         <div className="flex-1 overflow-hidden font-bold">
-                                                                            <p className={`truncate text-[11px] ${isMe ? 'text-white' : 'text-[#68BA7F]'}`}>{msg.content || 'Document'}</p>
+                                                                            <p className={`truncate text-[11px] ${isMe ? 'text-white' : 'text-[#EAE0CF]'}`}>{msg.content || 'Document'}</p>
                                                                             <p className="text-[9px] opacity-60 uppercase font-black tracking-widest">Download File</p>
                                                                         </div>
                                                                     </a>
@@ -190,7 +190,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                                             setActiveMenuId(msg._id);
                                                                         }
                                                                     }}
-                                                                    className="p-1.5 text-gray-400 hover:text-[#68BA7F] transition-colors rounded-lg hover:bg-black/5"
+                                                                    className="p-1.5 text-gray-400 hover:text-[#EAE0CF] transition-colors rounded-lg hover:bg-black/5"
                                                                 >
                                                                     ⋮
                                                                 </button>
@@ -284,7 +284,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                         <button
                                             type="button"
                                             onClick={() => { onTogglePin(activeMenuId); setActiveMenuId(null); }}
-                                            className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-[#68BA7F] hover:bg-white/5 flex items-center gap-3 transition-colors border-b border-white/5"
+                                            className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-[#EAE0CF] hover:bg-white/5 flex items-center gap-3 transition-colors border-b border-white/5"
                                         >
                                             <span className="text-base">{activeMsg.isPinned ? '📍' : '📌'}</span>
                                             {activeMsg.isPinned ? 'Unpin' : 'Pin Message'}

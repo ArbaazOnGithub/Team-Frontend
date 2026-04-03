@@ -6,14 +6,14 @@
   --color-brand-200: #547792;
   --color-brand-300: #749fb0;
   --color-brand-400: #94B4C1;
-  --color-brand-500: #68BA7F;
-  --color-brand-600: #57a16b;
-  --color-brand-700: #468757;
+  --color-brand-500: #EAE0CF;
+  --color-brand-600: #e2d2bb;
+  --color-brand-700: #c9b9a4;
 }
 
 @layer base {
   body {
-    @apply bg-[#213448] text-[#68BA7F] antialiased selection:bg-[#547792] selection:text-white font-sans;
+    @apply bg-[#213448] text-[#EAE0CF] antialiased selection:bg-[#547792] selection:text-white font-sans;
   }
 }
 

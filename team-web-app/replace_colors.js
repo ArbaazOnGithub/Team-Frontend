@@ -4,7 +4,7 @@ import path from 'path';
 const srcDir = path.join('d:', 'projects', 'React JS Project', 'team-web-app', 'src');
 
 const replacements = [
-  { from: '#EAE0CF', to: '#68BA7F' }
+  { from: '#68BA7F', to: '#EAE0CF' }
 ];
 
 function escapeRegExp(string) {
