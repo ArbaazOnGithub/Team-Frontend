@@ -207,18 +207,18 @@ const AdminDashboard = ({ onBack }) => {
                                     { label: 'Pending', val: requests.filter(r => r.status === 'Pending').length, icon: '⏳' },
                                     { label: 'Companies', val: currentUser.role === 'superadmin' ? 'Global' : 'My Team', icon: '🏢' }
                                 ].map((s, idx) => (
-                                    <div key={idx} className="glass-card p-6 border-white/5 hover:scale-[1.02] transition-transform">
+                                    <div key={idx} className="glass-card bg-[#1b2a3a]/40 p-6 border-white/10 hover:bg-[#1b2a3a]/60 hover:scale-[1.02] transition-transform">
                                         <div className="text-2xl mb-1">{s.icon}</div>
-                                        <div className="text-[10px] font-black text-[#EAE0CF] uppercase tracking-widest opacity-60">{s.label}</div>
-                                        <div className="text-3xl font-black text-[#EAE0CF]">{s.val}</div>
+                                        <div className="text-[10px] font-black text-brand-300 uppercase tracking-widest">{s.label}</div>
+                                        <div className="text-3xl font-black text-white">{s.val}</div>
                                     </div>
                                 ))}
                             </div>
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* Chart 1: Request Status Pulse */}
-                                <div className="glass-card p-8 border-white/5">
-                                    <h3 className="text-sm font-black text-[#EAE0CF] uppercase tracking-widest mb-8">Request Pulse</h3>
+                                <div className="glass-card bg-[#1b2a3a]/80 p-8 border-white/10">
+                                    <h3 className="text-sm font-black text-brand-300 uppercase tracking-widest mb-8">Request Pulse</h3>
                                     <div className="h-[300px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <BarChart data={[
@@ -227,12 +227,12 @@ const AdminDashboard = ({ onBack }) => {
                                                 { name: 'Resolved', count: requests.filter(r => r.status === 'Resolved').length },
                                                 { name: 'Cancelled', count: requests.filter(r => r.status === 'Cancelled').length },
                                             ]}>
-                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#64748B' }} />
-                                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#64748B' }} />
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#749fb0' }} />
+                                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#749fb0' }} />
                                                 <Tooltip 
-                                                    cursor={{ fill: '#F1F5F9' }}
-                                                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 800 }}
+                                                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                                                    contentStyle={{ backgroundColor: '#1b2a3a', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.5)', fontWeight: 800, color: '#white' }}
                                                 />
                                                 <Bar dataKey="count" fill="#94B4C1" radius={[4, 4, 0, 0]} barSize={40} />
                                             </BarChart>
@@ -241,8 +241,8 @@ const AdminDashboard = ({ onBack }) => {
                                 </div>
 
                                 {/* Chart 2: Team Roles */}
-                                <div className="glass-card p-8 border-white/5">
-                                    <h3 className="text-sm font-black text-[#EAE0CF] uppercase tracking-widest mb-8">Team Composition</h3>
+                                <div className="glass-card bg-[#1b2a3a]/80 p-8 border-white/10">
+                                    <h3 className="text-sm font-black text-brand-300 uppercase tracking-widest mb-8">Team Composition</h3>
                                     <div className="h-[300px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <PieChart>
@@ -261,7 +261,7 @@ const AdminDashboard = ({ onBack }) => {
                                                         <Cell key={`cell-${idx}`} fill={color} />
                                                     ))}
                                                 </Pie>
-                                                <Tooltip />
+                                                <Tooltip contentStyle={{ backgroundColor: '#1b2a3a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }} />
                                                 <Legend iconType="circle" />
                                             </PieChart>
                                         </ResponsiveContainer>
@@ -270,8 +270,8 @@ const AdminDashboard = ({ onBack }) => {
                             </div>
 
                             {/* Chart 3: Trends over time */}
-                            <div className="glass-card p-8 border-white/5">
-                                <h3 className="text-sm font-black text-[#EAE0CF] uppercase tracking-widest mb-8">Activity Trends (Last 7 Days)</h3>
+                            <div className="glass-card bg-[#1b2a3a]/80 p-8 border-white/10">
+                                <h3 className="text-sm font-black text-brand-300 uppercase tracking-widest mb-8">Activity Trends (Last 7 Days)</h3>
                                 <div className="h-[300px] w-full">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <AreaChart data={[...Array(7)].map((_, i) => {
@@ -287,9 +287,9 @@ const AdminDashboard = ({ onBack }) => {
                                                     <stop offset="95%" stopColor="#547792" stopOpacity={0} />
                                                 </linearGradient>
                                             </defs>
-                                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#64748B' }} />
-                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                                            <Tooltip />
+                                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: '#749fb0' }} />
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                                            <Tooltip contentStyle={{ backgroundColor: '#1b2a3a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }} />
                                             <Area type="monotone" dataKey="count" stroke="#94B4C1" strokeWidth={2} fillOpacity={1} fill="url(#colorCount)" />
                                         </AreaChart>
                                     </ResponsiveContainer>

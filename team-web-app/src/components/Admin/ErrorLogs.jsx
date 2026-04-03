@@ -27,15 +27,15 @@ const ErrorLogs = () => {
     };
 
     return (
-        <div className="glass-card p-6 border-rose-200">
+        <div className="glass-card bg-[#1b2a3a]/40 p-6 border-rose-500/20">
             <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-black text-rose-600 flex items-center gap-2">
+                <h3 className="text-xl font-black text-rose-500 flex items-center gap-2">
                     <span>⚠️</span> Global Error Logs
                 </h3>
                 <button
                     onClick={loadLogs}
                     disabled={loading}
-                    className="btn-premium px-4 py-2 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold hover:bg-rose-100"
+                    className="btn-premium px-4 py-2 bg-rose-500/10 text-rose-500 border border-rose-500/20 rounded-lg text-xs font-black hover:bg-rose-500 hover:text-white transition-all"
                 >
                     {loading ? "Refreshing..." : "Refresh"}
                 </button>
@@ -44,12 +44,12 @@ const ErrorLogs = () => {
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
-                        <tr className="border-b border-rose-100 bg-rose-50/50">
-                            <th className="p-4 text-rose-800 font-bold uppercase text-xs tracking-widest">Time</th>
-                            <th className="p-4 text-rose-800 font-bold uppercase text-xs tracking-widest">Method</th>
-                            <th className="p-4 text-rose-800 font-bold uppercase text-xs tracking-widest">Endpoint</th>
-                            <th className="p-4 text-rose-800 font-bold uppercase text-xs tracking-widest">Message</th>
-                            <th className="p-4 text-rose-800 font-bold uppercase text-xs tracking-widest text-right">Details</th>
+                        <tr className="border-b border-white/5 bg-rose-500/5">
+                            <th className="p-4 text-rose-400 font-bold uppercase text-[10px] tracking-widest">Time</th>
+                            <th className="p-4 text-rose-400 font-bold uppercase text-[10px] tracking-widest">Method</th>
+                            <th className="p-4 text-rose-400 font-bold uppercase text-[10px] tracking-widest">Endpoint</th>
+                            <th className="p-4 text-rose-400 font-bold uppercase text-[10px] tracking-widest">Message</th>
+                            <th className="p-4 text-rose-400 font-bold uppercase text-[10px] tracking-widest text-right">Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,26 +60,26 @@ const ErrorLogs = () => {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    className="border-b border-rose-50 hover:bg-rose-50/30 transition-colors"
+                                    className="border-b border-white/5 hover:bg-white/5 transition-colors group"
                                 >
-                                    <td className="p-4 text-xs font-medium text-slate-300">
+                                    <td className="p-4 text-[10px] font-black text-white/40 group-hover:text-white/60 transition-colors">
                                         {new Date(log.createdAt).toLocaleString()}
                                     </td>
                                     <td className="p-4">
-                                        <span className="px-2 py-1 bg-slate-800 text-slate-300 rounded text-[10px] font-black uppercase">
+                                        <span className="px-2 py-1 bg-black/40 text-white/50 border border-white/10 rounded text-[9px] font-black uppercase">
                                             {log.method || 'UKNWN'}
                                         </span>
                                     </td>
-                                    <td className="p-4 text-xs font-mono text-slate-700">
+                                    <td className="p-4 text-[10px] font-mono text-white/30 truncate">
                                         {log.endpoint || '/system'}
                                     </td>
-                                    <td className="p-4 text-sm font-bold text-rose-700 max-w-xs truncate">
+                                    <td className="p-4 text-sm font-black text-rose-400/80 max-w-xs truncate group-hover:text-rose-400 transition-colors">
                                         {log.message}
                                     </td>
                                     <td className="p-4 text-right">
                                         <button
                                             onClick={() => setSelectedLog(log)}
-                                            className="px-3 py-1 bg-rose-100 text-rose-600 rounded-lg text-[10px] font-black uppercase hover:bg-rose-200 transition-colors"
+                                            className="px-3 py-1 bg-rose-500/10 text-rose-500 border border-rose-500/20 rounded-lg text-[10px] font-black uppercase hover:bg-rose-500 hover:text-white transition-all shadow-sm"
                                         >
                                             Inspect
                                         </button>

@@ -80,16 +80,16 @@ const AdminLogs = () => {
     return (
         <div className="animate-fadeIn">
             {/* Sub-tabs for Logs */}
-            <div className="flex gap-4 mb-6 border-b border-[#547792]/10 pb-4">
+            <div className="flex gap-4 mb-6 border-b border-white/5 pb-4">
                 <button
                     onClick={() => setActiveSubTab('requests')}
-                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'requests' ? 'bg-[#EAE0CF] text-white shadow-md' : 'text-[#EAE0CF]/60 hover:bg-white'}`}
+                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'requests' ? 'bg-[#547792] text-white shadow-md' : 'text-brand-300 hover:bg-white/5'}`}
                 >
                     Ticket Logs
                 </button>
                 <button
                     onClick={() => setActiveSubTab('system')}
-                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'system' ? 'bg-[#EAE0CF] text-white shadow-md' : 'text-[#EAE0CF]/60 hover:bg-white'}`}
+                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'system' ? 'bg-[#547792] text-white shadow-md' : 'text-brand-300 hover:bg-white/5'}`}
                 >
                     System Activity
                 </button>
@@ -104,13 +104,13 @@ const AdminLogs = () => {
                             placeholder="Search by Request No, Name, or Query..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="input-premium pl-12 py-3 bg-black/20 border-[#EAE0CF]/30 focus:bg-white"
+                            className="input-premium pl-12 py-3 bg-black/20 border-white/10 focus:bg-black/40"
                         />
                     </div>
                     <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
-                        className="input-premium w-40 py-3 bg-black/20 border-[#EAE0CF]/30 font-bold text-xs uppercase tracking-widest cursor-pointer focus:bg-white text-[#EAE0CF]"
+                        className="input-premium w-40 py-3 bg-black/20 border-white/10 font-bold text-xs uppercase tracking-widest cursor-pointer focus:bg-black/40 text-brand-500"
                     >
                         <option value="all">All Status</option>
                         <option value="Pending">Pending</option>
@@ -121,7 +121,7 @@ const AdminLogs = () => {
                 </div>
                 <button
                     onClick={handleExportExcel}
-                    className="flex items-center gap-2 px-6 py-3 bg-[#EAE0CF] text-white rounded-xl font-bold text-sm hover:bg-[#EAE0CF] shadow-lg shadow-[#EAE0CF]/20 transition-all active:scale-95"
+                    className="flex items-center gap-2 px-6 py-3 bg-[#547792] text-white rounded-xl font-bold text-sm hover:bg-[#749fb0] shadow-lg shadow-[#547792]/20 transition-all active:scale-95"
                 >
                     📥 Export to Excel
                 </button>
@@ -214,22 +214,22 @@ const AdminLogs = () => {
                             </thead>
                             <tbody>
                                 {systemLogs.map((log) => (
-                                    <tr key={log._id} className="border-b border-black/5 hover:bg-black/30 transition-colors">
+                                    <tr key={log._id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                                         <td className="p-5">
-                                            <div className="font-bold text-[#EAE0CF]">{log.user?.name || 'Unknown'}</div>
-                                            <div className="text-[10px] text-[#547792]">{log.user?.role}</div>
+                                            <div className="font-bold text-white">{log.user?.name || 'Unknown'}</div>
+                                            <div className="text-[10px] text-brand-300 font-black">{log.user?.role}</div>
                                         </td>
                                         <td className="p-5">
-                                            <p className="text-xs font-medium text-[#EAE0CF]">{log.action}</p>
+                                            <p className="text-xs font-medium text-white/80">{log.action}</p>
                                         </td>
                                         <td className="p-5">
-                                            <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest bg-gray-100 text-gray-600`}>
+                                            <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest bg-white/10 text-brand-300 border border-white/10`}>
                                                 {log.type}
                                             </span>
                                         </td>
                                         <td className="p-5">
-                                            <div className="text-[10px] font-bold text-[#EAE0CF]">{new Date(log.createdAt).toLocaleDateString()}</div>
-                                            <div className="text-[9px] text-[#547792]">{new Date(log.createdAt).toLocaleTimeString()}</div>
+                                            <div className="text-[10px] font-bold text-white">{new Date(log.createdAt).toLocaleDateString()}</div>
+                                            <div className="text-[9px] text-brand-300">{new Date(log.createdAt).toLocaleTimeString()}</div>
                                         </td>
                                     </tr>
                                 ))}

@@ -64,13 +64,13 @@ const CompanyManagement = () => {
 
     return (
         <div className="animate-fade-in p-6">
-            <h2 className="text-2xl font-black text-slate-800 mb-6">Manage Client Companies</h2>
+            <h2 className="text-2xl font-black text-white mb-6">Manage Client Companies</h2>
             
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
-                <h3 className="text-lg font-bold text-[#EAE0CF] mb-4">Onboard New Company</h3>
+            <div className="bg-[#1b2a3a]/40 p-6 rounded-2xl shadow-sm border border-white/10 mb-8">
+                <h3 className="text-lg font-bold text-brand-500 mb-4">Onboard New Company</h3>
                 <form onSubmit={handleCreateCompany} className="flex flex-col md:flex-row gap-4 items-end">
                     <div className="flex-1 w-full">
-                        <label className="text-xs font-bold text-slate-500 mb-1 block uppercase">Company Name</label>
+                        <label className="text-xs font-bold text-brand-300 mb-1 block uppercase">Company Name</label>
                         <input 
                             type="text" 
                             className="input-premium w-full" 
@@ -80,7 +80,7 @@ const CompanyManagement = () => {
                         />
                     </div>
                     <div className="flex-1 w-full">
-                        <label className="text-xs font-bold text-slate-500 mb-1 block uppercase">Company Slug (Login ID)</label>
+                        <label className="text-xs font-bold text-brand-300 mb-1 block uppercase">Company Slug (Login ID)</label>
                         <input 
                             type="text" 
                             className="input-premium w-full uppercase" 
@@ -92,17 +92,17 @@ const CompanyManagement = () => {
                     <button 
                         type="submit" 
                         disabled={creating}
-                        className="btn-premium bg-[#EAE0CF] text-white font-bold p-3 rounded-xl hover:bg-[#EAE0CF] w-full md:w-auto min-w-[150px]"
+                        className="btn-premium bg-[#547792] hover:bg-[#749fb0] text-white font-bold p-3 rounded-xl w-full md:w-auto min-w-[150px]"
                     >
                         {creating ? "Creating..." : "+ Create Company"}
                     </button>
                 </form>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <div className="p-5 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                    <h3 className="font-bold text-slate-700">Registered Companies</h3>
-                    <span className="bg-[#EAE0CF] text-white text-xs font-bold px-3 py-1 rounded-full">
+            <div className="glass-card bg-[#1b2a3a]/40 rounded-2xl shadow-sm border border-white/10 overflow-hidden">
+                <div className="p-5 border-b border-white/10 bg-white/5 flex justify-between items-center">
+                    <h3 className="font-bold text-brand-300">Registered Companies</h3>
+                    <span className="bg-white/10 text-brand-500 text-xs font-bold px-3 py-1 rounded-full border border-white/10">
                         {companies.length} Total
                     </span>
                 </div>
@@ -113,7 +113,7 @@ const CompanyManagement = () => {
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-white border-b border-slate-100 text-xs uppercase tracking-wider text-slate-400">
+                                <tr className="bg-white/5 border-b border-white/10 text-xs uppercase tracking-wider text-brand-300 font-black">
                                     <th className="p-4 font-bold">Company Name</th>
                                     <th className="p-4 font-bold">Slug (ID)</th>
                                     <th className="p-4 font-bold">Total Users</th>
@@ -122,22 +122,22 @@ const CompanyManagement = () => {
                             </thead>
                             <tbody>
                                 {companies.map((company) => (
-                                    <tr key={company._id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                                        <td className="p-4 font-bold text-slate-700">
+                                            <tr key={company._id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                        <td className="p-4 font-bold text-white">
                                             {company.name}
-                                            {company.slug === 'n1solution' && <span className="ml-2 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full uppercase">Root Tenant</span>}
+                                            {company.slug === 'n1solution' && <span className="ml-2 text-[10px] bg-amber-500/20 text-amber-500 px-2 py-0.5 rounded-full uppercase border border-amber-500/20 font-black">Root Tenant</span>}
                                         </td>
-                                        <td className="p-4 font-mono text-sm text-[#EAE0CF] font-bold">
+                                        <td className="p-4 font-mono text-sm text-brand-500 font-bold">
                                             {company.slug}
                                         </td>
-                                        <td className="p-4 text-slate-300 font-medium">
+                                        <td className="p-4 text-white/40 font-black">
                                             {company.userCount || 0}
                                         </td>
                                         <td className="p-4 text-right">
                                             {company.slug !== 'n1solution' && (
                                                 <button 
                                                     onClick={() => handleDeleteCompany(company._id, company.name, company.slug)}
-                                                    className="text-red-500 hover:text-red-700 font-bold text-sm bg-red-50 hover:bg-red-100 px-3 py-1 rounded-lg transition-colors"
+                                                    className="text-rose-500 hover:text-white font-bold text-sm bg-rose-500/10 hover:bg-rose-500 px-3 py-1 rounded-lg transition-all"
                                                 >
                                                     Delete
                                                 </button>

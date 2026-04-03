@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as api from '../../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import io from 'socket.io-client';
+import logo from '../../assets/logo.png';
 
 const Header = ({ user, handleLogout, setView }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -64,8 +65,8 @@ const Header = ({ user, handleLogout, setView }) => {
     return (
         <header className="glass bg-[#1b2a3a]/90 px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/10">
             <div className="flex items-center gap-2">
-               <div className="w-8 h-8 bg-brand-500 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/20">
-                    <span className="text-white text-lg">📁</span>
+               <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
+                    <img src={logo} alt="Logo" className="w-7 h-7 object-contain" />
                </div>
                <h1
                    className="text-xl font-black bg-gradient-to-r from-brand-500 to-brand-200 bg-clip-text text-transparent cursor-pointer tracking-tight"
