@@ -40,17 +40,17 @@ const ProfileModal = ({ user, isOpen, onClose, onUpdate, loading }) => {
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="glass bg-[#CFFFDC]/90 p-8 w-full max-w-sm rounded-3xl relative z-10 border-[#68BA7F]/30 shadow-2xl"
+                        className="glass bg-[#94B4C1]/90 p-8 w-full max-w-sm rounded-3xl relative z-10 border-[#547792]/30 shadow-2xl"
                     >
-                        <button onClick={onClose} className="absolute top-6 right-6 text-[#253D2C]/40 hover:text-[#2E6F40] font-bold">✕</button>
-                        <h2 className="text-2xl font-black text-[#253D2C] mb-8">Edit Profile</h2>
+                        <button onClick={onClose} className="absolute top-6 right-6 text-[#213448]/40 hover:text-[#213448] font-bold">✕</button>
+                        <h2 className="text-2xl font-black text-[#213448] mb-8">Edit Profile</h2>
 
                         <form onSubmit={handleSubmit} className="flex flex-col items-center">
                             <div className="relative group mb-8">
                                 <img
                                     src={imagePreview}
                                     onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff&size=150"}
-                                    className="w-28 h-28 rounded-full object-cover border-4 border-[#2E6F40] shadow-lg"
+                                    className="w-28 h-28 rounded-full object-cover border-4 border-[#213448] shadow-lg"
                                     alt="Profile"
                                 />
                                 <label htmlFor="modal-image" className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
@@ -60,7 +60,7 @@ const ProfileModal = ({ user, isOpen, onClose, onUpdate, loading }) => {
                             </div>
 
                             <div className="w-full mb-8">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-[#68BA7F] mb-2 block ml-1">Full Name</label>
+                                <label className="text-[10px] font-black uppercase tracking-widest text-[#547792] mb-2 block ml-1">Full Name</label>
                                 <input
                                     type="text"
                                     value={name}
@@ -73,7 +73,7 @@ const ProfileModal = ({ user, isOpen, onClose, onUpdate, loading }) => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full btn-premium py-4 bg-[#2E6F40] text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-[#253D2C] shadow-xl shadow-[#2E6F40]/30"
+                                className="w-full btn-premium py-4 bg-[#213448] text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-[#213448] shadow-xl shadow-[#213448]/30"
                             >
                                 {loading ? "Updating..." : "Save Changes"}
                             </button>

@@ -80,16 +80,16 @@ const AdminLogs = () => {
     return (
         <div className="animate-fadeIn">
             {/* Sub-tabs for Logs */}
-            <div className="flex gap-4 mb-6 border-b border-[#68BA7F]/10 pb-4">
+            <div className="flex gap-4 mb-6 border-b border-[#547792]/10 pb-4">
                 <button
                     onClick={() => setActiveSubTab('requests')}
-                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'requests' ? 'bg-[#2E6F40] text-white shadow-md' : 'text-[#2E6F40]/60 hover:bg-white'}`}
+                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'requests' ? 'bg-[#213448] text-white shadow-md' : 'text-[#213448]/60 hover:bg-white'}`}
                 >
                     Ticket Logs
                 </button>
                 <button
                     onClick={() => setActiveSubTab('system')}
-                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'system' ? 'bg-[#2E6F40] text-white shadow-md' : 'text-[#2E6F40]/60 hover:bg-white'}`}
+                    className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${activeSubTab === 'system' ? 'bg-[#213448] text-white shadow-md' : 'text-[#213448]/60 hover:bg-white'}`}
                 >
                     System Activity
                 </button>
@@ -98,19 +98,19 @@ const AdminLogs = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div className="flex flex-1 gap-4 max-w-2xl">
                     <div className="relative group flex-1">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#2E6F40]/60 group-focus-within:text-[#2E6F40] transition-colors">🔍</span>
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#213448]/60 group-focus-within:text-[#213448] transition-colors">🔍</span>
                         <input
                             type="text"
                             placeholder="Search by Request No, Name, or Query..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="input-premium pl-12 py-3 bg-white/70 border-[#2E6F40]/30 focus:bg-white"
+                            className="input-premium pl-12 py-3 bg-white/70 border-[#213448]/30 focus:bg-white"
                         />
                     </div>
                     <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
-                        className="input-premium w-40 py-3 bg-white/70 border-[#2E6F40]/30 font-bold text-xs uppercase tracking-widest cursor-pointer focus:bg-white text-[#253D2C]"
+                        className="input-premium w-40 py-3 bg-white/70 border-[#213448]/30 font-bold text-xs uppercase tracking-widest cursor-pointer focus:bg-white text-[#213448]"
                     >
                         <option value="all">All Status</option>
                         <option value="Pending">Pending</option>
@@ -121,7 +121,7 @@ const AdminLogs = () => {
                 </div>
                 <button
                     onClick={handleExportExcel}
-                    className="flex items-center gap-2 px-6 py-3 bg-[#2E6F40] text-white rounded-xl font-bold text-sm hover:bg-[#253D2C] shadow-lg shadow-[#2E6F40]/20 transition-all active:scale-95"
+                    className="flex items-center gap-2 px-6 py-3 bg-[#213448] text-white rounded-xl font-bold text-sm hover:bg-[#213448] shadow-lg shadow-[#213448]/20 transition-all active:scale-95"
                 >
                     📥 Export to Excel
                 </button>
@@ -132,12 +132,12 @@ const AdminLogs = () => {
                     <table className="w-full text-left border-collapse min-w-[1000px]">
                         <thead>
                             <tr className="border-b border-black/5 bg-white/30">
-                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">No</th>
-                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Raiser</th>
-                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Query</th>
-                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Status</th>
-                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Handler</th>
-                                <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Date</th>
+                                <th className="p-5 text-[#213448] font-bold uppercase text-[10px] tracking-widest">No</th>
+                                <th className="p-5 text-[#213448] font-bold uppercase text-[10px] tracking-widest">Raiser</th>
+                                <th className="p-5 text-[#213448] font-bold uppercase text-[10px] tracking-widest">Query</th>
+                                <th className="p-5 text-[#213448] font-bold uppercase text-[10px] tracking-widest">Status</th>
+                                <th className="p-5 text-[#213448] font-bold uppercase text-[10px] tracking-widest">Handler</th>
+                                <th className="p-5 text-[#213448] font-bold uppercase text-[10px] tracking-widest">Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -151,18 +151,18 @@ const AdminLogs = () => {
                                         exit={{ opacity: 0 }}
                                         className="border-b border-black/5 hover:bg-white/50 transition-colors group"
                                     >
-                                        <td className="p-5 font-black text-[#2E6F40]">#{log.requestNo || '---'}</td>
+                                        <td className="p-5 font-black text-[#213448]">#{log.requestNo || '---'}</td>
                                         <td className="p-5">
-                                            <div className="font-bold text-[#253D2C]">{log.user?.name || 'Deleted User'}</div>
-                                            <div className="text-[10px] text-[#68BA7F]">{log.user?.email}</div>
+                                            <div className="font-bold text-[#213448]">{log.user?.name || 'Deleted User'}</div>
+                                            <div className="text-[10px] text-[#547792]">{log.user?.email}</div>
                                         </td>
                                         <td className="p-5 max-w-xs">
-                                            <p className="text-xs text-[#253D2C]/80 line-clamp-2">{log.query}</p>
+                                            <p className="text-xs text-[#213448]/80 line-clamp-2">{log.query}</p>
                                         </td>
                                         <td className="p-5">
-                                            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${log.status === 'Pending' ? 'bg-[#68BA7F]/10 text-[#68BA7F]' :
-                                                log.status === 'Approved' ? 'bg-[#2E6F40]/10 text-[#2E6F40]' :
-                                                    log.status === 'Resolved' ? 'bg-[#253D2C]/10 text-[#253D2C]' :
+                                            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${log.status === 'Pending' ? 'bg-[#547792]/10 text-[#547792]' :
+                                                log.status === 'Approved' ? 'bg-[#213448]/10 text-[#213448]' :
+                                                    log.status === 'Resolved' ? 'bg-[#213448]/10 text-[#213448]' :
                                                         'bg-rose-50 text-rose-600'
                                                 }`}>
                                                 {log.status}
@@ -171,21 +171,21 @@ const AdminLogs = () => {
                                         <td className="p-5">
                                             {log.actionBy ? (
                                                 <div className="flex items-center gap-2">
-                                                    <span className="w-2 h-2 rounded-full bg-[#2E6F40]"></span>
-                                                    <span className="text-xs font-bold text-[#2E6F40]">{log.actionBy.name}</span>
+                                                    <span className="w-2 h-2 rounded-full bg-[#213448]"></span>
+                                                    <span className="text-xs font-bold text-[#213448]">{log.actionBy.name}</span>
                                                 </div>
                                             ) : (
                                                 <span className="text-xs text-gray-400 italic">Unassigned</span>
                                             )}
                                         </td>
                                         <td className="p-5">
-                                            <div className="text-[10px] font-bold text-[#253D2C]">{new Date(log.createdAt).toLocaleDateString()}</div>
-                                            <div className="text-[9px] text-[#68BA7F]">{new Date(log.createdAt).toLocaleTimeString()}</div>
+                                            <div className="text-[10px] font-bold text-[#213448]">{new Date(log.createdAt).toLocaleDateString()}</div>
+                                            <div className="text-[9px] text-[#547792]">{new Date(log.createdAt).toLocaleTimeString()}</div>
                                         </td>
                                     </motion.tr>
                                 )) : !loading && (
                                     <tr>
-                                        <td colSpan="6" className="p-10 text-center font-bold text-[#253D2C]/40">No logs matching your criteria</td>
+                                        <td colSpan="6" className="p-10 text-center font-bold text-[#213448]/40">No logs matching your criteria</td>
                                     </tr>
                                 )}
                             </AnimatePresence>
@@ -194,8 +194,8 @@ const AdminLogs = () => {
                 </div>
                 {loading && (
                     <div className="p-10 text-center">
-                        <div className="animate-spin w-8 h-8 border-4 border-[#2E6F40] border-t-transparent rounded-full mx-auto mb-4"></div>
-                        <p className="text-sm font-bold text-[#68BA7F]">Loading log history...</p>
+                        <div className="animate-spin w-8 h-8 border-4 border-[#213448] border-t-transparent rounded-full mx-auto mb-4"></div>
+                        <p className="text-sm font-bold text-[#547792]">Loading log history...</p>
                     </div>
                 )}
             </div>
@@ -206,21 +206,21 @@ const AdminLogs = () => {
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="border-b border-black/5 bg-white/30">
-                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">User</th>
-                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Action</th>
-                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Type</th>
-                                    <th className="p-5 text-[#2E6F40] font-bold uppercase text-[10px] tracking-widest">Timestamp</th>
+                                    <th className="p-5 text-[#213448] font-bold uppercase text-[10px] tracking-widest">User</th>
+                                    <th className="p-5 text-[#213448] font-bold uppercase text-[10px] tracking-widest">Action</th>
+                                    <th className="p-5 text-[#213448] font-bold uppercase text-[10px] tracking-widest">Type</th>
+                                    <th className="p-5 text-[#213448] font-bold uppercase text-[10px] tracking-widest">Timestamp</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {systemLogs.map((log) => (
                                     <tr key={log._id} className="border-b border-black/5 hover:bg-white/50 transition-colors">
                                         <td className="p-5">
-                                            <div className="font-bold text-[#253D2C]">{log.user?.name || 'Unknown'}</div>
-                                            <div className="text-[10px] text-[#68BA7F]">{log.user?.role}</div>
+                                            <div className="font-bold text-[#213448]">{log.user?.name || 'Unknown'}</div>
+                                            <div className="text-[10px] text-[#547792]">{log.user?.role}</div>
                                         </td>
                                         <td className="p-5">
-                                            <p className="text-xs font-medium text-[#253D2C]">{log.action}</p>
+                                            <p className="text-xs font-medium text-[#213448]">{log.action}</p>
                                         </td>
                                         <td className="p-5">
                                             <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest bg-gray-100 text-gray-600`}>
@@ -228,8 +228,8 @@ const AdminLogs = () => {
                                             </span>
                                         </td>
                                         <td className="p-5">
-                                            <div className="text-[10px] font-bold text-[#253D2C]">{new Date(log.createdAt).toLocaleDateString()}</div>
-                                            <div className="text-[9px] text-[#68BA7F]">{new Date(log.createdAt).toLocaleTimeString()}</div>
+                                            <div className="text-[10px] font-bold text-[#213448]">{new Date(log.createdAt).toLocaleDateString()}</div>
+                                            <div className="text-[9px] text-[#547792]">{new Date(log.createdAt).toLocaleTimeString()}</div>
                                         </td>
                                     </tr>
                                 ))}

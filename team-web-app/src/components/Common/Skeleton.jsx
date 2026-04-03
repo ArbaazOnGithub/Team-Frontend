@@ -16,7 +16,7 @@ const Skeleton = ({ className, variant = "rect" }) => {
                 repeat: Infinity,
                 ease: "easeInOut"
             }}
-            className={`bg-[#68BA7F]/10 ${variants[variant]} ${className}`}
+            className={`bg-[#547792]/10 ${variants[variant]} ${className}`}
         />
     );
 };

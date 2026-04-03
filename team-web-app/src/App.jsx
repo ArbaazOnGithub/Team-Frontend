@@ -38,7 +38,7 @@ function App() {
     const initCapacitor = async () => {
       if (Capacitor.isNativePlatform()) {
         StatusBar.setOverlaysWebView({ overlay: false });
-        StatusBar.setBackgroundColor({ color: '#2E6F40' });
+        StatusBar.setBackgroundColor({ color: '#213448' });
         StatusBar.setStyle({ style: Style.Dark });
         LocalNotifications.requestPermissions();
 
@@ -687,7 +687,7 @@ function App() {
 
       <div className="max-w-2xl mx-auto px-6 py-12">
         {view === 'admin' ? (
-          <Suspense fallback={<div className="p-10 text-center font-bold text-[#68BA7F]">Loading Admin Dashboard...</div>}>
+          <Suspense fallback={<div className="p-10 text-center font-bold text-[#547792]">Loading Admin Dashboard...</div>}>
             <AdminDashboard
               onBack={() => setView('dashboard')}
             />
@@ -695,16 +695,16 @@ function App() {
         ) : (
           <>
             {user.role === 'superadmin' && availableCompanies.length > 0 && (
-              <div className="glass p-4 rounded-2xl mb-8 border-[#68BA7F]/30 bg-white/50 animate-fade-in shadow-sm">
+              <div className="glass p-4 rounded-2xl mb-8 border-[#547792]/30 bg-white/50 animate-fade-in shadow-sm">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">🏢</span>
-                    <h4 className="font-black text-[#2E6F40] text-xs uppercase tracking-widest">Global Company View</h4>
+                    <h4 className="font-black text-[#213448] text-xs uppercase tracking-widest">Global Company View</h4>
                   </div>
                   <select 
                     value={selectedCompanyId} 
                     onChange={(e) => handleCompanyContextChange(e.target.value)}
-                    className="bg-white border-[#68BA7F]/30 text-[#253D2C] font-bold text-sm rounded-xl px-4 py-2 outline-none focus:ring-2 ring-[#68BA7F]/20 transition-all min-w-[200px]"
+                    className="bg-white border-[#547792]/30 text-[#213448] font-bold text-sm rounded-xl px-4 py-2 outline-none focus:ring-2 ring-[#547792]/20 transition-all min-w-[200px]"
                   >
                     <option value="">My Default Company (N1Solution)</option>
                     {availableCompanies.map(comp => (
@@ -714,7 +714,7 @@ function App() {
                 </div>
               </div>
             )}
-            {error && <div className="glass bg-emerald-50/50 text-[#2E6F40] p-4 rounded-xl mb-8 text-center text-sm font-bold border-[#68BA7F]/20">{error}</div>}
+            {error && <div className="glass bg-emerald-50/50 text-[#213448] p-4 rounded-xl mb-8 text-center text-sm font-bold border-[#547792]/20">{error}</div>}
 
             <Stats stats={stats} loading={loading} />
 
@@ -731,19 +731,19 @@ function App() {
 
             <div className="flex items-center gap-4 mb-8">
               <div className="relative flex-1 group">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#68BA7F]/50 group-focus-within:text-[#2E6F40] transition-colors">🔍</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#547792]/50 group-focus-within:text-[#213448] transition-colors">🔍</span>
                 <input
                   type="text"
                   placeholder="Search queries..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="input-premium pl-12 py-3 bg-white/70 border-[#68BA7F]/30 focus:bg-white"
+                  className="input-premium pl-12 py-3 bg-white/70 border-[#547792]/30 focus:bg-white"
                 />
               </div>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="input-premium w-40 py-3 bg-white/70 border-[#68BA7F]/30 font-bold text-xs uppercase tracking-widest cursor-pointer focus:bg-white text-[#253D2C]"
+                className="input-premium w-40 py-3 bg-white/70 border-[#547792]/30 font-bold text-xs uppercase tracking-widest cursor-pointer focus:bg-white text-[#213448]"
               >
                 <option value="all">All Status</option>
                 <option value="Pending">Pending</option>

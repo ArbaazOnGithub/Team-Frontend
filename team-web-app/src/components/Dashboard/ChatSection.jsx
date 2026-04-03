@@ -83,15 +83,15 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-[160] flex flex-col border-l border-[#68BA7F]/20"
+                        className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-[160] flex flex-col border-l border-[#547792]/20"
                     >
                         {/* Header */}
-                        <div className="p-6 border-b border-[#68BA7F]/10 flex items-center justify-between bg-mesh-light">
+                        <div className="p-6 border-b border-[#547792]/10 flex items-center justify-between bg-mesh-light">
                             <div className="flex items-center gap-3">
                                 <span className="text-2xl">💬</span>
                                 <div>
-                                    <h3 className="text-xl font-black text-[#253D2C]">Team Chat</h3>
-                                    <p className="text-[10px] text-[#2E6F40] font-bold uppercase tracking-widest">Real-time sync • {users.length} members</p>
+                                    <h3 className="text-xl font-black text-[#213448]">Team Chat</h3>
+                                    <p className="text-[10px] text-[#213448] font-bold uppercase tracking-widest">Real-time sync • {users.length} members</p>
                                 </div>
                             </div>
                             <button onClick={onClose} className="p-2 hover:bg-rose-50 rounded-xl text-rose-500 transition-colors">✕</button>
@@ -99,14 +99,14 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
 
                         {/* Pinned Messages Area */}
                         {pinnedMessages.length > 0 && (
-                            <div className="bg-[#CFFFDC]/30 p-4 border-b border-[#68BA7F]/20">
-                                <p className="text-[9px] font-black text-[#2E6F40] uppercase tracking-widest mb-2 flex items-center gap-1">
+                            <div className="bg-[#94B4C1]/30 p-4 border-b border-[#547792]/20">
+                                <p className="text-[9px] font-black text-[#213448] uppercase tracking-widest mb-2 flex items-center gap-1">
                                     📌 Pinned Messages ({pinnedMessages.length})
                                 </p>
                                 <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
                                     {pinnedMessages.map(msg => (
-                                        <div key={msg._id} className="bg-white/80 p-2 rounded-lg border border-[#68BA7F]/30 text-xs shadow-sm flex justify-between items-start gap-3">
-                                            <p className="text-[#253D2C] leading-snug"><span className="font-bold">{msg.user?.name}:</span> {msg.content}</p>
+                                        <div key={msg._id} className="bg-white/80 p-2 rounded-lg border border-[#547792]/30 text-xs shadow-sm flex justify-between items-start gap-3">
+                                            <p className="text-[#213448] leading-snug"><span className="font-bold">{msg.user?.name}:</span> {msg.content}</p>
                                             <button onClick={() => onTogglePin(msg._id)} className="text-[10px] opacity-40 hover:opacity-100 transition-opacity">📍</button>
                                         </div>
                                     ))}
@@ -122,7 +122,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                             {messages.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
                                     <span className="text-5xl mb-4">🍃</span>
-                                    <p className="font-bold text-[#253D2C]">Start the conversation!</p>
+                                    <p className="font-bold text-[#213448]">Start the conversation!</p>
                                 </div>
                             ) : (
                                 messages.map((msg, idx) => {
@@ -139,14 +139,14 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                 <img
                                                     src={api.getImageUrl(msg.user?.profileImage)}
                                                     onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"}
-                                                    className="w-7 h-7 rounded-full object-cover border border-[#68BA7F]/20 shadow-sm"
+                                                    className="w-7 h-7 rounded-full object-cover border border-[#547792]/20 shadow-sm"
                                                     alt={msg.user?.name}
                                                 />
                                                 <div className="space-y-1">
-                                                    {!isMe && <p className="text-[10px] font-bold text-[#2E6F40] ml-1">{msg.user?.name}</p>}
+                                                    {!isMe && <p className="text-[10px] font-bold text-[#213448] ml-1">{msg.user?.name}</p>}
                                                     <div className={`p-4 rounded-2xl text-sm leading-relaxed relative group ${isMe
-                                                        ? 'bg-[#2E6F40] text-white rounded-tr-none'
-                                                        : 'bg-white text-[#253D2C] border border-[#68BA7F]/10 rounded-tl-none shadow-sm'
+                                                        ? 'bg-[#213448] text-white rounded-tr-none'
+                                                        : 'bg-white text-[#213448] border border-[#547792]/10 rounded-tl-none shadow-sm'
                                                         }`}>
                                                         {msg.fileUrl ? (
                                                             <div className="space-y-2">
@@ -166,7 +166,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                                     >
                                                                         <span className="text-xl">📄</span>
                                                                         <div className="flex-1 overflow-hidden font-bold">
-                                                                            <p className={`truncate text-[11px] ${isMe ? 'text-white' : 'text-[#2E6F40]'}`}>{msg.content || 'Document'}</p>
+                                                                            <p className={`truncate text-[11px] ${isMe ? 'text-white' : 'text-[#213448]'}`}>{msg.content || 'Document'}</p>
                                                                             <p className="text-[9px] opacity-60 uppercase font-black tracking-widest">Download File</p>
                                                                         </div>
                                                                     </a>
@@ -190,7 +190,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                                             setActiveMenuId(msg._id);
                                                                         }
                                                                     }}
-                                                                    className="p-1.5 text-gray-400 hover:text-[#2E6F40] transition-colors rounded-lg hover:bg-black/5"
+                                                                    className="p-1.5 text-gray-400 hover:text-[#213448] transition-colors rounded-lg hover:bg-black/5"
                                                                 >
                                                                     ⋮
                                                                 </button>
@@ -231,7 +231,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                         </div>
 
                         {/* Input Area */}
-                        <form onSubmit={handleSend} className="p-6 bg-white border-t border-[#68BA7F]/10">
+                        <form onSubmit={handleSend} className="p-6 bg-white border-t border-[#547792]/10">
                             <div className="relative group flex items-center gap-2">
                                 <input 
                                     type="file" 
@@ -244,7 +244,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                     type="button"
                                     disabled={uploading}
                                     onClick={() => fileInputRef.current.click()}
-                                    className="p-3 bg-[#F8FAF9] text-[#2E6F40] rounded-xl hover:bg-[#CFFFDC] transition-all border border-[#68BA7F]/10 disabled:opacity-50"
+                                    className="p-3 bg-[#F8FAF9] text-[#213448] rounded-xl hover:bg-[#94B4C1] transition-all border border-[#547792]/10 disabled:opacity-50"
                                 >
                                     {uploading ? "⏳" : "📎"}
                                 </button>
@@ -254,12 +254,12 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                         placeholder="Type your message..."
                                         value={newMessage}
                                         onChange={(e) => setNewMessage(e.target.value)}
-                                        className="input-premium py-4 pr-14 bg-[#F8FAF9] border-[#68BA7F]/20 focus:bg-white"
+                                        className="input-premium py-4 pr-14 bg-[#F8FAF9] border-[#547792]/20 focus:bg-white"
                                     />
                                     <button
                                         type="submit"
                                         disabled={!newMessage.trim() || uploading}
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-[#2E6F40] text-white rounded-xl shadow-lg shadow-[#2E6F40]/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-[#213448] text-white rounded-xl shadow-lg shadow-[#213448]/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
                                     >
                                         🚀
                                     </button>
@@ -278,13 +278,13 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                         animate={{ opacity: 1, scale: 1, y: 0 }}
                                         exit={{ opacity: 0, scale: 0.9, y: -6 }}
                                         style={{ position: 'fixed', top: menuPos.top, left: menuPos.left, zIndex: 9999 }}
-                                        className="bg-white border border-[#68BA7F]/20 rounded-xl shadow-2xl min-w-[144px] overflow-hidden"
+                                        className="bg-white border border-[#547792]/20 rounded-xl shadow-2xl min-w-[144px] overflow-hidden"
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         <button
                                             type="button"
                                             onClick={() => { onTogglePin(activeMenuId); setActiveMenuId(null); }}
-                                            className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-[#253D2C] hover:bg-[#F0FDF4] flex items-center gap-3 transition-colors border-b border-gray-50"
+                                            className="w-full px-4 py-2.5 text-left text-[11px] font-bold text-[#213448] hover:bg-[#F0FDF4] flex items-center gap-3 transition-colors border-b border-gray-50"
                                         >
                                             <span className="text-base">{activeMsg.isPinned ? '📍' : '📌'}</span>
                                             {activeMsg.isPinned ? 'Unpin' : 'Pin Message'}
