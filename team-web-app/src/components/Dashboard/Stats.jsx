@@ -5,7 +5,7 @@ const Stats = ({ stats, loading }) => {
     const totalRequests = Object.values(stats).reduce((acc, curr) => acc + (typeof curr === 'number' ? curr : 0), 0);
 
     const cards = [
-        { label: 'Total', value: totalRequests, color: 'text-slate-800', bg: 'bg-slate-800', icon: '📁' },
+        { label: 'Total', value: totalRequests, color: 'text-slate-800', bg: 'bg-green-300', icon: '📁' },
         { label: 'Pending', value: stats['Pending'] || 0, color: 'text-brand-500', bg: 'bg-brand-500', icon: '⏳' },
         { label: 'Approved', value: stats['Approved'] || 0, color: 'text-brand-400', bg: 'bg-brand-400', icon: '✅' },
         { label: 'Cancelled', value: stats['Cancelled'] || 0, color: 'text-rose-500', bg: 'bg-rose-500', icon: '❌' }
