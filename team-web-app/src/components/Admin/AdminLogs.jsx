@@ -98,7 +98,7 @@ const AdminLogs = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div className="flex flex-1 gap-4 max-w-2xl">
                     <div className="relative group flex-1">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#EAE0CF]/60 group-focus-within:text-[#EAE0CF] transition-colors">🔍</span>
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-[#EAE0CF]/60 group-focus-within:text-[#EAE0CF] transition-colors">🔍</span>
                         <input
                             type="text"
                             placeholder="Search by Request No, Name, or Query..."

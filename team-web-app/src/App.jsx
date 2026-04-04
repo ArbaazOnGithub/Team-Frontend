@@ -731,7 +731,7 @@ function App() {
 
             <div className="flex items-center gap-4 mb-8">
               <div className="relative flex-1 group">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#547792]/50 group-focus-within:text-[#EAE0CF] transition-colors">🔍</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-[#547792]/50 group-focus-within:text-[#EAE0CF] transition-colors">🔍</span>
                 <input
                   type="text"
                   placeholder="Search queries..."

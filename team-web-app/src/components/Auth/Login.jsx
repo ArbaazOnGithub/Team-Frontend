@@ -15,7 +15,7 @@ const Login = ({
     return (
         <div className="space-y-4">
             <div className="relative group">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg opacity-40 group-focus-within:opacity-100 transition-opacity">🏢</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-lg opacity-40 group-focus-within:opacity-100 transition-opacity">🏢</span>
                 <input
                     type="text"
                     placeholder="Company ID"
@@ -26,7 +26,7 @@ const Login = ({
             </div>
 
             <div className="relative group">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg opacity-40 group-focus-within:opacity-100 transition-opacity">📱</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-lg opacity-40 group-focus-within:opacity-100 transition-opacity">📱</span>
                 <input
                     type="tel"
                     placeholder="Mobile Number"
@@ -38,7 +38,7 @@ const Login = ({
             </div>
 
             <div className="relative group">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg opacity-40 group-focus-within:opacity-100 transition-opacity">🔑</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-lg opacity-40 group-focus-within:opacity-100 transition-opacity">🔑</span>
                 <input
                     type="password"
                     placeholder="Password"
@@ -72,7 +72,7 @@ const Login = ({
                 <button
                     onClick={handleLogin}
                     disabled={loading}
-                    className="flex-1 py-4 bg-brand-500 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs btn-premium shadow-xl shadow-brand-500/30"
+                    className="flex-1 py-3 bg-brand-500 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs btn-premium"
                 >
                     {loading ? "Authenticating..." : "Login Now"}
                 </button>

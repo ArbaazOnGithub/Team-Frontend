@@ -306,7 +306,7 @@ const AdminDashboard = ({ onBack }) => {
                             {/* Search and Stats Grid for Users */}
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                                 <div className="relative group flex-1 max-w-md">
-                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#547792]/50 group-focus-within:text-[#EAE0CF] transition-colors">🔍</span>
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-[#547792]/50 group-focus-within:text-[#EAE0CF] transition-colors">🔍</span>
                                     <input
                                         type="text"
                                         placeholder="Search by name, email, or mobile..."
