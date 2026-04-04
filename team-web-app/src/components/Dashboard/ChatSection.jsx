@@ -232,7 +232,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
 
                         {/* Input Area */}
                         <form onSubmit={handleSend} className="p-6 bg-[#1b2a3a] border-t border-white/10">
-                            <div className="relative group flex items-center gap-2">
+                            <div className="flex items-center gap-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-[1.5rem] p-1.5 pl-3 focus-within:border-[#94B4C1]/50 focus-within:ring-4 focus-within:ring-[#94B4C1]/5 transition-all shadow-inner group">
                                 <input
                                     type="file"
                                     ref={fileInputRef}
@@ -244,26 +244,29 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                     type="button"
                                     disabled={uploading}
                                     onClick={() => fileInputRef.current.click()}
-                                    className="p-3 bg-white/5 text-[#94B4C1] rounded-xl hover:bg-white/10 transition-all border border-white/10 disabled:opacity-50"
+                                    className="p-2 text-[#94B4C1] hover:bg-white/5 rounded-xl transition-all disabled:opacity-50"
+                                    title="Attach file"
                                 >
                                     {uploading ? "⏳" : "📎"}
                                 </button>
-                                <div className="relative flex-1">
-                                    <input
-                                        type="text"
-                                        placeholder="Type your message..."
-                                        value={newMessage}
-                                        onChange={(e) => setNewMessage(e.target.value)}
-                                        className="input-premium py-4 pr-14 bg-[#547792]/30 border-[#547792]/10 focus:bg-[#547792]/50"
-                                    />
-                                    <button
-                                        type="submit"
-                                        disabled={!newMessage.trim() || uploading}
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-[#94B4C1] text-[#213448] rounded-xl shadow-lg shadow-white/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-0"
-                                    >
-                                        🚀
-                                    </button>
-                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Type your message..."
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    className="flex-1 bg-transparent border-none focus:ring-0 text-sm py-2.5 text-[#EAE0CF] placeholder:text-white/20 outline-none"
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={!newMessage.trim() || uploading}
+                                    className={`p-3 rounded-xl transition-all duration-300 flex items-center justify-center ${
+                                        newMessage.trim() 
+                                        ? 'bg-[#94B4C1] text-[#213448] shadow-lg shadow-white/20 scale-100' 
+                                        : 'bg-white/5 text-white/50 scale-95 opacity-30 shadow-none'
+                                    }`}
+                                >
+                                    <span className={newMessage.trim() ? "animate-pulse" : ""}>🚀</span>
+                                </button>
                             </div>
                         </form>
 
