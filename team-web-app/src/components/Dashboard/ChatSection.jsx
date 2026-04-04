@@ -105,7 +105,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                 </p>
                                 <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
                                     {pinnedMessages.map(msg => (
-                                        <div key={msg._id} className="bg-black/30 backdrop-blur-md p-2 rounded-lg border border-white/10 text-xs shadow-lg shadow-black/20 flex justify-between items-start gap-3">
+                                        <div key={msg._id} className="bg-black/30 backdrop-blur-md p-2 rounded-lg border border-white/10 text-xs shadow-lg shadow-brand-400/10 flex justify-between items-start gap-3">
                                             <p className="text-[#EAE0CF] leading-snug"><span className="font-bold">{msg.user?.name}:</span> {msg.content}</p>
                                             <button onClick={() => onTogglePin(msg._id)} className="text-[10px] opacity-40 hover:opacity-100 transition-opacity whitespace-nowrap">📍</button>
                                         </div>
@@ -145,8 +145,8 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                 <div className="space-y-1">
                                                     {!isMe && <p className="text-[10px] font-bold text-[#EAE0CF] ml-1">{msg.user?.name}</p>}
                                                     <div className={`p-4 rounded-2xl text-sm leading-relaxed relative group backdrop-blur-md shadow-lg ${isMe
-                                                        ? 'bg-[#94B4C1]/90 text-[#213448] rounded-tr-none shadow-black/10'
-                                                        : 'bg-[#2e435a]/80 text-[#EAE0CF] border border-white/10 rounded-tl-none shadow-black/20'
+                                                        ? 'bg-[#94B4C1]/90 text-[#213448] rounded-tr-none shadow-white/20'
+                                                        : 'bg-[#2e435a]/80 text-[#EAE0CF] border border-white/10 rounded-tl-none shadow-brand-400/10'
                                                         }`}>
                                                         {msg.fileUrl ? (
                                                             <div className="space-y-2">
@@ -254,12 +254,12 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                         placeholder="Type your message..."
                                         value={newMessage}
                                         onChange={(e) => setNewMessage(e.target.value)}
-                                        className="input-premium py-4 pr-14 bg-[#547792]/20 border-[#547792]/20 focus:bg-white"
+                                        className="input-premium py-4 pr-14 bg-[#547792]/30 border-[#547792]/10 focus:bg-[#547792]/50"
                                     />
                                     <button
                                         type="submit"
                                         disabled={!newMessage.trim() || uploading}
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-[#94B4C1] text-[#213448] rounded-xl shadow-lg shadow-[#94B4C1]/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-[#94B4C1] text-[#213448] rounded-xl shadow-lg shadow-white/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-0"
                                     >
                                         🚀
                                     </button>

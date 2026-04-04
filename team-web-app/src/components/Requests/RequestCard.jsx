@@ -94,7 +94,7 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                 )}
 
                 {(req.comment || (req.actionBy && req.status !== 'Pending')) && (
-                    <div className={`mt-6 p-4 rounded-2xl border backdrop-blur-md shadow-lg shadow-black/20 ${req.status === 'Cancelled' ? 'bg-rose-500/10 border-rose-500/20' : 'bg-black/20 border-white/10'}`}>
+                    <div className={`mt-6 p-4 rounded-2xl border backdrop-blur-md shadow-lg shadow-white/10 ${req.status === 'Cancelled' ? 'bg-rose-500/10 border-rose-500/20' : 'bg-black/20 border-white/10'}`}>
                         <div className="flex items-center justify-between mb-2">
                              <p className={`text-[9px] font-black uppercase tracking-widest ${req.status === 'Cancelled' ? 'text-rose-500' : 'text-brand-400'}`}>
                                 {req.status === 'Cancelled' ? 'Rejection Reason' : 'Admin Resolution'}
