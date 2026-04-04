@@ -13,7 +13,7 @@
 
 @layer base {
   body {
-    @apply bg-[#213448] text-[#EAE0CF] antialiased selection:bg-[#547792] selection:text-white font-sans;
+    @apply bg-[#121d28] text-[#EAE0CF] antialiased selection:bg-[#547792] selection:text-white font-sans;
   }
 }
 

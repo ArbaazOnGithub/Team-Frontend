@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { getImageUrl } from '../../services/api';
+import { motion } from 'framer-motion';
 
 const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => {
     const [isActioning, setIsActioning] = useState(false);

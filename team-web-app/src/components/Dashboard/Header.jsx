@@ -63,7 +63,7 @@ const Header = ({ user, handleLogout, setView }) => {
     const unreadCount = notifications.filter(n => !n.isRead).length;
 
     return (
-        <header className="glass bg-[#1b2a3a]/90 px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/10">
+        <header className="glass bg-[#25394E]/90 px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/10">
             <div className="flex items-center gap-2">
                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
                     <img src={logo} alt="Logo" className="w-7 h-7 object-contain" />
