@@ -35,7 +35,7 @@
   }
 
   .input-premium {
-    @apply w-full p-4 bg-black/20 border border-white/10 rounded-2xl transition-all duration-300 focus:outline-none focus:border-[#547792] focus:bg-black/30 focus:ring-8 focus:ring-[#547792]/5 placeholder:text-white/20 shadow-sm text-white;
+    @apply w-full p-4 bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl transition-all duration-300 focus:outline-none focus:border-[#94B4C1]/50 focus:bg-black/40 focus:ring-4 focus:ring-[#94B4C1]/10 placeholder:text-white/20 shadow-inner text-[#EAE0CF];
   }
   
   .card-highlight {

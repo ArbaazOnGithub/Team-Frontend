@@ -77,7 +77,7 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
                                 type="date"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
-                                className="input-premium py-2 bg-black/20 border-[#547792]/30"
+                                className="input-premium py-2"
                             />
                         </div>
                         <div className="space-y-1">
@@ -86,7 +86,7 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
                                 type="date"
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
-                                className="input-premium py-2 bg-black/20 border-[#547792]/30"
+                                className="input-premium py-2"
                             />
                         </div>
                     </div>
@@ -114,7 +114,7 @@ const RequestForm = ({ query, setQuery, submitRequest, loading, requestType, set
                     placeholder={requestType === 'General' ? "How can we help you today?" : "Reason for leave..."}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="input-premium min-h-24 text-white placeholder:text-white/20 border-dashed border-white/10 focus:bg-white/5"
+                    className="input-premium min-h-24"
                     maxLength={1000}
                 />
                 
