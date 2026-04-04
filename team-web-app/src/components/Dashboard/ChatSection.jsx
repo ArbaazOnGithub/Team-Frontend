@@ -51,10 +51,10 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
         setUploading(true);
         try {
             const data = await api.uploadChatMessageFile(file);
-            onSendMessage({ 
-                content: file.name, 
-                fileUrl: data.fileUrl, 
-                fileType: data.fileType 
+            onSendMessage({
+                content: file.name,
+                fileUrl: data.fileUrl,
+                fileType: data.fileType
             });
             toast.success("File shared!");
         } catch (err) {
@@ -105,7 +105,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                 </p>
                                 <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
                                     {pinnedMessages.map(msg => (
-                                        <div key={msg._id} className="bg-black/20 p-2 rounded-lg border border-white/5 text-xs shadow-sm flex justify-between items-start gap-3">
+                                        <div key={msg._id} className="bg-black/30 backdrop-blur-md p-2 rounded-lg border border-white/10 text-xs shadow-lg shadow-black/20 flex justify-between items-start gap-3">
                                             <p className="text-[#EAE0CF] leading-snug"><span className="font-bold">{msg.user?.name}:</span> {msg.content}</p>
                                             <button onClick={() => onTogglePin(msg._id)} className="text-[10px] opacity-40 hover:opacity-100 transition-opacity whitespace-nowrap">📍</button>
                                         </div>
@@ -144,23 +144,23 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                                 />
                                                 <div className="space-y-1">
                                                     {!isMe && <p className="text-[10px] font-bold text-[#EAE0CF] ml-1">{msg.user?.name}</p>}
-                                                    <div className={`p-4 rounded-2xl text-sm leading-relaxed relative group ${isMe
-                                                        ? 'bg-[#94B4C1] text-[#213448] rounded-tr-none'
-                                                        : 'bg-[#2e435a] text-[#EAE0CF] border border-white/5 rounded-tl-none shadow-sm'
+                                                    <div className={`p-4 rounded-2xl text-sm leading-relaxed relative group backdrop-blur-md shadow-lg ${isMe
+                                                        ? 'bg-[#94B4C1]/90 text-[#213448] rounded-tr-none shadow-black/10'
+                                                        : 'bg-[#2e435a]/80 text-[#EAE0CF] border border-white/10 rounded-tl-none shadow-black/20'
                                                         }`}>
                                                         {msg.fileUrl ? (
                                                             <div className="space-y-2">
                                                                 {msg.fileType === 'image' ? (
-                                                                    <img 
-                                                                        src={api.getImageUrl(msg.fileUrl)} 
+                                                                    <img
+                                                                        src={api.getImageUrl(msg.fileUrl)}
                                                                         className="max-w-full rounded-lg border border-white/5 shadow-inner cursor-pointer hover:scale-[1.02] transition-transform"
-                                                                        alt="shared" 
+                                                                        alt="shared"
                                                                         onClick={() => window.open(api.getImageUrl(msg.fileUrl), '_blank')}
                                                                     />
                                                                 ) : (
-                                                                    <a 
-                                                                        href={api.getImageUrl(msg.fileUrl)} 
-                                                                        target="_blank" 
+                                                                    <a
+                                                                        href={api.getImageUrl(msg.fileUrl)}
+                                                                        target="_blank"
                                                                         rel="noreferrer"
                                                                         className={`flex items-center gap-3 p-3 rounded-xl border ${isMe ? 'bg-black/20 border-white/5' : 'bg-black/40 border-white/5'} hover:bg-opacity-80 transition-all`}
                                                                     >
@@ -233,14 +233,14 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                         {/* Input Area */}
                         <form onSubmit={handleSend} className="p-6 bg-[#1b2a3a] border-t border-white/10">
                             <div className="relative group flex items-center gap-2">
-                                <input 
-                                    type="file" 
-                                    ref={fileInputRef} 
-                                    className="hidden" 
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    className="hidden"
                                     onChange={handleFileChange}
                                     accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx"
                                 />
-                                <button 
+                                <button
                                     type="button"
                                     disabled={uploading}
                                     onClick={() => fileInputRef.current.click()}
@@ -254,7 +254,7 @@ const ChatSection = ({ isOpen, onClose, user, token, messages, users, onSendMess
                                         placeholder="Type your message..."
                                         value={newMessage}
                                         onChange={(e) => setNewMessage(e.target.value)}
-                                        className="input-premium py-4 pr-14 bg-[#F8FAF9] border-[#547792]/20 focus:bg-white"
+                                        className="input-premium py-4 pr-14 bg-[#547792]/20 border-[#547792]/20 focus:bg-white"
                                     />
                                     <button
                                         type="submit"
