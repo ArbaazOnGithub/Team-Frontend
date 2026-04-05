@@ -108,6 +108,7 @@ function App() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
   const isSubmittingRef = useRef(false);
+  const socketRef = useRef(null);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -136,6 +137,7 @@ function App() {
     let socket = null;
     if (token && user) {
       socket = io(api.BACKEND_URL, { auth: { token } });
+      socketRef.current = socket;
       socket.on("connect", () => console.log("Connected to Socket"));
       socket.on("new_request", (data) => {
         if (['admin', 'superadmin'].includes(user.role) || data.user._id === user._id) {
@@ -197,7 +199,10 @@ function App() {
         setChatMessages(prev => prev.filter(m => m._id !== messageId));
       });
     }
-    return () => { if (socket) socket.disconnect(); };
+    return () => {
+      if (socket) socket.disconnect();
+      socketRef.current = null;
+    };
   }, [token, user]);
 
   // --- INITIAL DATA FETCH ---
@@ -540,8 +545,9 @@ function App() {
   };
 
   const handleSendMessage = (content) => {
-    const socket = io(api.BACKEND_URL, { auth: { token } });
-    socket.emit('send_message', content);
+    if (socketRef.current) {
+      socketRef.current.emit('send_message', content);
+    }
   };
 
   const handleTogglePinMessage = async (id) => {
@@ -553,8 +559,9 @@ function App() {
   };
 
   const handleMarkRead = (messageId) => {
-    const socket = io(api.BACKEND_URL, { auth: { token } });
-    socket.emit('mark_read', messageId);
+    if (socketRef.current) {
+      socketRef.current.emit('mark_read', messageId);
+    }
   };
 
   const handleDeleteChatMessage = async (messageId) => {
