@@ -8,7 +8,7 @@ export const ForgotPassword = ({ companySlug, setCompanySlug, email, setEmail, l
             <button
                 onClick={handleForgotPassword}
                 disabled={loading}
-                className="w-full p-4 bg-[#EAE0CF] text-white rounded-xl font-bold btn-premium hover:bg-[#EAE0CF]"
+                className="w-full p-4 bg-[#09bfe3] text-[#121d28] rounded-xl font-bold btn-premium hover:bg-[#EAE0CF]"
             >
                 {loading ? "Sending..." : "Send OTP"}
             </button>
@@ -31,7 +31,7 @@ export const ResetPassword = ({ email, otp, setOtp, newPassword, setNewPassword,
             <button
                 onClick={handleResetPassword}
                 disabled={loading}
-                className="w-full p-4 bg-[#EAE0CF] text-white rounded-xl font-bold btn-premium hover:bg-[#EAE0CF]"
+                className="w-full p-4 bg-[#09bfe3] text-[#121d28] rounded-xl font-bold btn-premium "
             >
                 {loading ? "Resetting..." : "Update Password"}
             </button>

@@ -18,7 +18,7 @@ const Register = ({ companySlug, setCompanySlug, name, setName, email, setEmail,
             <button
                 onClick={handleRegister}
                 disabled={loading}
-                className="w-full p-4 bg-[#EAE0CF] text-white rounded-xl font-bold btn-premium hover:bg-[#EAE0CF] hover:shadow-lg"
+                className="w-full p-4 bg-[#09bfe3] text-[#121d28] rounded-xl font-bold btn-premium "
             >
                 {loading ? "Creating Account..." : "Register"}
             </button>
