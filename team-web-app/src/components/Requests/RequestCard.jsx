@@ -112,7 +112,7 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-brand-50">
-                {user.role === "admin" && req.status === "Pending" && (
+                {(user.role === "admin" || user.role === "superadmin") && req.status === "Pending" && (
                     <div className="w-full sm:w-auto">
                         {!isActioning ? (
                             <div className="flex gap-3 w-full">

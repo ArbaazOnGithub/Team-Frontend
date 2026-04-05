@@ -510,6 +510,10 @@ function App() {
   const handleChangeStatus = async (id, newStatus, comment = "") => {
     try {
       await api.updateRequestStatus(id, newStatus, comment);
+      // Optimistically update local state immediately (socket event will also arrive and sync server data)
+      setRequests(prev => prev.map(item =>
+        item._id === id ? { ...item, status: newStatus, comment } : item
+      ));
       toast.success(`Updated to ${newStatus}`);
     }
     catch (err) {
