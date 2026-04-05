@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Login = ({ 
-    companySlug, setCompanySlug, 
-    mobile, setMobile, 
-    password, setPassword, 
-    loading, handleLogin, 
+const Login = ({
+    companySlug, setCompanySlug,
+    mobile, setMobile,
+    password, setPassword,
+    loading, handleLogin,
     setView, resetForms,
     isBiometricSupported,
     hasSavedCredentials,
@@ -72,7 +72,7 @@ const Login = ({
                 <button
                     onClick={handleLogin}
                     disabled={loading}
-                    className="flex-1 py-3 bg-brand-500 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs btn-premium"
+                    className="flex-1 py-3 bg-[#09bfe3] text-[#121d28] rounded-2xl font-black uppercase tracking-[0.2em] text-xs btn-premium"
                 >
                     {loading ? "Authenticating..." : "Login Now"}
                 </button>
@@ -90,14 +90,14 @@ const Login = ({
             </div>
 
             <div className="flex justify-between pt-8 px-2">
-                <button 
-                    onClick={() => { setView("register"); resetForms(); }} 
+                <button
+                    onClick={() => { setView("register"); resetForms(); }}
                     className="text-[10px] font-black uppercase tracking-widest text-brand-500 hover:text-brand-600 transition-colors"
-               >
+                >
                     Create Account
                 </button>
-                <button 
-                    onClick={() => { setView("forgot-password"); resetForms(); }} 
+                <button
+                    onClick={() => { setView("forgot-password"); resetForms(); }}
                     className="text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-brand-500 transition-colors"
                 >
                     Lost Password?
