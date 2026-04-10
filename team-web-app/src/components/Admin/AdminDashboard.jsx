@@ -10,6 +10,8 @@ import {
 import AdminLogs from './AdminLogs';
 import ErrorLogs from './ErrorLogs';
 import CompanyManagement from './CompanyManagement';
+import LeaveCalendar from './LeaveCalendar';
+import AddUserModal from './AddUserModal';
 
 const AdminDashboard = ({ onBack }) => {
     const { token, user: currentUser } = useAuth();
@@ -17,11 +19,12 @@ const AdminDashboard = ({ onBack }) => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [activeTab, setActiveTab] = useState('analytics'); // Default to analytics for Phase 2
+    const [activeTab, setActiveTab] = useState('analytics');
     const [selectedUserForLeave, setSelectedUserForLeave] = useState(null);
     const [newLeaveBalance, setNewLeaveBalance] = useState(0);
     const [leaveReason, setLeaveReason] = useState("");
     const [announcementMsg, setAnnouncementMsg] = useState("");
+    const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
 
     useEffect(() => {
         if (activeTab === 'users') loadUsers();
@@ -163,6 +166,12 @@ const AdminDashboard = ({ onBack }) => {
                                 className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'logs' ? 'bg-[#547792] text-white shadow-lg' : 'text-white/60 hover:text-white'}`}
                             >
                                 Logs
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('calendar')}
+                                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'calendar' ? 'bg-[#547792] text-white shadow-lg' : 'text-white/60 hover:text-white'}`}
+                            >
+                                📅 Leave Calendar
                             </button>
                         {currentUser.role === 'superadmin' && (
                             <>
@@ -328,6 +337,12 @@ const AdminDashboard = ({ onBack }) => {
                                     <p className="text-[#EAE0CF] font-bold uppercase text-[9px] tracking-widest mb-1">Users</p>
                                     <h3 className="text-xl font-black text-[#EAE0CF]">{users.filter(u => u.role === 'user').length}</h3>
                                 </div>
+                                <button
+                                    onClick={() => setIsAddUserModalOpen(true)}
+                                    className="px-6 py-3 rounded-xl bg-[#547792] text-white font-black uppercase tracking-widest text-[10px] hover:bg-[#94B4C1] transition-all flex items-center gap-2 shadow-lg shadow-[#547792]/20"
+                                >
+                                    <span>➕</span> Add Employee
+                                </button>
                             </div>
 
                             {/* Users Table */}
@@ -458,7 +473,16 @@ const AdminDashboard = ({ onBack }) => {
                         >
                             <CompanyManagement />
                         </motion.div>
-                    ) : (
+                    ) : activeTab === 'calendar' ? (
+                        <motion.div
+                            key="calendar-tab"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                        >
+                            <LeaveCalendar />
+                        </motion.div>
+                    ) : activeTab === 'announce' ? (
                         <motion.div
                             key="announce-tab"
                             initial={{ opacity: 0, y: 10 }}
@@ -505,7 +529,7 @@ const AdminDashboard = ({ onBack }) => {
                                 </div>
                             </div>
                         </motion.div>
-                    )}
+                    ) : null}
                 </AnimatePresence>
 
                 {/* Adjust Balance Modal */}
@@ -570,6 +594,12 @@ const AdminDashboard = ({ onBack }) => {
                         </div>
                     )}
                 </AnimatePresence>
+
+                <AddUserModal 
+                    isOpen={isAddUserModalOpen} 
+                    onClose={() => setIsAddUserModalOpen(false)} 
+                    onSuccess={loadUsers} 
+                />
             </div>
         </div>
     );

@@ -89,13 +89,7 @@ const Login = ({
                 )}
             </div>
 
-            <div className="flex justify-between pt-8 px-2">
-                <button
-                    onClick={() => { setView("register"); resetForms(); }}
-                    className="text-[10px] font-black uppercase tracking-widest text-brand-500 hover:text-brand-600 transition-colors"
-                >
-                    Create Account
-                </button>
+            <div className="flex justify-center pt-8 px-2">
                 <button
                     onClick={() => { setView("forgot-password"); resetForms(); }}
                     className="text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-brand-500 transition-colors"

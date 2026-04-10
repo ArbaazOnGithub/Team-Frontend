@@ -65,15 +65,15 @@ const Header = ({ user, handleLogout, setView }) => {
     return (
         <header className="glass bg-[#25394E]/90 px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/10">
             <div className="flex items-center gap-2">
-               <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
+                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
                     <img src={logo} alt="Logo" className="w-7 h-7 object-contain" />
-               </div>
-               <h1
-                   className="text-xl font-black bg-gradient-to-r from-brand-500 to-brand-200 bg-clip-text text-transparent cursor-pointer tracking-tight"
-                   onClick={() => setView('dashboard')}
-               >
-                   TeamQueries <span className="text-[10px] text-brand-300 font-black ml-1">v4.2</span>
-               </h1>
+                </div>
+                <h1
+                    className="text-xl font-black bg-gradient-to-r from-brand-500 to-brand-200 bg-clip-text text-transparent cursor-pointer tracking-tight"
+                    onClick={() => setView('dashboard')}
+                >
+                    TeamQueries <span className="text-[10px] text-brand-300 font-black ml-1">v5.1</span>
+                </h1>
             </div>
 
             <div className="flex items-center gap-3 sm:gap-4">
@@ -178,7 +178,7 @@ const Header = ({ user, handleLogout, setView }) => {
                                 <div className="p-5 border-b border-white/5 bg-white/5">
                                     <div className="font-black text-brand-300 tracking-tight">{user.name}</div>
                                     <div className="text-[10px] text-brand-200 font-bold uppercase tracking-widest mt-0.5">{user.role}</div>
-                                    
+
                                     <div className="mt-4 flex gap-2">
                                         <div className="flex-1 bg-[#547792] text-white p-2 rounded-xl text-center">
                                             <div className="text-[8px] font-black uppercase tracking-widest opacity-70">Leave Balance</div>
