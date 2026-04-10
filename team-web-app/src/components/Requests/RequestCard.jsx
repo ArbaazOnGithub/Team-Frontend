@@ -116,8 +116,18 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                     <div className="w-full sm:w-auto">
                         {!isActioning ? (
                             <div className="flex gap-3 w-full">
-                                <button className="btn-premium flex-1 px-6 py-2.5 bg-brand-500 text-white text-[10px] font-black uppercase tracking-widest shadow-xl shadow-brand-500/20" onClick={() => { setIsActioning(true); setActionType("Approved"); }}>✔ Approve</button>
-                                <button className="btn-premium flex-1 px-6 py-2.5 bg-white text-rose-500 border border-rose-100 text-[10px] font-black uppercase tracking-widest" onClick={() => { setIsActioning(true); setActionType("Cancelled"); }}>✖ Reject</button>
+                                <button 
+                                    className="btn-premium flex-1 px-6 py-2.5 bg-emerald-100 text-emerald-700 border border-emerald-200 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all shadow-sm" 
+                                    onClick={() => { setIsActioning(true); setActionType("Approved"); }}
+                                >
+                                    ✔ Approve
+                                </button>
+                                <button 
+                                    className="btn-premium flex-1 px-6 py-2.5 bg-rose-100 text-rose-700 border border-rose-200 text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all shadow-sm" 
+                                    onClick={() => { setIsActioning(true); setActionType("Cancelled"); }}
+                                >
+                                    ✖ Reject
+                                </button>
                             </div>
                         ) : (
                             <motion.div 
@@ -134,7 +144,7 @@ const RequestCard = ({ req, user, changeStatus, deleteRequest, formatDate }) => 
                                 ></textarea>
                                 <div className="flex gap-2">
                                     <button
-                                        className={`btn-premium flex-2 px-4 py-2 text-white text-[10px] font-black uppercase tracking-widest ${actionType === 'Cancelled' ? 'bg-rose-500 shadow-rose-500/20' : 'bg-brand-500 shadow-brand-500/20'}`}
+                                        className={`btn-premium flex-2 px-4 py-2 text-white text-[10px] font-black uppercase tracking-widest transition-all ${actionType === 'Cancelled' ? 'bg-rose-600 shadow-rose-600/20 hover:bg-rose-700' : 'bg-emerald-600 shadow-emerald-600/20 hover:bg-emerald-700'}`}
                                         onClick={handleAction}
                                     >
                                         Confirm {actionType === 'Approved' ? 'Approval' : 'Rejection'}

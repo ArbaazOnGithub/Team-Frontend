@@ -3,10 +3,12 @@ import * as api from '../../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import io from 'socket.io-client';
 import logo from '../../assets/logo.png';
+import LeaveCalendar from './LeaveCalendar';
 
 const Header = ({ user, handleLogout, setView }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isNotifOpen, setIsNotifOpen] = useState(false);
+    const [showCalendar, setShowCalendar] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const dropdownRef = useRef(null);
     const notifRef = useRef(null);
@@ -84,6 +86,15 @@ const Header = ({ user, handleLogout, setView }) => {
                     title="Team Chat"
                 >
                     💬
+                </button>
+
+                {/* Calendar Toggle Button */}
+                <button
+                    onClick={() => setShowCalendar(true)}
+                    className="p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 shadow-sm hover:shadow-md transition-all text-xl"
+                    title="Leave Calendar"
+                >
+                    📅
                 </button>
 
                 {/* Notifications Bell */}
@@ -224,6 +235,41 @@ const Header = ({ user, handleLogout, setView }) => {
                         )}
                     </AnimatePresence>
                 </div>
+
+                {/* Global Leave Calendar Modal */}
+                <AnimatePresence>
+                    {showCalendar && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setShowCalendar(false)}
+                                className="absolute inset-0 bg-black/60 backdrop-blur-md"
+                            />
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9, y: 30 }}
+                                className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto scroll-premium bg-[#1b2a3a] rounded-[2.5rem] p-4 md:p-8 shadow-2xl border border-white/10"
+                            >
+                                <div className="flex justify-between items-center mb-6 px-4">
+                                    <div>
+                                        <h2 className="text-2xl font-black text-white">Team Schedule</h2>
+                                        <p className="text-[#547792] text-xs font-bold uppercase tracking-widest mt-1">Global Leave Board</p>
+                                    </div>
+                                    <button 
+                                        onClick={() => setShowCalendar(false)}
+                                        className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-rose-500/20 hover:text-rose-500 transition-all border border-white/10"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                                <LeaveCalendar />
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
             </div>
         </header>
     );

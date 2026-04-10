@@ -10,7 +10,7 @@ import {
 import AdminLogs from './AdminLogs';
 import ErrorLogs from './ErrorLogs';
 import CompanyManagement from './CompanyManagement';
-import LeaveCalendar from './LeaveCalendar';
+import LeaveCalendar from '../Dashboard/LeaveCalendar';
 import AddUserModal from './AddUserModal';
 
 const AdminDashboard = ({ onBack }) => {
