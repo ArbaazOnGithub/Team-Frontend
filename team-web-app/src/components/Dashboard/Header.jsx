@@ -239,7 +239,7 @@ const Header = ({ user, handleLogout, setView }) => {
                 {/* Global Leave Calendar Modal */}
                 <AnimatePresence>
                     {showCalendar && (
-                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4">
+                        <div className="fixed top-[70px] sm:top-[80px] inset-x-0 bottom-0 z-[100] flex items-start justify-center p-2 sm:p-4 overflow-y-auto">
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -248,10 +248,10 @@ const Header = ({ user, handleLogout, setView }) => {
                                 className="absolute inset-0 bg-black/60 backdrop-blur-md"
                             />
                             <motion.div
-                                initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                                initial={{ opacity: 0, scale: 0.9, y: 10 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                                className="relative w-full max-w-5xl max-h-[95vh] flex flex-col bg-[#1b2a3a] rounded-3xl md:rounded-[2.5rem] shadow-2xl border border-white/10 overflow-hidden"
+                                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                                className="relative w-full max-w-4xl max-h-fit flex flex-col bg-[#1b2a3a] rounded-3xl md:rounded-[2.5rem] shadow-2xl border border-white/10 overflow-hidden"
                             >
                                 <div className="flex-none bg-[#1b2a3a]/95 backdrop-blur-md flex justify-between items-center p-5 md:p-8 border-b border-white/5">
                                     <div>

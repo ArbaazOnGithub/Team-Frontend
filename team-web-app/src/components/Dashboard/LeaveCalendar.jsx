@@ -82,7 +82,7 @@ const LeaveCalendar = ({ showHeader = true }) => {
 
         // Padding for first day
         for (let i = 0; i < firstDay; i++) {
-            cells.push(<div key={`empty-${i}`} className="h-24 md:h-32 bg-transparent"></div>);
+            cells.push(<div key={`empty-${i}`} className="h-20 md:h-24 bg-transparent"></div>);
         }
 
         for (let d = 1; d <= totalDays; d++) {
@@ -109,11 +109,11 @@ const LeaveCalendar = ({ showHeader = true }) => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: d * 0.01 }}
                     onClick={() => setSelectedDay({ day: d, requests: dayRequests, date: currDateObj })}
-                    className={`h-24 md:h-32 glass-card bg-[#1b2a3a]/20 border-white/5 p-1.5 md:p-2 overflow-hidden relative hover:bg-[#1b2a3a]/40 transition-colors group cursor-pointer ${
+                    className={`h-20 md:h-24 glass-card bg-[#1b2a3a]/20 border-white/5 p-1 md:p-1.5 overflow-hidden relative hover:bg-[#1b2a3a]/40 transition-colors group cursor-pointer ${
                         new Date().toDateString() === currDateObj.toDateString() ? 'border-brand-500/50 bg-brand-500/5' : ''
                     }`}
                 >
-                    <span className={`text-[10px] md:text-xs font-black ${
+                    <span className={`text-[9px] md:text-xs font-black ${
                         new Date().toDateString() === currDateObj.toDateString() ? 'text-brand-400' : 'text-slate-500'
                     }`}>
                         {d}
