@@ -65,24 +65,24 @@ const Header = ({ user, handleLogout, setView }) => {
     const unreadCount = notifications.filter(n => !n.isRead).length;
 
     return (
-        <header className="glass bg-[#25394E]/90 px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/10">
+        <header className="glass bg-[#25394E]/90 px-4 py-3 sm:px-6 sm:py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/10">
             <div className="flex items-center gap-2">
                 <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
                     <img src={logo} alt="Logo" className="w-7 h-7 object-contain" />
                 </div>
                 <h1
-                    className="text-xl font-black bg-gradient-to-r from-brand-500 to-brand-200 bg-clip-text text-transparent cursor-pointer tracking-tight"
+                    className="text-lg sm:text-xl font-black bg-gradient-to-r from-brand-500 to-brand-200 bg-clip-text text-transparent cursor-pointer tracking-tight"
                     onClick={() => setView('dashboard')}
                 >
-                    TeamQueries <span className="text-[10px] text-brand-300 font-black ml-1">v5.1</span>
+                    TeamQueries <span className="text-[10px] text-brand-300 font-black ml-1 hidden sm:inline-block">v5.1</span>
                 </h1>
             </div>
 
-            <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
                 {/* Chat Toggle Button */}
                 <button
                     onClick={() => window.dispatchEvent(new Event('open-chat'))}
-                    className="p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 shadow-sm hover:shadow-md transition-all text-xl"
+                    className="p-2 sm:p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 shadow-sm hover:shadow-md transition-all text-lg sm:text-xl"
                     title="Team Chat"
                 >
                     💬
@@ -91,7 +91,7 @@ const Header = ({ user, handleLogout, setView }) => {
                 {/* Calendar Toggle Button */}
                 <button
                     onClick={() => setShowCalendar(true)}
-                    className="p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 shadow-sm hover:shadow-md transition-all text-xl"
+                    className="p-2 sm:p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 shadow-sm hover:shadow-md transition-all text-lg sm:text-xl"
                     title="Leave Calendar"
                 >
                     📅
@@ -104,11 +104,11 @@ const Header = ({ user, handleLogout, setView }) => {
                             setIsNotifOpen(!isNotifOpen);
                             if (!isNotifOpen) handleMarkRead();
                         }}
-                        className="p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 shadow-sm hover:shadow-md transition-all text-xl relative"
+                        className="p-2 sm:p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 shadow-sm hover:shadow-md transition-all text-lg sm:text-xl relative"
                     >
                         🔔
                         {unreadCount > 0 && (
-                            <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-full shadow-lg shadow-rose-500/30 animate-pulse">
+                            <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] font-black w-3.5 h-3.5 sm:w-4 sm:h-4 flex items-center justify-center rounded-full shadow-lg shadow-rose-500/30 animate-pulse">
                                 {unreadCount}
                             </span>
                         )}
@@ -157,17 +157,17 @@ const Header = ({ user, handleLogout, setView }) => {
                 <div className="relative" ref={dropdownRef}>
                     {/* User Profile Trigger */}
                     <div
-                        className="flex items-center gap-3 cursor-pointer group/profile p-1.5 rounded-2xl hover:bg-white/5 transition-all"
+                        className="flex items-center gap-2 sm:gap-3 cursor-pointer group/profile p-1 sm:p-1.5 rounded-2xl hover:bg-white/5 transition-all"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
                         <div className="relative">
                             <img
                                 src={api.getImageUrl(user.profileImage)}
                                 onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=68BA7F&color=fff"}
-                                className="w-10 h-10 rounded-2xl object-cover border-2 border-white/10 shadow-md transition-all group-hover/profile:scale-105 group-hover/profile:shadow-lg"
+                                className="w-8 h-8 sm:w-10 sm:h-10 rounded-2xl object-cover border-2 border-white/10 shadow-md transition-all group-hover/profile:scale-105 group-hover/profile:shadow-lg"
                                 alt="Profile"
                             />
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-[#1b2a3a] rounded-full shadow-sm"></div>
+                            <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-emerald-500 border-2 border-[#1b2a3a] rounded-full shadow-sm"></div>
                         </div>
                         <div className="hidden md:block mr-2 text-left">
                             <div className="font-black text-sm text-brand-500 leading-tight tracking-tight flex items-center gap-1">
@@ -251,16 +251,16 @@ const Header = ({ user, handleLogout, setView }) => {
                                 initial={{ opacity: 0, scale: 0.9, y: 30 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                                className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto scroll-premium bg-[#1b2a3a] rounded-[2.5rem] p-4 md:p-8 shadow-2xl border border-white/10"
+                                className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto scroll-premium bg-[#1b2a3a] rounded-3xl md:rounded-[2.5rem] p-3 md:p-8 shadow-2xl border border-white/10"
                             >
-                                <div className="flex justify-between items-center mb-6 px-4">
+                                <div className="flex justify-between items-center mb-6 px-2 md:px-4">
                                     <div>
-                                        <h2 className="text-2xl font-black text-white">Team Schedule</h2>
-                                        <p className="text-[#547792] text-xs font-bold uppercase tracking-widest mt-1">Global Leave Board</p>
+                                        <h2 className="text-xl md:text-2xl font-black text-white">Team Schedule</h2>
+                                        <p className="text-[#547792] text-[10px] md:text-xs font-bold uppercase tracking-widest mt-1">Global Leave Board</p>
                                     </div>
                                     <button 
                                         onClick={() => setShowCalendar(false)}
-                                        className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-rose-500/20 hover:text-rose-500 transition-all border border-white/10"
+                                        className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-rose-500/20 hover:text-rose-500 transition-all border border-white/10"
                                     >
                                         ✕
                                     </button>

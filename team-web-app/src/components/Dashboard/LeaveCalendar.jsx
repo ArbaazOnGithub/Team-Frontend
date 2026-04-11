@@ -7,6 +7,7 @@ const LeaveCalendar = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedDay, setSelectedDay] = useState(null);
 
     useEffect(() => {
         loadData();
@@ -81,7 +82,7 @@ const LeaveCalendar = () => {
 
         // Padding for first day
         for (let i = 0; i < firstDay; i++) {
-            cells.push(<div key={`empty-${i}`} className="h-32 bg-transparent"></div>);
+            cells.push(<div key={`empty-${i}`} className="h-24 md:h-32 bg-transparent"></div>);
         }
 
         for (let d = 1; d <= totalDays; d++) {
@@ -107,11 +108,12 @@ const LeaveCalendar = () => {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: d * 0.01 }}
-                    className={`h-32 glass-card bg-[#1b2a3a]/20 border-white/5 p-2 overflow-y-auto relative hover:bg-[#1b2a3a]/40 transition-colors group ${
+                    onClick={() => setSelectedDay({ day: d, requests: dayRequests, date: currDateObj })}
+                    className={`h-24 md:h-32 glass-card bg-[#1b2a3a]/20 border-white/5 p-1.5 md:p-2 overflow-hidden relative hover:bg-[#1b2a3a]/40 transition-colors group cursor-pointer ${
                         new Date().toDateString() === currDateObj.toDateString() ? 'border-brand-500/50 bg-brand-500/5' : ''
                     }`}
                 >
-                    <span className={`text-xs font-black ${
+                    <span className={`text-[10px] md:text-xs font-black ${
                         new Date().toDateString() === currDateObj.toDateString() ? 'text-brand-400' : 'text-slate-500'
                     }`}>
                         {d}
@@ -133,9 +135,9 @@ const LeaveCalendar = () => {
                         ))}
                     </div>
 
-                    {dayRequests.length > 3 && (
-                        <div className="absolute bottom-1 right-2 text-[8px] font-black text-slate-600">
-                            +{dayRequests.length - 3} more
+                    {dayRequests.length > 2 && (
+                        <div className="absolute bottom-1 right-2 text-[7px] md:text-[8px] font-black text-slate-600">
+                            +{dayRequests.length - 2} more
                         </div>
                     )}
                 </motion.div>
@@ -146,20 +148,20 @@ const LeaveCalendar = () => {
     };
 
     return (
-        <div className="glass-card bg-[#1b2a3a]/40 p-8 border-white/10">
+        <div className="glass-card bg-[#1b2a3a]/40 p-4 md:p-8 border-white/10 relative">
             {renderHeader()}
             {loading ? (
                 <div className="h-96 flex items-center justify-center text-white/40 font-black animate-pulse">
                     LOADING CALENDAR DATA...
                 </div>
             ) : (
-                <>
+                <div className="relative">
                     {renderDays()}
                     {renderCells()}
-                </>
+                </div>
             )}
 
-            <div className="mt-8 flex gap-6 text-[10px] font-black uppercase tracking-widest border-t border-white/5 pt-6">
+            <div className="mt-8 flex flex-wrap gap-4 md:gap-6 text-[10px] font-black uppercase tracking-widest border-t border-white/5 pt-6">
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-emerald-500/20 border border-emerald-500/30 rounded"></div>
                     <span className="text-emerald-500">Approved</span>
@@ -173,6 +175,73 @@ const LeaveCalendar = () => {
                     <span className="text-rose-500">Canceled</span>
                 </div>
             </div>
+
+            {/* Day Detail Popup */}
+            <AnimatePresence>
+                {selectedDay && (
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setSelectedDay(null)}
+                            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                        />
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="relative w-full max-w-sm glass-card bg-[#1b2a3a] p-6 shadow-2xl border border-white/10"
+                        >
+                            <div className="flex justify-between items-center mb-6">
+                                <div>
+                                    <h3 className="text-xl font-black text-white">
+                                        {selectedDay.day} {currentDate.toLocaleString('default', { month: 'long' })}
+                                    </h3>
+                                    <p className="text-[10px] text-brand-400 font-black uppercase tracking-widest mt-1">Leave Details</p>
+                                </div>
+                                <button 
+                                    onClick={() => setSelectedDay(null)}
+                                    className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-white hover:bg-rose-500/20 transition-all"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div className="space-y-3 max-h-64 overflow-y-auto pr-2 scroll-premium">
+                                {selectedDay.requests.length > 0 ? (
+                                    selectedDay.requests.map((req, idx) => (
+                                        <div key={idx} className="p-3 bg-white/5 rounded-2xl border border-white/5">
+                                            <div className="flex items-center justify-between mb-2">
+                                                <span className="text-xs font-black text-white">{req.user?.name}</span>
+                                                <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${
+                                                    req.status === 'Approved' ? 'bg-emerald-500/20 text-emerald-400' :
+                                                    req.status === 'Pending' ? 'bg-amber-500/20 text-amber-400' :
+                                                    'bg-rose-500/20 text-rose-400'
+                                                }`}>
+                                                    {req.status}
+                                                </span>
+                                            </div>
+                                            <p className="text-[10px] text-white/50 leading-relaxed italic">"{req.query}"</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-6 text-white/20 font-bold text-xs">
+                                        No leave records for this day
+                                    </div>
+                                )}
+                            </div>
+
+                            <button 
+                                onClick={() => setSelectedDay(null)}
+                                className="w-full mt-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/10"
+                            >
+                                Close Details
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
