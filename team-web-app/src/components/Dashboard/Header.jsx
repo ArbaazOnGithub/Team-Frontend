@@ -239,7 +239,7 @@ const Header = ({ user, handleLogout, setView }) => {
                 {/* Global Leave Calendar Modal */}
                 <AnimatePresence>
                     {showCalendar && (
-                        <div className="fixed inset-0 z-[100] flex items-start justify-center p-2 sm:p-4 overflow-y-auto pt-10 sm:pt-4">
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4">
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -251,9 +251,9 @@ const Header = ({ user, handleLogout, setView }) => {
                                 initial={{ opacity: 0, scale: 0.9, y: 30 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                                className="relative w-full max-w-5xl bg-[#1b2a3a] rounded-3xl md:rounded-[2.5rem] shadow-2xl border border-white/10 overflow-hidden"
+                                className="relative w-full max-w-5xl max-h-[95vh] flex flex-col bg-[#1b2a3a] rounded-3xl md:rounded-[2.5rem] shadow-2xl border border-white/10 overflow-hidden"
                             >
-                                <div className="sticky top-0 z-20 bg-[#1b2a3a]/95 backdrop-blur-md flex justify-between items-center p-5 md:p-8 border-b border-white/5">
+                                <div className="flex-none bg-[#1b2a3a]/95 backdrop-blur-md flex justify-between items-center p-5 md:p-8 border-b border-white/5">
                                     <div>
                                         <h2 className="text-xl md:text-2xl font-black text-white">Team Schedule</h2>
                                         <p className="text-[#547792] text-[10px] md:text-xs font-bold uppercase tracking-widest mt-1">Global Leave Board</p>
@@ -265,8 +265,8 @@ const Header = ({ user, handleLogout, setView }) => {
                                         ✕
                                     </button>
                                 </div>
-                                <div className="p-4 md:p-8 pt-6">
-                                    <LeaveCalendar />
+                                <div className="flex-1 overflow-y-auto scroll-premium p-4 md:p-8 pt-6">
+                                    <LeaveCalendar showHeader={true} />
                                 </div>
                             </motion.div>
                         </div>

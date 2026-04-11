@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import * as api from '../../services/api';
 import toast from 'react-hot-toast';
 
-const LeaveCalendar = () => {
+const LeaveCalendar = ({ showHeader = true }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -149,7 +149,7 @@ const LeaveCalendar = () => {
 
     return (
         <div className="relative">
-            {renderHeader()}
+            {showHeader && renderHeader()}
             {loading ? (
                 <div className="h-96 flex items-center justify-center text-white/40 font-black animate-pulse">
                     LOADING CALENDAR DATA...
