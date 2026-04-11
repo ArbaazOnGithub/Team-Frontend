@@ -65,6 +65,7 @@ const Header = ({ user, handleLogout, setView }) => {
     const unreadCount = notifications.filter(n => !n.isRead).length;
 
     return (
+        <>
         <header className="glass bg-[#25394E]/90 px-4 py-3 sm:px-6 sm:py-4 flex justify-between items-center sticky top-0 z-50 border-b border-white/10">
             <div className="flex items-center gap-2">
                 <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
@@ -235,45 +236,46 @@ const Header = ({ user, handleLogout, setView }) => {
                         )}
                     </AnimatePresence>
                 </div>
-
-                {/* Global Leave Calendar Modal */}
-                <AnimatePresence>
-                    {showCalendar && (
-                        <div className="fixed top-[70px] sm:top-[80px] inset-x-0 bottom-0 z-[100] flex items-start justify-center p-2 sm:p-4 overflow-y-auto">
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                onClick={() => setShowCalendar(false)}
-                                className="absolute inset-0 bg-black/60 backdrop-blur-md"
-                            />
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                                className="relative w-full max-w-4xl max-h-fit flex flex-col bg-[#1b2a3a] rounded-3xl md:rounded-[2.5rem] shadow-2xl border border-white/10 overflow-hidden"
-                            >
-                                <div className="flex-none bg-[#1b2a3a]/95 backdrop-blur-md flex justify-between items-center p-5 md:p-8 border-b border-white/5">
-                                    <div>
-                                        <h2 className="text-xl md:text-2xl font-black text-white">Team Schedule</h2>
-                                        <p className="text-[#547792] text-[10px] md:text-xs font-bold uppercase tracking-widest mt-1">Global Leave Board</p>
-                                    </div>
-                                    <button 
-                                        onClick={() => setShowCalendar(false)}
-                                        className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-rose-500/20 hover:text-rose-500 transition-all border border-white/10"
-                                    >
-                                        ✕
-                                    </button>
-                                </div>
-                                <div className="flex-1 overflow-y-auto scroll-premium p-4 md:p-8 pt-6">
-                                    <LeaveCalendar showHeader={true} />
-                                </div>
-                            </motion.div>
-                        </div>
-                    )}
-                </AnimatePresence>
             </div>
         </header>
+
+        {/* Global Leave Calendar Modal */}
+        <AnimatePresence>
+            {showCalendar && (
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowCalendar(false)}
+                        className="absolute inset-0 bg-black/60 backdrop-blur-md"
+                    />
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                        className="relative w-full max-w-4xl max-h-[95vh] flex flex-col bg-[#1b2a3a] rounded-3xl md:rounded-[2.5rem] shadow-2xl border border-white/10 overflow-hidden"
+                    >
+                        <div className="flex-none bg-[#1b2a3a]/95 backdrop-blur-md flex justify-between items-center p-5 md:p-8 border-b border-white/5">
+                            <div>
+                                <h2 className="text-xl md:text-2xl font-black text-white">Team Schedule</h2>
+                                <p className="text-[#547792] text-[10px] md:text-xs font-bold uppercase tracking-widest mt-1">Global Leave Board</p>
+                            </div>
+                            <button 
+                                onClick={() => setShowCalendar(false)}
+                                className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-rose-500/20 hover:text-rose-500 transition-all border border-white/10"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto scroll-premium p-4 md:p-8 pt-6">
+                            <LeaveCalendar showHeader={true} />
+                        </div>
+                    </motion.div>
+                </div>
+            )}
+        </AnimatePresence>
+        </>
     );
 };
 
