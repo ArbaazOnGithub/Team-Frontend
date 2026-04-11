@@ -148,7 +148,7 @@ const LeaveCalendar = () => {
     };
 
     return (
-        <div className="glass-card bg-[#1b2a3a]/40 p-4 md:p-8 border-white/10 relative">
+        <div className="relative">
             {renderHeader()}
             {loading ? (
                 <div className="h-96 flex items-center justify-center text-white/40 font-black animate-pulse">
