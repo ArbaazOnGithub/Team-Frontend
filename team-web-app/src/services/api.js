@@ -30,6 +30,11 @@ api.interceptors.request.use((config) => {
         config.headers['x-team-context'] = teamContext;
     }
 
+    const adminModeContext = localStorage.getItem("team_admin_mode");
+    if (adminModeContext === "true") {
+        config.headers['x-admin-mode'] = 'true';
+    }
+
     return config;
 }, (error) => {
     return Promise.reject(error);

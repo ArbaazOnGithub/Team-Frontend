@@ -7,9 +7,12 @@ import LeaveCalendar from './LeaveCalendar';
 import { useAuth } from '../../context/AuthContext';
 
 const Header = ({ user, handleLogout, setView }) => {
-    const { activeTeamId, switchTeam } = useAuth();
+    const { activeTeamId, isAdminMode, switchTeam } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isTeamSwitcherOpen, setIsTeamSwitcherOpen] = useState(false);
+
+    // [omitted non-changed code for brevity in instruction, actual replacement below contains full block]
+
     const teamSwitcherRef = useRef(null);
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
@@ -93,12 +96,14 @@ const Header = ({ user, handleLogout, setView }) => {
                             className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
                         >
                             <span className="text-sm font-black text-brand-400 capitalize whitespace-nowrap overflow-hidden max-w-[100px] text-ellipsis">
-                                {user.team?._id === activeTeamId || user.team === activeTeamId ? 'Member' : 'Manager'}
+                                {isAdminMode ? 'Admin' : 'Member'}
                             </span>
                             <span className="text-white/20">|</span>
-                            {/* We show the team name if it was populated, else fallback */}
                             <span className="text-[10px] font-bold text-white/60 uppercase tracking-tighter">
-                                {user.managedTeams.find(t => (t._id || t) === activeTeamId)?.name || 'Default Team'}
+                                {isAdminMode 
+                                    ? (user.managedTeams.find(t => (t._id || t) === activeTeamId)?.name || 'Managed Team')
+                                    : (user.team?.name || 'Primary Team')
+                                }
                             </span>
                             <span className="ml-1 text-[8px] opacity-30 group-hover:opacity-100 transition-opacity">▼</span>
                         </button>
@@ -116,16 +121,16 @@ const Header = ({ user, handleLogout, setView }) => {
                                     {/* Primary Team (Member Mode) */}
                                     <button
                                         onClick={() => {
-                                            switchTeam(user.team?._id || user.team);
+                                            switchTeam(user.team?._id || user.team, false);
                                             setIsTeamSwitcherOpen(false);
                                         }}
-                                        className={`w-full text-left px-4 py-3 hover:bg-white/5 transition-colors flex items-center justify-between group ${activeTeamId === (user.team?._id || user.team) ? 'bg-brand-500/10' : ''}`}
+                                        className={`w-full text-left px-4 py-3 hover:bg-white/5 transition-colors flex items-center justify-between group ${!isAdminMode ? 'bg-brand-500/10' : ''}`}
                                     >
                                         <div>
                                             <div className="text-xs font-black text-white group-hover:text-brand-500 transition-colors">Member Role</div>
                                             <div className="text-[9px] text-white/40 font-bold uppercase tracking-tight">Primary Team Chat/Requests</div>
                                         </div>
-                                        {activeTeamId === (user.team?._id || user.team) && <span className="text-emerald-500 font-bold">✓</span>}
+                                        {!isAdminMode && <span className="text-emerald-500 font-bold">✓</span>}
                                     </button>
 
                                     {/* Managed Teams (Manager Mode) */}
@@ -133,16 +138,16 @@ const Header = ({ user, handleLogout, setView }) => {
                                         <button
                                             key={team._id || team}
                                             onClick={() => {
-                                                switchTeam(team._id || team);
+                                                switchTeam(team._id || team, true);
                                                 setIsTeamSwitcherOpen(false);
                                             }}
-                                            className={`w-full text-left px-4 py-3 hover:bg-white/5 transition-colors border-t border-white/5 flex items-center justify-between group ${activeTeamId === (team._id || team) ? 'bg-brand-500/10' : ''}`}
+                                            className={`w-full text-left px-4 py-3 hover:bg-white/5 transition-colors border-t border-white/5 flex items-center justify-between group ${isAdminMode && activeTeamId === (team._id || team) ? 'bg-brand-500/10' : ''}`}
                                         >
                                             <div>
                                                 <div className="text-xs font-black text-white group-hover:text-brand-500 transition-colors">Admin Role</div>
                                                 <div className="text-[9px] text-white/40 font-bold uppercase tracking-tight">{team.name || 'Managed Department'}</div>
                                             </div>
-                                            {activeTeamId === (team._id || team) && <span className="text-emerald-500 font-bold">✓</span>}
+                                            {isAdminMode && activeTeamId === (team._id || team) && <span className="text-emerald-500 font-bold">✓</span>}
                                         </button>
                                     ))}
                                 </motion.div>
