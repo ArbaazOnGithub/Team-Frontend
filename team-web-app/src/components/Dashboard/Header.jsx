@@ -4,9 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import io from 'socket.io-client';
 import logo from '../../assets/logo.png';
 import LeaveCalendar from './LeaveCalendar';
+import { useAuth } from '../../context/AuthContext';
 
 const Header = ({ user, handleLogout, setView }) => {
+    const { activeTeamId, switchTeam } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isTeamSwitcherOpen, setIsTeamSwitcherOpen] = useState(false);
+    const teamSwitcherRef = useRef(null);
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
     const [notifications, setNotifications] = useState([]);
@@ -57,6 +61,9 @@ const Header = ({ user, handleLogout, setView }) => {
             if (notifRef.current && !notifRef.current.contains(event.target)) {
                 setIsNotifOpen(false);
             }
+            if (teamSwitcherRef.current && !teamSwitcherRef.current.contains(event.target)) {
+                setIsTeamSwitcherOpen(false);
+            }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -72,11 +79,77 @@ const Header = ({ user, handleLogout, setView }) => {
                     <img src={logo} alt="Logo" className="w-7 h-7 object-contain" />
                 </div>
                 <h1
-                    className="text-lg sm:text-xl font-black bg-gradient-to-r from-brand-500 to-brand-200 bg-clip-text text-transparent cursor-pointer tracking-tight"
+                    className="text-lg sm:text-xl font-black bg-gradient-to-r from-brand-500 to-brand-200 bg-clip-text text-transparent cursor-pointer tracking-tight mr-4"
                     onClick={() => setView('dashboard')}
                 >
-                    TeamQueries <span className="text-[10px] text-brand-300 font-black ml-1 hidden sm:inline-block">v5.1</span>
+                    TeamQueries
                 </h1>
+
+                {/* Team Context Switcher */}
+                {user.managedTeams?.length > 0 && (
+                    <div className="relative" ref={teamSwitcherRef}>
+                        <button
+                            onClick={() => setIsTeamSwitcherOpen(!isTeamSwitcherOpen)}
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
+                        >
+                            <span className="text-sm font-black text-brand-400 capitalize whitespace-nowrap overflow-hidden max-w-[100px] text-ellipsis">
+                                {user.team?._id === activeTeamId || user.team === activeTeamId ? 'Member' : 'Manager'}
+                            </span>
+                            <span className="text-white/20">|</span>
+                            {/* We show the team name if it was populated, else fallback */}
+                            <span className="text-[10px] font-bold text-white/60 uppercase tracking-tighter">
+                                {user.managedTeams.find(t => (t._id || t) === activeTeamId)?.name || 'Default Team'}
+                            </span>
+                            <span className="ml-1 text-[8px] opacity-30 group-hover:opacity-100 transition-opacity">▼</span>
+                        </button>
+
+                        <AnimatePresence>
+                            {isTeamSwitcherOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                                    className="absolute left-0 mt-3 w-64 glass-card bg-[#1b2a3a] border border-white/10 overflow-hidden z-[60] shadow-2xl"
+                                >
+                                    <div className="p-3 bg-white/5 border-b border-white/10 text-[9px] font-black uppercase text-brand-500 tracking-widest">Select Context</div>
+                                    
+                                    {/* Primary Team (Member Mode) */}
+                                    <button
+                                        onClick={() => {
+                                            switchTeam(user.team?._id || user.team);
+                                            setIsTeamSwitcherOpen(false);
+                                        }}
+                                        className={`w-full text-left px-4 py-3 hover:bg-white/5 transition-colors flex items-center justify-between group ${activeTeamId === (user.team?._id || user.team) ? 'bg-brand-500/10' : ''}`}
+                                    >
+                                        <div>
+                                            <div className="text-xs font-black text-white group-hover:text-brand-500 transition-colors">Member Role</div>
+                                            <div className="text-[9px] text-white/40 font-bold uppercase tracking-tight">Primary Team Chat/Requests</div>
+                                        </div>
+                                        {activeTeamId === (user.team?._id || user.team) && <span className="text-emerald-500 font-bold">✓</span>}
+                                    </button>
+
+                                    {/* Managed Teams (Manager Mode) */}
+                                    {user.managedTeams.map(team => (
+                                        <button
+                                            key={team._id || team}
+                                            onClick={() => {
+                                                switchTeam(team._id || team);
+                                                setIsTeamSwitcherOpen(false);
+                                            }}
+                                            className={`w-full text-left px-4 py-3 hover:bg-white/5 transition-colors border-t border-white/5 flex items-center justify-between group ${activeTeamId === (team._id || team) ? 'bg-brand-500/10' : ''}`}
+                                        >
+                                            <div>
+                                                <div className="text-xs font-black text-white group-hover:text-brand-500 transition-colors">Admin Role</div>
+                                                <div className="text-[9px] text-white/40 font-bold uppercase tracking-tight">{team.name || 'Managed Department'}</div>
+                                            </div>
+                                            {activeTeamId === (team._id || team) && <span className="text-emerald-500 font-bold">✓</span>}
+                                        </button>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                )}
             </div>
 
             <div className="flex items-center gap-2 sm:gap-4">

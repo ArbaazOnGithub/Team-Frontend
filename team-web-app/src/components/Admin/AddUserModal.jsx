@@ -13,7 +13,8 @@ const AddUserModal = ({ isOpen, onClose, onSuccess }) => {
         mobile: '',
         password: '',
         companyId: currentUser?.company || '',
-        teamId: currentUser?.team?._id || currentUser?.team || ''
+        teamId: currentUser?.team?._id || currentUser?.team || '',
+        managedTeams: []
     });
     const [teams, setTeams] = useState([]);
     const [image, setImage] = useState(null);
@@ -153,8 +154,35 @@ const AddUserModal = ({ isOpen, onClose, onSuccess }) => {
                                 />
                             </div>
 
+                            </div>
+                            
+                            {/* Managed Teams Selection (SuperAdmin Only) */}
+                            {currentUser?.role === 'superadmin' && (
+                                <div>
+                                    <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 ml-2">Teams to Manage (Admin Access)</label>
+                                    <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto p-3 bg-black/20 rounded-2xl border border-white/5 custom-scrollbar">
+                                        {teams.map(team => (
+                                            <label key={team._id} className="flex items-center gap-2 p-2 hover:bg-white/5 rounded-lg cursor-pointer transition-colors group">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={formData.managedTeams.includes(team._id)}
+                                                    onChange={(e) => {
+                                                        const newManaged = e.target.checked 
+                                                            ? [...formData.managedTeams, team._id]
+                                                            : formData.managedTeams.filter(id => id !== team._id);
+                                                        setFormData({ ...formData, managedTeams: newManaged });
+                                                    }}
+                                                    className="w-4 h-4 rounded border-white/10 bg-black/20 text-brand-500 focus:ring-brand-500/20"
+                                                />
+                                                <span className="text-[10px] font-bold text-slate-300 group-hover:text-white transition-colors">{team.name}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
                             <div>
-                                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 ml-2">Assign Team</label>
+                                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 ml-2">Assign Primary Team (Where they are a Member)</label>
                                 <div className="relative">
                                     <select
                                         value={formData.teamId}

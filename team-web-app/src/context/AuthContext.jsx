@@ -13,20 +13,31 @@ export const AuthProvider = ({ children }) => {
         }
     });
     const [token, setToken] = useState(() => localStorage.getItem("team_token") || null);
+    const [activeTeamId, setActiveTeamId] = useState(() => localStorage.getItem("team_active_id") || null);
 
     const login = (userData, userToken) => {
         setUser(userData);
         setToken(userToken);
+        setActiveTeamId(userData.team?._id || userData.team); // Default to primary team
         localStorage.setItem("team_user", JSON.stringify(userData));
         localStorage.setItem("team_token", userToken);
+        localStorage.setItem("team_active_id", userData.team?._id || userData.team);
     };
 
     const logout = (message = "Logged out successfully!") => {
         setUser(null);
         setToken(null);
+        setActiveTeamId(null);
         localStorage.removeItem("team_user");
         localStorage.removeItem("team_token");
+        localStorage.removeItem("team_active_id");
         if (message) toast.success(message);
+    };
+
+    const switchTeam = (teamId) => {
+        setActiveTeamId(teamId);
+        localStorage.setItem("team_active_id", teamId);
+        toast.success("Team context switched!");
     };
 
     const updateUserData = (updatedUser) => {
@@ -35,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, updateUserData }}>
+        <AuthContext.Provider value={{ user, token, activeTeamId, login, logout, updateUserData, switchTeam }}>
             {children}
         </AuthContext.Provider>
     );

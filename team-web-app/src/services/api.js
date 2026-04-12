@@ -25,6 +25,11 @@ api.interceptors.request.use((config) => {
         config.headers['x-company-context'] = companyContext;
     }
 
+    const teamContext = localStorage.getItem("team_active_id");
+    if (teamContext) {
+        config.headers['x-team-context'] = teamContext;
+    }
+
     return config;
 }, (error) => {
     return Promise.reject(error);

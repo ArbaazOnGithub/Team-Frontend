@@ -27,7 +27,7 @@ const AnnouncementModal = lazy(() => import('./components/Dashboard/Announcement
 const ChatSection = lazy(() => import('./components/Dashboard/ChatSection'));
 
 function App() {
-  const { user, token, login, logout, updateUserData } = useAuth();
+  const { user, token, activeTeamId, login, logout, updateUserData } = useAuth();
 
   const [isBiometricSupported, setIsBiometricSupported] = useState(false);
   const [hasSavedCredentials, setHasSavedCredentials] = useState(false);
@@ -203,7 +203,7 @@ function App() {
       if (socket) socket.disconnect();
       socketRef.current = null;
     };
-  }, [token, user]);
+  }, [token, user, activeTeamId]);
 
   // --- INITIAL DATA FETCH ---
   useEffect(() => {
@@ -221,7 +221,7 @@ function App() {
         loadAvailableCompanies();
       }
     }
-  }, [user, token, selectedCompanyId]);
+  }, [user, token, selectedCompanyId, activeTeamId]);
 
   const setupPushNotifications = async () => {
     try {
