@@ -95,11 +95,11 @@ const Header = ({ user, handleLogout, setView }) => {
                             onClick={() => setIsTeamSwitcherOpen(!isTeamSwitcherOpen)}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
                         >
-                            <span className="text-sm font-black text-brand-400 capitalize whitespace-nowrap overflow-hidden max-w-[100px] text-ellipsis">
+                            <span className="text-sm font-black text-brand-400 capitalize whitespace-nowrap overflow-hidden max-w-[80px] sm:max-w-[100px] text-ellipsis">
                                 {isAdminMode ? 'Admin' : 'Member'}
                             </span>
                             <span className="text-white/20">|</span>
-                            <span className="text-[10px] font-bold text-white/60 uppercase tracking-tighter">
+                            <span className="text-[10px] font-bold text-white/60 uppercase tracking-tighter truncate max-w-[80px] sm:max-w-[120px]">
                                 {isAdminMode 
                                     ? (user.managedTeams.find(t => (t._id || t) === activeTeamId)?.name || 'Managed Team')
                                     : (user.team?.name || 'Primary Team')

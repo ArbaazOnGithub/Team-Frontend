@@ -50,8 +50,8 @@ api.interceptors.response.use((response) => {
     return Promise.reject(error);
 });
 
-export const fetchRequests = async () => {
-    const res = await api.get('/requests');
+export const fetchRequests = async (calendar = false) => {
+    const res = await api.get(calendar ? '/requests?calendar=true' : '/requests');
     return res.data.requests || res.data;
 };
 

@@ -16,7 +16,7 @@ const LeaveCalendar = ({ showHeader = true }) => {
     const loadData = async () => {
         setLoading(true);
         try {
-            const data = await api.fetchRequests();
+            const data = await api.fetchRequests(true);
             // Filter only leave requests
             setRequests(data.filter(r => r.requestType === 'Leave'));
         } catch (err) {
