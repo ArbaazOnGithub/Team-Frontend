@@ -88,73 +88,7 @@ const Header = ({ user, handleLogout, setView }) => {
                     TeamQueries
                 </h1>
 
-                {/* Team Context Switcher */}
-                {user.managedTeams?.length > 0 && (
-                    <div className="relative" ref={teamSwitcherRef}>
-                        <button
-                            onClick={() => setIsTeamSwitcherOpen(!isTeamSwitcherOpen)}
-                            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
-                        >
-                            <span className="text-sm font-black text-brand-400 capitalize whitespace-nowrap overflow-hidden max-w-[80px] sm:max-w-[100px] text-ellipsis">
-                                {isAdminMode ? 'Admin' : 'Member'}
-                            </span>
-                            <span className="text-white/20">|</span>
-                            <span className="text-[10px] font-bold text-white/60 uppercase tracking-tighter truncate max-w-[80px] sm:max-w-[120px]">
-                                {isAdminMode 
-                                    ? (user.managedTeams.find(t => (t._id || t) === activeTeamId)?.name || 'Managed Team')
-                                    : (user.team?.name || 'Primary Team')
-                                }
-                            </span>
-                            <span className="ml-1 text-[8px] opacity-30 group-hover:opacity-100 transition-opacity">▼</span>
-                        </button>
 
-                        <AnimatePresence>
-                            {isTeamSwitcherOpen && (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                                    className="absolute left-0 mt-3 w-64 glass-card bg-[#1b2a3a] border border-white/10 overflow-hidden z-[60] shadow-2xl"
-                                >
-                                    <div className="p-3 bg-white/5 border-b border-white/10 text-[9px] font-black uppercase text-brand-500 tracking-widest">Select Context</div>
-                                    
-                                    {/* Primary Team (Member Mode) */}
-                                    <button
-                                        onClick={() => {
-                                            switchTeam(user.team?._id || user.team, false);
-                                            setIsTeamSwitcherOpen(false);
-                                        }}
-                                        className={`w-full text-left px-4 py-3 hover:bg-white/5 transition-colors flex items-center justify-between group ${!isAdminMode ? 'bg-brand-500/10' : ''}`}
-                                    >
-                                        <div>
-                                            <div className="text-xs font-black text-white group-hover:text-brand-500 transition-colors">Member Role</div>
-                                            <div className="text-[9px] text-white/40 font-bold uppercase tracking-tight">Primary Team Chat/Requests</div>
-                                        </div>
-                                        {!isAdminMode && <span className="text-emerald-500 font-bold">✓</span>}
-                                    </button>
-
-                                    {/* Managed Teams (Manager Mode) */}
-                                    {user.managedTeams.map(team => (
-                                        <button
-                                            key={team._id || team}
-                                            onClick={() => {
-                                                switchTeam(team._id || team, true);
-                                                setIsTeamSwitcherOpen(false);
-                                            }}
-                                            className={`w-full text-left px-4 py-3 hover:bg-white/5 transition-colors border-t border-white/5 flex items-center justify-between group ${isAdminMode && activeTeamId === (team._id || team) ? 'bg-brand-500/10' : ''}`}
-                                        >
-                                            <div>
-                                                <div className="text-xs font-black text-white group-hover:text-brand-500 transition-colors">Admin Role</div>
-                                                <div className="text-[9px] text-white/40 font-bold uppercase tracking-tight">{team.name || 'Managed Department'}</div>
-                                            </div>
-                                            {isAdminMode && activeTeamId === (team._id || team) && <span className="text-emerald-500 font-bold">✓</span>}
-                                        </button>
-                                    ))}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                )}
             </div>
 
             <div className="flex items-center gap-2 sm:gap-4">
@@ -300,6 +234,53 @@ const Header = ({ user, handleLogout, setView }) => {
                                             <span className="text-lg opacity-50 group-hover:scale-110 transition-all">🛡️</span>
                                             <span className="font-black tracking-tight">Admin Console</span>
                                         </button>
+                                    )}
+
+                                    {user.managedTeams?.length > 0 && (
+                                        <>
+                                            <div className="px-5 py-2 mt-2 bg-black/20 border-y border-white/5">
+                                                <span className="text-[9px] font-black uppercase text-brand-500 tracking-widest">Select Context</span>
+                                            </div>
+                                            
+                                            {/* Primary Team Context */}
+                                            <button
+                                                onClick={() => {
+                                                    switchTeam(user.team?._id || user.team, false);
+                                                    setIsDropdownOpen(false);
+                                                }}
+                                                className={`w-full text-left px-5 py-3 text-sm flex items-center gap-4 transition-colors group ${!isAdminMode ? 'bg-brand-500/10 text-brand-400' : 'text-slate-400 hover:bg-white/5'}`}
+                                            >
+                                                <span className="text-lg opacity-50 transition-all">👥</span>
+                                                <div className="flex-1">
+                                                    <div className="font-black tracking-tight">Member Role</div>
+                                                    <div className="text-[9px] uppercase font-bold tracking-tighter opacity-60 flex items-center gap-2">
+                                                        {user.team?.name || 'Primary Team'} 
+                                                        {!isAdminMode && <span className="text-emerald-500 text-[10px]">✓</span>}
+                                                    </div>
+                                                </div>
+                                            </button>
+
+                                            {/* Managed Teams Context */}
+                                            {user.managedTeams.map(team => (
+                                                <button
+                                                    key={team._id || team}
+                                                    onClick={() => {
+                                                        switchTeam(team._id || team, true);
+                                                        setIsDropdownOpen(false);
+                                                    }}
+                                                    className={`w-full text-left px-5 py-3 text-sm flex items-center gap-4 transition-colors group border-t border-white/5 ${isAdminMode && activeTeamId === (team._id || team) ? 'bg-brand-500/10 text-brand-400' : 'text-slate-400 hover:bg-white/5'}`}
+                                                >
+                                                    <span className="text-lg opacity-50 transition-all">👑</span>
+                                                    <div className="flex-1">
+                                                        <div className="font-black tracking-tight">Admin Role</div>
+                                                        <div className="text-[9px] uppercase font-bold tracking-tighter opacity-60 flex items-center gap-2">
+                                                            {team.name || 'Managed Department'}
+                                                            {isAdminMode && activeTeamId === (team._id || team) && <span className="text-emerald-500 text-[10px]">✓</span>}
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            ))}
+                                        </>
                                     )}
 
                                     <button
