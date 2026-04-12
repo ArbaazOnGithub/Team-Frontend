@@ -153,8 +153,6 @@ const AddUserModal = ({ isOpen, onClose, onSuccess }) => {
                                     className="input-premium bg-black/20 border-white/5"
                                 />
                             </div>
-
-                            </div>
                             
                             {/* Managed Teams Selection (SuperAdmin Only) */}
                             {currentUser?.role === 'superadmin' && (
