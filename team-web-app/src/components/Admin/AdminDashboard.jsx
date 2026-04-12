@@ -12,6 +12,8 @@ import ErrorLogs from './ErrorLogs';
 import CompanyManagement from './CompanyManagement';
 import LeaveCalendar from '../Dashboard/LeaveCalendar';
 import AddUserModal from './AddUserModal';
+import TeamManagement from './TeamManagement';
+import EditUserModal from './EditUserModal';
 
 const AdminDashboard = ({ onBack }) => {
     const { token, user: currentUser } = useAuth();
@@ -25,6 +27,8 @@ const AdminDashboard = ({ onBack }) => {
     const [leaveReason, setLeaveReason] = useState("");
     const [announcementMsg, setAnnouncementMsg] = useState("");
     const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+    const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
+    const [selectedUserForEdit, setSelectedUserForEdit] = useState(null);
 
     useEffect(() => {
         if (activeTab === 'users') loadUsers();
@@ -97,20 +101,9 @@ const AdminDashboard = ({ onBack }) => {
         }
     };
 
-    const handleToggleRole = async (userId, currentRole) => {
-        if (currentUser.role !== 'superadmin') {
-            return toast.error("Only Super Admins can manage roles.");
-        }
-        const newRole = currentRole === 'admin' ? 'user' : 'admin';
-        if (!window.confirm(`Are you sure you want to change this user's role to ${newRole}?`)) return;
-
-        try {
-            await api.updateUserRole(userId, newRole);
-            setUsers(prev => prev.map(u => u._id === userId ? { ...u, role: newRole } : u));
-            toast.success("Role updated successfully");
-        } catch (err) {
-            toast.error(err.message);
-        }
+    const handleEditUser = (user) => {
+        setSelectedUserForEdit(user);
+        setIsEditUserModalOpen(true);
     };
 
     const handleDeleteUser = async (userId) => {
@@ -182,6 +175,12 @@ const AdminDashboard = ({ onBack }) => {
                                     🏢 Companies
                                 </button>
                                 <button
+                                    onClick={() => setActiveTab('teams')}
+                                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'teams' ? 'bg-[#547792] text-white shadow-lg' : 'text-white/60 hover:text-white'}`}
+                                >
+                                    🤝 Teams
+                                </button>
+                                <button
                                     onClick={() => setActiveTab('error-logs')}
                                     className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'error-logs' ? 'bg-rose-500 text-white shadow-lg shadow-rose-200' : 'text-white/60 hover:text-rose-500'}`}
                                 >
@@ -214,7 +213,7 @@ const AdminDashboard = ({ onBack }) => {
                                     { label: 'Total Team', val: users.length, icon: '👥' },
                                     { label: 'Total Requests', val: requests.length, icon: '📝' },
                                     { label: 'Pending', val: requests.filter(r => r.status === 'Pending').length, icon: '⏳' },
-                                    { label: 'Companies', val: currentUser.role === 'superadmin' ? 'Global' : 'My Team', icon: '🏢' }
+                                    { label: 'Focus', val: currentUser.role === 'superadmin' ? 'Global' : (currentUser.team?.name || 'My Team'), icon: '🎯' }
                                 ].map((s, idx) => (
                                     <div key={idx} className="glass-card bg-[#1b2a3a]/40 p-6 border-white/10 hover:bg-[#1b2a3a]/60 hover:scale-[1.02] transition-transform">
                                         <div className="text-2xl mb-1">{s.icon}</div>
@@ -415,15 +414,13 @@ const AdminDashboard = ({ onBack }) => {
                                                         </td>
                                                         <td className="p-5 text-right">
                                                             <div className="flex items-center justify-end gap-2">
-                                                                {currentUser.role === 'superadmin' && (
-                                                                    <button
-                                                                        onClick={() => handleToggleRole(user._id, user.role)}
-                                                                        className="p-2.5 rounded-xl bg-[#EAE0CF]/10 text-[#EAE0CF] hover:bg-[#EAE0CF] hover:text-white transition-all shadow-sm"
-                                                                        title={user.role === 'admin' ? "Make User" : "Make Admin"}
-                                                                    >
-                                                                        {user.role === 'admin' ? "👑" : "👤"}
-                                                                    </button>
-                                                                )}
+                                                                <button
+                                                                    onClick={() => handleEditUser(user)}
+                                                                    className="p-2.5 rounded-xl bg-[#EAE0CF]/10 text-[#EAE0CF] hover:bg-[#EAE0CF] hover:text-white transition-all shadow-sm"
+                                                                    title="Edit User Permissions"
+                                                                >
+                                                                    {user.role === 'admin' ? "👑" : "👤"}
+                                                                </button>
                                                                 <button
                                                                     onClick={() => handleDeleteUser(user._id)}
                                                                     className="p-2.5 rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-sm"
@@ -472,6 +469,15 @@ const AdminDashboard = ({ onBack }) => {
                             exit={{ opacity: 0, y: -10 }}
                         >
                             <CompanyManagement />
+                        </motion.div>
+                    ) : activeTab === 'teams' && currentUser.role === 'superadmin' ? (
+                        <motion.div
+                            key="teams-tab"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                        >
+                            <TeamManagement />
                         </motion.div>
                     ) : activeTab === 'calendar' ? (
                         <motion.div
@@ -599,6 +605,13 @@ const AdminDashboard = ({ onBack }) => {
                     isOpen={isAddUserModalOpen} 
                     onClose={() => setIsAddUserModalOpen(false)} 
                     onSuccess={loadUsers} 
+                />
+
+                <EditUserModal
+                    isOpen={isEditUserModalOpen}
+                    onClose={() => { setIsEditUserModalOpen(false); setSelectedUserForEdit(null); }}
+                    user={selectedUserForEdit}
+                    onSuccess={loadUsers}
                 />
             </div>
         </div>

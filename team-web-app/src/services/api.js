@@ -106,8 +106,8 @@ export const fetchAllUsers = async () => {
     return res.data;
 };
 
-export const updateUserRole = async (userId, role) => {
-    const res = await api.put('/admin/users/role', { userId, role });
+export const updateUserRole = async (userId, role, teamId = null, managedTeams = null) => {
+    const res = await api.put('/admin/users/role', { userId, role, teamId, managedTeams });
     return res.data;
 };
 
@@ -154,6 +154,27 @@ export const createCompany = async (payload) => {
 
 export const deleteCompany = async (companyId) => {
     const res = await api.delete(`/admin/superadmin/companies/${companyId}`);
+    return res.data;
+};
+
+// --- TEAMS API ---
+export const fetchTeamsByCompany = async (companyId) => {
+    const res = await api.get(`/teams/company/${companyId}`);
+    return res.data;
+};
+
+export const createTeam = async (name, companyId) => {
+    const res = await api.post('/teams', { name, companyId });
+    return res.data;
+};
+
+export const updateTeam = async (id, name) => {
+    const res = await api.put(`/teams/${id}`, { name });
+    return res.data;
+};
+
+export const deleteTeam = async (id) => {
+    const res = await api.delete(`/teams/${id}`);
     return res.data;
 };
 
